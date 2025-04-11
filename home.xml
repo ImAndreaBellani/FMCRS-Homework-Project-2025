@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.6//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_6.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+
+broadcast chan shoot_to_main_tower;
+broadcast chan shoot_to_enemy;
+broadcast chan is_enemy_near; // ragionare su questo quando si fa la mappa
+
+const int MAP_ROWS = 8;
+const int MAP_COLS = 16;
+
+const int[0,3] map[MAP_ROWS,MAP_COLS] :=
+    {{2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+     {2,0,0,0,0,0,0,2,2,2,2,2,2,2,2,2},
+     {2,0,0,0,0,0,0,2,1,0,0,0,0,0,1,2},
+     {2,0,1,0,0,0,0,2,0,0,0,0,0,0,0,2},
+     {2,2,2,2,2,2,2,2,0,0,2,2,2,2,2,3},
+     {0,0,0,0,0,1,0,2,0,0,2,1,0,0,0,2},
+     {0,0,0,0,0,0,0,2,1,0,2,0,0,0,1,2},
+     {0,0,0,0,0,0,0,2,2,2,2,2,2,2,2,2}};
+
+const int CELL_TYPE_BLANK = 0;
+const int CELL_TYPE_TURRETS = 1;
+const int CELL_TYPE_ENEMIES = 2;
+const int CELL_TYPE_MAIN_TOWER = 3;
+
+const int MAIN_TOWER_POS_X = 15;
+const int MAIN_TOWER_POS_Y = 4;
+
+const int TURRET_1_POS_X = 8;
+const int TURRET_1_POS_Y = 6;
+
+const int TURRET_2_POS_X = 14;
+const int TURRET_2_POS_Y = 6;
+
+const int TURRET_3_POS_X = 5;
+const int TURRET_3_POS_Y = 5;
+
+const int TURRET_4_POS_X = 11;
+const int TURRET_4_POS_Y = 5;
+
+const int TURRET_5_POS_X = 2;
+const int TURRET_5_POS_Y = 3;
+
+const int TURRET_6_POS_X = 8;
+const int TURRET_6_POS_Y = 2;
+
+const int TURRET_7_POS_X = 14;
+const int TURRET_7_POS_Y = 2;
+
+const int CIRCLES_ENEMIES = 3;
+const int SQUARES_ENEMIES = 3;
+
+</declaration>
+	<template>
+		<name x="5" y="5">main_tower</name>
+		<declaration>    //main tower constructor:
+        process main_tower()
+            {
+            }
+    //main tower parameters:
+        const int mt_max_lp = 10;
+
+    //main tower variables:
+        int[0,mt_max_lp] mt_life = mt_max_lp;
+    
+    //main tower functions:
+        
+        void decLife(int damage)
+            {
+                mt_life = mt_life - damage;
+            }
+
+
+
+
+
+
+    
+    
+    
+       
+       
+</declaration>
+		<location id="id0" x="-1113" y="-578">
+			<name x="-1123" y="-612">alive</name>
+		</location>
+		<location id="id1" x="-867" y="-578">
+			<name x="-877" y="-612">dead</name>
+		</location>
+		<init ref="id0"/>
+		<transition id="id2">
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="guard" x="-1037" y="-612">mt_life == 0</label>
+		</transition>
+		<transition id="id3">
+			<source ref="id0"/>
+			<target ref="id0"/>
+			<label kind="guard" x="-1130" y="-536">mt_life&gt;0</label>
+			<label kind="synchronisation" x="-1181" y="-502">shoot_to_main_tower? damage</label>
+			<label kind="assignment" x="-1130" y="-519">decLife(damage)</label>
+			<nail x="-1155" y="-561"/>
+			<nail x="-1104" y="-536"/>
+		</transition>
+	</template>
+	<template>
+		<name>turret</name>
+		<declaration>    // turrets parameters:
+            const int type;
+            const int BASIC_TURRET_TYPE = 0;
+            const int CANNON_TURRET_TYPE = 1;
+            const int SNIPER_TURRET_TYPE = 2;
+            process turret(const int t)
+                {
+                    if (t &lt; 0 or t &gt; 2)
+                        {
+                            type = BASIC_TURRET_TYPE;
+                        }
+                    else
+                        {
+                            type = t;
+                        }
+                }
+
+        //basic turrets parameters:
+            const int bt_sr = 2;
+            const int bt_fs = 2;
+            const int bt_id = 2;
+        //cannon turrets parameters:
+            const int ct_sr = 1;
+            const int ct_fs = 7;
+            const int ct_id = 5;
+        //sniper turretss parameters:
+            const int st_sr = 4;
+            const int st_fs = 20;
+            const int st_id = 8;</declaration>
+		<location id="id4" x="-790" y="-433">
+		</location>
+		<location id="id5" x="-620" y="-433">
+		</location>
+		<init ref="id4"/>
+		<transition id="id6">
+			<source ref="id5"/>
+			<target ref="id4"/>
+			<nail x="-705" y="-391"/>
+		</transition>
+		<transition id="id7">
+			<source ref="id4"/>
+			<target ref="id5"/>
+			<nail x="-705" y="-484"/>
+		</transition>
+	</template>
+	<template>
+		<name>enemy</name>
+		<declaration>            
+            const int type;
+            const int CIRCLE_ENEMY_TYPE = 0;
+            const int SQUARE_ENEMY_TYPE = 1;
+            process enemy(const int t, const int px, const int py)
+                {
+                    if (t &lt; 0 or t &gt; 1)
+                        {
+                            type = CIRCLE_ENEMY_TYPE;
+                        }
+                    else
+                        {
+                            type = t;
+                        }
+                    pos_x = px;
+                    pos_y = py;
+                }
+    // enemies variables:
+        int pos_x;
+        int pos_y;
+        int en_life;
+    // enemies parameters:
+        //circles parameters:
+            const int ce_st = 2;
+            const int ce_s = 1;
+            const int ce_h = 10;
+            const int ce_d = 2;
+        //square parameters:
+            const int se_st = 3;
+            const int se_s = 3;
+            const int se_h = 20;
+            const int se_d = 4;</declaration>
+		<location id="id8" x="-255" y="-119">
+		</location>
+		<location id="id9" x="-85" y="-119">
+		</location>
+		<location id="id10" x="-161" y="-17">
+		</location>
+		<location id="id11" x="-42" y="-8">
+		</location>
+		<init ref="id8"/>
+		<transition id="id12">
+			<source ref="id9"/>
+			<target ref="id11"/>
+		</transition>
+		<transition id="id13">
+			<source ref="id9"/>
+			<target ref="id10"/>
+		</transition>
+		<transition id="id14">
+			<source ref="id9"/>
+			<target ref="id9"/>
+			<nail x="-25" y="-161"/>
+			<nail x="-34" y="-110"/>
+		</transition>
+		<transition id="id15">
+			<source ref="id8"/>
+			<target ref="id9"/>
+		</transition>
+	</template>
+	<system>main_tower = main_tower();
+circle(x, y) = enemy(CIRCLE_ENEMY_TYPE, x, y);
+square(x, y) = enemy(SQUARE_ENEMY_TYPE, x, y);
+basic_turret = turret(BASIC_TURRET_TYPE);
+cannon_turret = turret(CANNON_TURRET_TYPE);
+sniper_turret = turret(SNIPER_TURRET_TYPE);
+
+system
+    MT = main_tower; //poi vanno istanziati tutti gli altri
+
+//broadcast channels:
+    
+
+
+</system>
+	<queries>
+		<query>
+			<formula/>
+			<comment/>
+		</query>
+	</queries>
+</nta>
