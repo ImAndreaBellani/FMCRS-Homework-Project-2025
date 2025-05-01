@@ -6,6 +6,15 @@
     int y;
 } Cell;
 
+typedef struct {
+    int speed;
+    int health;
+    int damage;
+} EnemyConfiguration;
+
+const EnemyConfiguration SQUARE := {1, 10, 2};
+const EnemyConfiguration CIRCLE := {3, 20, 4};
+
 Cell MAIN_POS = {15,4};
 
 int DAMAGE_TO_MT;
@@ -15,23 +24,13 @@ urgent chan STMT; //"SHOOT TO MAIN TOWER"
 urgent chan LOCK_DAMAGE_TO_MT;
 urgent chan UNLOCK_DAMAGE_TO_MT;
 
-//not used yet
-
-typedef struct {
-    int speed;
-    int health;
-    int damage;
-} EnemyConfiguration;
-
-EnemyConfiguration SQUARE := {1, 10, 2};
-EnemyConfiguration CIRCLE := {3, 20, 4};
 
  
 
 </declaration>
 	<template>
 		<name>enemy</name>
-		<parameter>int id, int speed, int health, int damage</parameter>
+		<parameter>const int id, int speed, int health, int damage</parameter>
 		<declaration>const Cell START_POS := {0,0};
 
 int c1 := 0; 
@@ -104,16 +103,16 @@ void next()
                         pos.y = pos.y - 1;
             }
     }</declaration>
-		<location id="id0" x="-272" y="-51">
+		<location id="id0" x="-272" y="-51" color="#00ff00">
 			<name x="-297" y="-93">onTrip</name>
 		</location>
-		<location id="id1" x="-263" y="59">
+		<location id="id1" x="-263" y="59" color="#ffa500">
 			<name x="-297" y="51">reachedMT</name>
 		</location>
-		<location id="id2" x="-170" y="136">
+		<location id="id2" x="-170" y="136" color="#ff0000">
 			<name x="-187" y="136">readyToShoot</name>
 		</location>
-		<location id="id3" x="-340" y="136">
+		<location id="id3" x="-340" y="136" color="#0000ff">
 			<name x="-408" y="136">onLockRelease</name>
 		</location>
 		<init ref="id0"/>
@@ -157,10 +156,10 @@ void next()
 	</template>
 	<template>
 		<name>STMTCONTROLLER</name>
-		<location id="id10" x="-221" y="-68">
+		<location id="id10" x="-221" y="-68" color="#00ff00">
 			<name x="-231" y="-102">unlock</name>
 		</location>
-		<location id="id11" x="17" y="-59">
+		<location id="id11" x="17" y="-59" color="#ff0000">
 			<name x="7" y="-93">lock</name>
 		</location>
 		<init ref="id10"/>
@@ -183,10 +182,10 @@ void next()
     {
         life = life - DAMAGE_TO_MT;   
     }</declaration>
-		<location id="id14" x="-1113" y="-578">
+		<location id="id14" x="-1113" y="-578" color="#00ff00">
 			<name x="-1123" y="-612">alive</name>
 		</location>
-		<location id="id15" x="-867" y="-578">
+		<location id="id15" x="-867" y="-578" color="#ff0000">
 			<name x="-877" y="-612">dead</name>
 		</location>
 		<init ref="id14"/>
@@ -215,8 +214,11 @@ void next()
 			<label kind="guard" x="-1037" y="-612">life &lt;= 0</label>
 		</transition>
 	</template>
-	<system>en0 = enemy(0, 1,10,2);
-en1 = enemy(1, 3,20,4);
+	<system>circle(const int id) = enemy(id, CIRCLE.speed, CIRCLE.health, CIRCLE.damage);
+square(const int id) = enemy(id, SQUARE.speed, SQUARE.health, SQUARE.damage);
+
+en0 = circle(0);
+en1 = square(1);
 
 mt = main(10);
 stmtController = STMTCONTROLLER();
