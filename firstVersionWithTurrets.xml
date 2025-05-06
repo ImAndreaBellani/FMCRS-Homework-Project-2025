@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.6//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_6.dtd'>
 <nta>
-	<declaration>typedef struct {
+	<declaration>//type definitions:
+
+typedef struct {
     int x;
     int y;
 } Cell;
+
+typedef struct {
+    int health;
+} MainTowerConfiguration;
 
 typedef struct {
     int speed;
@@ -12,6 +18,7 @@ typedef struct {
     int damage;
     int spawningTime;
 } EnemyConfiguration;
+
 typedef struct {
     int range;
     int speed;
@@ -19,11 +26,17 @@ typedef struct {
 } TurretConfiguration;
 
 typedef struct {
-    int health;
-} MainTowerConfiguration;
+    Cell pos;
+    int lifeTime;
+    bool kind;
+    int DAMAGE_TO_ENEMY;
+    bool available;
+} EnemyRecord;
 
-const int MAX_ENEMIES := 4;
-int countEnemies=MAX_ENEMIES;
+//configuration definitions:
+
+const MainTowerConfiguration MT := {300};
+
 const EnemyConfiguration SQUARE := {3, 20, 4, 3};
 const EnemyConfiguration CIRCLE := {1, 10, 2, 2};
 
@@ -31,37 +44,51 @@ const TurretConfiguration BASIC := {2,2,2};
 const TurretConfiguration CANNON := {1,7,5};
 const TurretConfiguration SNIPER := {4,20,8};
 
+//map definitions
 
-const MainTowerConfiguration MT := {300};
+const Cell MAIN_POS = {15,4};
 
 const Cell TURRET0_POS = {2,3};
+const Cell TURRET1_POS = {5,5};
+const Cell TURRET2_POS = {8,2};
+const Cell TURRET3_POS = {8,6};
+const Cell TURRET4_POS = {11,5};
+const Cell TURRET5_POS = {14,2};
+const Cell TURRET6_POS = {14,6};
 
-Cell MAIN_POS = {15,4};
+const Cell ENEMIES_PATH1[12] = {{0,0},{0,1},{0,2},{0,3},{0,4},{1,4},{2,4},{3,4},{4,4},{5,4},{6,4},{7,4}};
+const Cell ENEMIES_PATH2[6] = {{7,5},{7,6},{7,7},{8,7},{9,7},{10,7}};
+const Cell ENEMIES_PATH3[8] = {{11,7},{12,7},{13,7},{14,7},{15,7},{15,6},{15,5},{15,4}};
+const Cell ENEMIES_PATH4[8] = {{10,6},{10,5},{10,4},{11,4},{12,4},{13,4},{14,4},{15,4}};
+const Cell ENEMIES_PATH5[14] = {{7,3},{7,2},{7,1},{8,1},{9,1},{10,1},{11,1},{12,1},{13,1},{14,1},{15,1},{15,2},{15,3},{15,4}};
 
-Cell ENEMIES_PATH1[12] = {{0,0},{0,1},{0,2},{0,3},{0,4},{1,4},{2,4},{3,4},{4,4},{5,4},{6,4},{7,4}};
-Cell ENEMIES_PATH2[6] = {{7,5},{7,6},{7,7},{8,7},{9,7},{10,7}};
-Cell ENEMIES_PATH3[8] = {{11,7},{12,7},{13,7},{14,7},{15,7},{15,6},{15,5},{15,4}};
-Cell ENEMIES_PATH4[8] = {{10,6},{10,5},{10,4},{11,4},{12,4},{13,4},{14,4},{15,4}};
-Cell ENEMIES_PATH5[14] = {{7,3},{7,2},{7,1},{8,1},{9,1},{10,1},{11,1},{12,1},{13,1},{14,1},{15,1},{15,2},{15,3},{15,4}};
+const Cell INVALID_POS = {-1,-1};
+const Cell START_POS = {0,0};
 
-typedef struct {
-    Cell pos;
-    int lifeTime;
-    bool kind;
-    int DAMAGE_TO_ENEMY;
-} EnemyRecord;
+//wave parameters
 
-EnemyRecord SHOOT_TABLE[MAX_ENEMIES];
+const int MAX_ENEMIES := 4;
 
-int DAMAGE_TO_MT;
+//channels and shared parameters
 
-urgent chan STMT; //"SHOOT TO MAIN TOWER"
+    //enemies --&gt; MT
 
-broadcast chan ENEMY_SYNC;</declaration>
+    urgent chan STMT;
+    int DAMAGE_TO_MT;
+
+    //turrets --&gt; enemies
+
+    EnemyRecord SHOOT_TABLE[MAX_ENEMIES];
+   // int countEnemies=MAX_ENEMIES;
+
+    //global sync
+
+    broadcast chan ENEMY_SYNC;</declaration>
 	<template>
 		<name>turret</name>
 		<parameter>int id, Cell pos, int range, int speed, int damage</parameter>
 		<declaration>int c1=0;
+
 int max (int v1, int v2)
     {
         if (v1 &gt;= v2)
@@ -80,7 +107,7 @@ void shoot()
             {
                 for (i = 0 ; i &lt; MAX_ENEMIES ; i++)
                     {
-                        if (dist(SHOOT_TABLE[i].pos, pos) == k)
+                        if (SHOOT_TABLE[i].available &amp;&amp; dist(SHOOT_TABLE[i].pos, pos) == k)
                             {
                                 app[appLen] = i;
                                 appLen++;
@@ -121,36 +148,43 @@ void shoot()
                     }
             }   
     }</declaration>
-		<location id="id0" x="-340" y="-238">
+		<location id="id0" x="-416" y="-280">
 		</location>
-		<init ref="id0"/>
-		<transition id="id1">
-			<source ref="id0"/>
-			<target ref="id0"/>
-			<label kind="guard" x="-313" y="-314">c1&lt;speed</label>
-			<label kind="assignment" x="-289" y="-297">c1++</label>
-			<nail x="-331" y="-306"/>
-			<nail x="-263" y="-255"/>
-		</transition>
+		<location id="id1" x="-535" y="-382">
+		</location>
+		<init ref="id1"/>
 		<transition id="id2">
+			<source ref="id1"/>
+			<target ref="id0"/>
+			<label kind="synchronisation" x="-517" y="-348">ENEMY_SYNC?</label>
+			<label kind="assignment" x="-544" y="-340">shoot()</label>
+		</transition>
+		<transition id="id3">
 			<source ref="id0"/>
 			<target ref="id0"/>
-			<label kind="guard" x="-552" y="-238">c1==speed</label>
-			<label kind="synchronisation" x="-545" y="-221">ENEMY_SYNC?</label>
-			<label kind="assignment" x="-552" y="-204">shoot(), c1=0</label>
-			<nail x="-477" y="-238"/>
-			<nail x="-400" y="-170"/>
+			<label kind="guard" x="-389" y="-356">c1&lt;speed</label>
+			<label kind="assignment" x="-365" y="-339">c1++</label>
+			<nail x="-407" y="-348"/>
+			<nail x="-339" y="-297"/>
+		</transition>
+		<transition id="id4">
+			<source ref="id0"/>
+			<target ref="id0"/>
+			<label kind="guard" x="-629" y="-272">c1==speed</label>
+			<label kind="synchronisation" x="-621" y="-263">ENEMY_SYNC?</label>
+			<label kind="assignment" x="-637" y="-246">shoot(),c1=0</label>
+			<nail x="-553" y="-280"/>
+			<nail x="-476" y="-212"/>
 		</transition>
 	</template>
 	<template>
 		<name>enemySync</name>
-		<location id="id3" x="-170" y="-110">
+		<location id="id5" x="-170" y="-110">
 		</location>
-		<init ref="id3"/>
-		<transition id="id4">
-			<source ref="id3"/>
-			<target ref="id3"/>
-			<label kind="guard" x="-110" y="-110">countEnemies&gt;0</label>
+		<init ref="id5"/>
+		<transition id="id6">
+			<source ref="id5"/>
+			<target ref="id5"/>
 			<label kind="synchronisation" x="-102" y="-93">ENEMY_SYNC!</label>
 			<nail x="-110" y="-119"/>
 			<nail x="-136" y="-68"/>
@@ -160,11 +194,9 @@ void shoot()
 	<template>
 		<name>enemy</name>
 		<parameter>const int id, const int speed, int health, const int damage, const int spawningTime, const bool kind</parameter>
-		<declaration>const Cell START_POS := {0,0};
-
-int c1 := 0;
+		<declaration>int c1 := 0;
 int c2 := 0;
-Cell pos := START_POS;
+Cell pos := INVALID_POS;
 int current_index := 1;
 int current_path := 1;
 
@@ -174,12 +206,25 @@ int current_path := 1;
     -&gt; alcune volte si cambia la pos. senza aspettare il delay (probabilmente si sovrappongono le guard)
 */
 
+void initEnemy ()
+    {
+        pos = START_POS;
+        SHOOT_TABLE[id].lifeTime = 0;
+        SHOOT_TABLE[id].kind = kind;
+        SHOOT_TABLE[id].DAMAGE_TO_ENEMY = 0;
+        SHOOT_TABLE[id].available = true;
+    }
 void updateRecord ()
     {
-        health = health - SHOOT_TABLE[id].DAMAGE_TO_ENEMY; //và inizializzata
-        SHOOT_TABLE[id].DAMAGE_TO_ENEMY = 0;
         SHOOT_TABLE[id].pos = pos;
-        SHOOT_TABLE[id].lifeTime++; //và inizializzata!
+        SHOOT_TABLE[id].lifeTime++;
+        health = health - SHOOT_TABLE[id].DAMAGE_TO_ENEMY;
+        SHOOT_TABLE[id].DAMAGE_TO_ENEMY = 0;
+        if (health&lt;=0)
+            {
+                SHOOT_TABLE[id].available = false;
+            }
+        
     }
 void changePath(int i)
     {
@@ -212,225 +257,236 @@ void next()
         current_index++;
         c1=0;
     }</declaration>
-		<location id="id5" x="-680" y="-221" color="#ffa500">
+		<location id="id7" x="-688" y="-221" color="#ffa500">
 		</location>
-		<location id="id6" x="-680" y="85" color="#ffa500">
+		<location id="id8" x="-688" y="85" color="#ffa500">
 		</location>
-		<location id="id7" x="-688" y="-569" color="#ffa500">
+		<location id="id9" x="-688" y="-569" color="#ffa500">
 		</location>
-		<location id="id8" x="59" y="-306" color="#0000ff">
+		<location id="id10" x="59" y="-280" color="#0000ff">
 		</location>
-		<location id="id9" x="59" y="-569" color="#ffa500">
+		<location id="id11" x="59" y="-569" color="#ffa500">
 		</location>
-		<location id="id10" x="-280" y="-306" color="#ffa500">
+		<location id="id12" x="-306" y="-280" color="#ffa500">
 		</location>
-		<location id="id11" x="-280" y="-76" color="#ff0000">
+		<location id="id13" x="-306" y="-76" color="#ff0000">
 		</location>
-		<location id="id12" x="-1147" y="-212" color="#00ff00">
+		<location id="id14" x="-1147" y="-221" color="#00ff00">
 		</location>
-		<init ref="id12"/>
-		<transition id="id13" color="#ff0000">
-			<source ref="id8"/>
-			<target ref="id11"/>
-			<nail x="-119" y="-119"/>
-		</transition>
-		<transition id="id14" color="#ff0000">
-			<source ref="id9"/>
-			<target ref="id11"/>
-			<nail x="374" y="-357"/>
-			<nail x="153" y="-85"/>
-		</transition>
+		<init ref="id14"/>
 		<transition id="id15" color="#ff0000">
 			<source ref="id10"/>
-			<target ref="id11"/>
+			<target ref="id13"/>
+			<label kind="guard" x="-102" y="-170">health&lt;=0</label>
+			<nail x="-119" y="-119"/>
 		</transition>
-		<transition id="id16">
-			<source ref="id12"/>
-			<target ref="id12"/>
-			<label kind="guard" x="-1334" y="-204">c2&lt;spawningTime</label>
-			<label kind="synchronisation" x="-1309" y="-212">ENEMY_SYNC?</label>
-			<label kind="assignment" x="-1240" y="-186">c2++</label>
-			<nail x="-1215" y="-212"/>
-			<nail x="-1190" y="-162"/>
+		<transition id="id16" color="#ff0000">
+			<source ref="id11"/>
+			<target ref="id13"/>
+			<label kind="guard" x="-59" y="-102">health&lt;=0</label>
+			<nail x="374" y="-357"/>
+			<nail x="153" y="-76"/>
 		</transition>
-		<transition id="id17" color="#00ff00">
+		<transition id="id17" color="#ff0000">
 			<source ref="id12"/>
-			<target ref="id5"/>
-			<label kind="guard" x="-1028" y="-238">c2==spawningTime</label>
+			<target ref="id13"/>
+			<label kind="guard" x="-348" y="-187">health&lt;=0</label>
+		</transition>
+		<transition id="id18">
+			<source ref="id14"/>
+			<target ref="id14"/>
+			<label kind="guard" x="-1334" y="-213">c2&lt;spawningTime</label>
+			<label kind="synchronisation" x="-1309" y="-221">ENEMY_SYNC?</label>
+			<label kind="assignment" x="-1240" y="-195">c2++</label>
+			<nail x="-1215" y="-221"/>
+			<nail x="-1190" y="-171"/>
+		</transition>
+		<transition id="id19" color="#00ff00">
+			<source ref="id14"/>
+			<target ref="id7"/>
+			<label kind="guard" x="-1003" y="-246">c2==spawningTime</label>
 			<label kind="synchronisation" x="-1027" y="-72">ENEMY_SYNC?</label>
-		</transition>
-		<transition id="id18" color="#ff0000">
-			<source ref="id6"/>
-			<target ref="id11"/>
-			<label kind="guard" x="-501" y="-17">health&lt;=0</label>
-		</transition>
-		<transition id="id19" color="#ff0000">
-			<source ref="id7"/>
-			<target ref="id11"/>
-			<label kind="guard" x="-484" y="-289">health&lt;=0</label>
+			<label kind="assignment" x="-1045" y="-221">initEnemy(),updateRecord()</label>
 		</transition>
 		<transition id="id20" color="#ff0000">
-			<source ref="id5"/>
-			<target ref="id11"/>
+			<source ref="id8"/>
+			<target ref="id13"/>
+			<label kind="guard" x="-501" y="-17">health&lt;=0</label>
+		</transition>
+		<transition id="id21" color="#ff0000">
+			<source ref="id9"/>
+			<target ref="id13"/>
+			<label kind="guard" x="-484" y="-289">health&lt;=0</label>
+		</transition>
+		<transition id="id22" color="#ff0000">
+			<source ref="id7"/>
+			<target ref="id13"/>
 			<label kind="guard" x="-527" y="-161">health&lt;=0</label>
 		</transition>
-		<transition id="id21">
-			<source ref="id11"/>
-			<target ref="id11"/>
-			<label kind="synchronisation" x="-314" y="-153">ENEMY_SYNC?</label>
-			<nail x="-297" y="-25"/>
-			<nail x="-246" y="-25"/>
-		</transition>
-		<transition id="id22">
-			<source ref="id10"/>
-			<target ref="id10"/>
-			<label kind="guard" x="-255" y="-391">c1&gt;=speed &amp;&amp; pos != ENEMIES_PATH4[7]</label>
-			<label kind="synchronisation" x="-238" y="-331">ENEMY_SYNC?</label>
-			<label kind="assignment" x="-238" y="-373">next()</label>
-			<nail x="-255" y="-365"/>
-			<nail x="-221" y="-340"/>
-		</transition>
 		<transition id="id23">
-			<source ref="id10"/>
-			<target ref="id10"/>
-			<label kind="guard" x="-331" y="-416">c1&lt;speed</label>
-			<label kind="synchronisation" x="-272" y="-357">ENEMY_SYNC?</label>
-			<label kind="assignment" x="-323" y="-399">c1++</label>
-			<nail x="-314" y="-374"/>
-			<nail x="-272" y="-374"/>
-			<nail x="-280" y="-331"/>
+			<source ref="id13"/>
+			<target ref="id13"/>
+			<label kind="synchronisation" x="-340" y="-153">ENEMY_SYNC?</label>
+			<nail x="-323" y="-25"/>
+			<nail x="-272" y="-25"/>
 		</transition>
 		<transition id="id24">
-			<source ref="id9"/>
-			<target ref="id9"/>
-			<label kind="guard" x="136" y="-628">c1&gt;=speed &amp;&amp; pos != ENEMIES_PATH3[7]</label>
+			<source ref="id12"/>
+			<target ref="id12"/>
+			<label kind="guard" x="-212" y="-382">c1&gt;=speed
+&amp;&amp; pos != ENEMIES_PATH4[7]
+&amp;&amp; health&gt;0</label>
+			<label kind="synchronisation" x="-264" y="-305">ENEMY_SYNC?</label>
+			<label kind="assignment" x="-246" y="-323">next(),updateRecord()</label>
+			<nail x="-281" y="-339"/>
+			<nail x="-247" y="-314"/>
+		</transition>
+		<transition id="id25">
+			<source ref="id12"/>
+			<target ref="id12"/>
+			<label kind="guard" x="-416" y="-399">c1&lt;speed &amp;&amp; health&gt;0</label>
+			<label kind="synchronisation" x="-298" y="-331">ENEMY_SYNC?</label>
+			<label kind="assignment" x="-391" y="-382">c1++,updateRecord()</label>
+			<nail x="-340" y="-348"/>
+			<nail x="-298" y="-348"/>
+			<nail x="-306" y="-305"/>
+		</transition>
+		<transition id="id26">
+			<source ref="id11"/>
+			<target ref="id11"/>
+			<label kind="guard" x="136" y="-628">c1&gt;=speed &amp;&amp; pos != ENEMIES_PATH3[7] &amp;&amp; health&gt;0</label>
 			<label kind="synchronisation" x="136" y="-602">ENEMY_SYNC?</label>
 			<label kind="assignment" x="136" y="-603">next(),updateRecord()</label>
 			<nail x="93" y="-611"/>
 			<nail x="127" y="-594"/>
 		</transition>
-		<transition id="id25">
-			<source ref="id9"/>
-			<target ref="id9"/>
-			<label kind="guard" x="-8" y="-671">c1&lt;speed</label>
+		<transition id="id27">
+			<source ref="id11"/>
+			<target ref="id11"/>
+			<label kind="guard" x="-68" y="-663">c1&lt;speed &amp;&amp; health&gt;0</label>
 			<label kind="synchronisation" x="-17" y="-654">ENEMY_SYNC?</label>
 			<label kind="assignment" x="-51" y="-646">c1++,updateRecord()</label>
 			<nail x="-1" y="-603"/>
 			<nail x="42" y="-620"/>
 		</transition>
-		<transition id="id26" color="#ffa500">
-			<source ref="id9"/>
-			<target ref="id8"/>
-			<label kind="guard" x="-59" y="-476">pos == MAIN_POS &amp;&amp; c1&gt;=speed</label>
+		<transition id="id28" color="#ffa500">
+			<source ref="id11"/>
+			<target ref="id10"/>
+			<label kind="guard" x="-170" y="-476">pos == MAIN_POS &amp;&amp; c1&gt;=speed &amp;&amp; health&gt;0</label>
 			<label kind="synchronisation" x="8" y="-229">ENEMY_SYNC?</label>
-			<label kind="assignment" x="-8" y="-450">countEnemies--</label>
+			<label kind="assignment" x="8" y="-450">updateRecord()</label>
 		</transition>
-		<transition id="id27" color="#ffa500">
-			<source ref="id10"/>
-			<target ref="id8"/>
-			<label kind="guard" x="-212" y="-331">pos == MAIN_POS &amp;&amp; c1&gt;=speed</label>
+		<transition id="id29" color="#ffa500">
+			<source ref="id12"/>
+			<target ref="id10"/>
+			<label kind="guard" x="-187" y="-289">pos == MAIN_POS
+&amp;&amp; c1&gt;=speed
+&amp;&amp; health&gt;0</label>
 			<label kind="synchronisation" x="-230" y="-59">ENEMY_SYNC?</label>
-			<label kind="assignment" x="-144" y="-306">countEnemies--</label>
+			<label kind="assignment" x="-187" y="-229">updateRecord()</label>
 		</transition>
-		<transition id="id28">
-			<source ref="id7"/>
-			<target ref="id7"/>
+		<transition id="id30">
+			<source ref="id9"/>
+			<target ref="id9"/>
 			<label kind="guard" x="-671" y="-654">c1&lt;speed &amp;&amp; health&gt;0</label>
 			<label kind="synchronisation" x="-688" y="-679">ENEMY_SYNC?</label>
 			<label kind="assignment" x="-646" y="-637">c1++,updateRecord()</label>
 			<nail x="-620" y="-603"/>
 			<nail x="-680" y="-620"/>
 		</transition>
-		<transition id="id29">
-			<source ref="id7"/>
-			<target ref="id7"/>
+		<transition id="id31">
+			<source ref="id9"/>
+			<target ref="id9"/>
 			<label kind="guard" x="-1139" y="-629">c1&gt;=speed &amp;&amp; pos != ENEMIES_PATH2[5] &amp;&amp; health&gt;0</label>
 			<label kind="synchronisation" x="-866" y="-629">ENEMY_SYNC?</label>
 			<label kind="assignment" x="-918" y="-603">next(),updateRecord()</label>
 			<nail x="-756" y="-561"/>
 			<nail x="-731" y="-620"/>
 		</transition>
-		<transition id="id30">
-			<source ref="id6"/>
-			<target ref="id6"/>
-			<label kind="guard" x="-654" y="119">c1&lt;speed &amp;&amp; health&gt;0</label>
-			<label kind="synchronisation" x="-654" y="93">ENEMY_SYNC?</label>
-			<label kind="assignment" x="-654" y="136">c1++</label>
-			<nail x="-646" y="119"/>
-			<nail x="-688" y="127"/>
-		</transition>
-		<transition id="id31">
-			<source ref="id6"/>
-			<target ref="id6"/>
-			<label kind="guard" x="-1139" y="85">c1&gt;=speed &amp;&amp; pos != ENEMIES_PATH5[13] &amp;&amp; health&gt;0</label>
-			<label kind="synchronisation" x="-909" y="85">ENEMY_SYNC?</label>
-			<label kind="assignment" x="-790" y="102">next()</label>
-			<nail x="-739" y="85"/>
-			<nail x="-731" y="119"/>
-			<nail x="-714" y="119"/>
-		</transition>
-		<transition id="id32" color="#ffa500">
-			<source ref="id6"/>
+		<transition id="id32">
+			<source ref="id8"/>
 			<target ref="id8"/>
-			<label kind="guard" x="-340" y="59">pos == MAIN_POS &amp;&amp; c1&gt;=speed</label>
-			<label kind="synchronisation" x="-229" y="42">ENEMY_SYNC?</label>
-			<label kind="assignment" x="-297" y="93">countEnemies--</label>
-			<nail x="59" y="85"/>
+			<label kind="guard" x="-662" y="119">c1&lt;speed &amp;&amp; health&gt;0</label>
+			<label kind="synchronisation" x="-662" y="93">ENEMY_SYNC?</label>
+			<label kind="assignment" x="-671" y="136">c1++,updateRecord()</label>
+			<nail x="-654" y="119"/>
+			<nail x="-696" y="127"/>
 		</transition>
-		<transition id="id33" color="#ffa500">
-			<source ref="id7"/>
-			<target ref="id10"/>
-			<label kind="guard" x="-535" y="-459">pos == ENEMIES_PATH2[5]</label>
-			<label kind="synchronisation" x="-374" y="-238">ENEMY_SYNC?</label>
-			<label kind="assignment" x="-527" y="-433">changePath(4),next()</label>
+		<transition id="id33">
+			<source ref="id8"/>
+			<target ref="id8"/>
+			<label kind="guard" x="-1181" y="85">c1&gt;=speed &amp;&amp; pos != ENEMIES_PATH5[13] &amp;&amp; health&gt;0</label>
+			<label kind="synchronisation" x="-917" y="85">ENEMY_SYNC?</label>
+			<label kind="assignment" x="-926" y="102">next(),updateRecord()</label>
+			<nail x="-747" y="85"/>
+			<nail x="-739" y="119"/>
+			<nail x="-722" y="119"/>
 		</transition>
 		<transition id="id34" color="#ffa500">
-			<source ref="id7"/>
-			<target ref="id9"/>
-			<label kind="guard" x="-357" y="-603">pos == ENEMIES_PATH2[5]</label>
+			<source ref="id8"/>
+			<target ref="id10"/>
+			<label kind="guard" x="-340" y="59">pos == MAIN_POS &amp;&amp; c1&gt;=speed &amp;&amp; health&gt;0</label>
+			<label kind="synchronisation" x="-229" y="42">ENEMY_SYNC?</label>
+			<label kind="assignment" x="-289" y="85">updateRecord()</label>
+			<nail x="59" y="85"/>
+		</transition>
+		<transition id="id35" color="#ffa500">
+			<source ref="id9"/>
+			<target ref="id12"/>
+			<label kind="guard" x="-518" y="-510">pos == ENEMIES_PATH2[5]
+&amp;&amp; c1&gt;=speed
+&amp;&amp; health&gt;0</label>
+			<label kind="synchronisation" x="-374" y="-238">ENEMY_SYNC?</label>
+			<label kind="assignment" x="-535" y="-442">changePath(4),next(),updateRecord()</label>
+		</transition>
+		<transition id="id36" color="#ffa500">
+			<source ref="id9"/>
+			<target ref="id11"/>
+			<label kind="guard" x="-459" y="-603">pos == ENEMIES_PATH2[5] &amp;&amp; c1&gt;=speed &amp;&amp; health&gt;0</label>
 			<label kind="synchronisation" x="-306" y="-306">ENEMY_SYNC?</label>
 			<label kind="assignment" x="-391" y="-561">changePath(3),next(),updateRecord()</label>
 		</transition>
-		<transition id="id35" color="#ffa500">
-			<source ref="id5"/>
-			<target ref="id6"/>
-			<label kind="guard" x="-867" y="-68">pos == ENEMIES_PATH1[11] &amp;&amp; c1&gt;=speed &amp;&amp; health&gt;0</label>
+		<transition id="id37" color="#ffa500">
+			<source ref="id7"/>
+			<target ref="id8"/>
+			<label kind="guard" x="-884" y="-68">pos == ENEMIES_PATH1[11] &amp;&amp; c1&gt;=speed &amp;&amp; health&gt;0</label>
 			<label kind="synchronisation" x="-535" y="-34">ENEMY_SYNC?</label>
-			<label kind="assignment" x="-756" y="-42">changePath(5),next()</label>
+			<label kind="assignment" x="-850" y="-51">changePath(5),next(),updateRecord()</label>
 		</transition>
-		<transition id="id36" color="#ffa500">
-			<source ref="id5"/>
-			<target ref="id7"/>
-			<label kind="guard" x="-943" y="-484">pos == ENEMIES_PATH1[11] &amp;&amp; health&gt;0</label>
+		<transition id="id38" color="#ffa500">
+			<source ref="id7"/>
+			<target ref="id9"/>
+			<label kind="guard" x="-1122" y="-442">pos == ENEMIES_PATH1[11] &amp;&amp; health&gt;0 &amp;&amp; c1&gt;=speed</label>
 			<label kind="synchronisation" x="-535" y="-187">ENEMY_SYNC?</label>
-			<label kind="assignment" x="-935" y="-459">changePath(2),next(),updateRecord()</label>
-		</transition>
-		<transition id="id37">
-			<source ref="id5"/>
-			<target ref="id5"/>
-			<label kind="guard" x="-892" y="-170">c1&lt;speed &amp;&amp; health&gt;0</label>
-			<label kind="synchronisation" x="-663" y="-221">ENEMY_SYNC?</label>
-			<label kind="assignment" x="-875" y="-153">c1++,updateRecord()</label>
-			<nail x="-706" y="-161"/>
-			<nail x="-748" y="-187"/>
-		</transition>
-		<transition id="id38">
-			<source ref="id5"/>
-			<target ref="id5"/>
-			<label kind="guard" x="-1088" y="-306">c1&gt;=speed &amp;&amp; pos != ENEMIES_PATH1[11] &amp;&amp; health&gt;0</label>
-			<label kind="synchronisation" x="-833" y="-246">ENEMY_SYNC?</label>
-			<label kind="assignment" x="-1045" y="-212">next(),updateRecord()</label>
-			<nail x="-748" y="-246"/>
-			<nail x="-714" y="-280"/>
+			<label kind="assignment" x="-935" y="-416">changePath(2),next(),updateRecord()</label>
 		</transition>
 		<transition id="id39">
-			<source ref="id8"/>
-			<target ref="id8"/>
-			<label kind="guard" x="144" y="-348">pos == MAIN_POS</label>
-			<label kind="synchronisation" x="178" y="-323">STMT!</label>
-			<label kind="assignment" x="136" y="-332">DAMAGE_TO_MT = damage</label>
-			<nail x="119" y="-349"/>
-			<nail x="127" y="-289"/>
+			<source ref="id7"/>
+			<target ref="id7"/>
+			<label kind="guard" x="-901" y="-170">c1&lt;speed &amp;&amp; health&gt;0</label>
+			<label kind="synchronisation" x="-671" y="-221">ENEMY_SYNC?</label>
+			<label kind="assignment" x="-867" y="-153">c1++,updateRecord()</label>
+			<nail x="-714" y="-161"/>
+			<nail x="-756" y="-187"/>
+		</transition>
+		<transition id="id40">
+			<source ref="id7"/>
+			<target ref="id7"/>
+			<label kind="guard" x="-1122" y="-323">c1&gt;=speed &amp;&amp; pos != ENEMIES_PATH1[11] &amp;&amp; health&gt;0</label>
+			<label kind="synchronisation" x="-841" y="-246">ENEMY_SYNC?</label>
+			<label kind="assignment" x="-892" y="-306">next(),updateRecord()</label>
+			<nail x="-756" y="-246"/>
+			<nail x="-722" y="-280"/>
+		</transition>
+		<transition id="id41">
+			<source ref="id10"/>
+			<target ref="id10"/>
+			<label kind="guard" x="127" y="-297">health&gt;0</label>
+			<label kind="synchronisation" x="169" y="-263">STMT!</label>
+			<label kind="assignment" x="127" y="-271">DAMAGE_TO_MT = damage,
+updateRecord()</label>
+			<nail x="110" y="-305"/>
+			<nail x="110" y="-254"/>
 		</transition>
 	</template>
 	<template>
@@ -440,12 +496,12 @@ void next()
     {
         life = life - DAMAGE_TO_MT;   
     }</declaration>
-		<location id="id40" x="-1113" y="-578" color="#00ff00">
+		<location id="id42" x="-1113" y="-578" color="#00ff00">
 		</location>
-		<init ref="id40"/>
-		<transition id="id41">
-			<source ref="id40"/>
-			<target ref="id40"/>
+		<init ref="id42"/>
+		<transition id="id43">
+			<source ref="id42"/>
+			<target ref="id42"/>
 			<label kind="guard" x="-1265" y="-611">life&gt;0</label>
 			<label kind="synchronisation" x="-1257" y="-594">STMT?</label>
 			<label kind="assignment" x="-1282" y="-577">decDamage()</label>
@@ -453,9 +509,9 @@ void next()
 			<nail x="-1173" y="-544"/>
 			<nail x="-1173" y="-612"/>
 		</transition>
-		<transition id="id42">
-			<source ref="id40"/>
-			<target ref="id40"/>
+		<transition id="id44">
+			<source ref="id42"/>
+			<target ref="id42"/>
 			<label kind="guard" x="-1054" y="-595">life &lt;= 0</label>
 			<label kind="synchronisation" x="-1045" y="-578">STMT?</label>
 			<nail x="-1062" y="-595"/>
