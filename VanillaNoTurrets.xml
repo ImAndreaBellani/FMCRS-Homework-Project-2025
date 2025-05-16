@@ -59,6 +59,7 @@ int c2 := 0;
 Cell pos := INVALID_POS;
 int current_index := 1;
 int current_path := 1;
+int life := 0;
 
 void initEnemy ()
     {
@@ -108,10 +109,12 @@ void next()
 		<location id="id5" x="-306" y="-280" color="#ffa500">
 		</location>
 		<location id="id6" x="-306" y="-76" color="#ff0000">
+			<name x="-314" y="-59">dead</name>
 		</location>
 		<location id="id7" x="-1147" y="-221" color="#00ff00">
 		</location>
-		<location id="id8" x="348" y="-280">
+		<location id="id8" x="348" y="-280" color="#000000">
+			<name x="338" y="-314">ended</name>
 		</location>
 		<init ref="id7"/>
 		<transition id="id9">
@@ -125,8 +128,7 @@ void next()
 		<transition id="id10" color="#ff0000">
 			<source ref="id3"/>
 			<target ref="id6"/>
-			<label kind="guard" x="-102" y="-170">health&lt;=0</label>
-			<nail x="-119" y="-119"/>
+			<label kind="guard" x="-144" y="-195">health&lt;=0</label>
 		</transition>
 		<transition id="id11" color="#ff0000">
 			<source ref="id4"/>
@@ -170,12 +172,6 @@ void next()
 			<label kind="guard" x="-527" y="-161">health&lt;=0</label>
 		</transition>
 		<transition id="id18">
-			<source ref="id6"/>
-			<target ref="id6"/>
-			<nail x="-323" y="-25"/>
-			<nail x="-272" y="-25"/>
-		</transition>
-		<transition id="id19">
 			<source ref="id5"/>
 			<target ref="id5"/>
 			<label kind="guard" x="-212" y="-382">c1&gt;=speed
@@ -185,7 +181,7 @@ void next()
 			<nail x="-281" y="-339"/>
 			<nail x="-247" y="-314"/>
 		</transition>
-		<transition id="id20">
+		<transition id="id19">
 			<source ref="id5"/>
 			<target ref="id5"/>
 			<label kind="guard" x="-416" y="-399">c1&lt;speed &amp;&amp; health&gt;0</label>
@@ -194,7 +190,7 @@ void next()
 			<nail x="-298" y="-348"/>
 			<nail x="-306" y="-305"/>
 		</transition>
-		<transition id="id21">
+		<transition id="id20">
 			<source ref="id4"/>
 			<target ref="id4"/>
 			<label kind="guard" x="136" y="-628">c1&gt;=speed &amp;&amp; pos != ENEMIES_PATH3[7] &amp;&amp; health&gt;0</label>
@@ -202,7 +198,7 @@ void next()
 			<nail x="93" y="-611"/>
 			<nail x="127" y="-594"/>
 		</transition>
-		<transition id="id22">
+		<transition id="id21">
 			<source ref="id4"/>
 			<target ref="id4"/>
 			<label kind="guard" x="-68" y="-663">c1&lt;speed &amp;&amp; health&gt;0</label>
@@ -210,19 +206,19 @@ void next()
 			<nail x="-1" y="-603"/>
 			<nail x="42" y="-620"/>
 		</transition>
-		<transition id="id23" color="#ffa500">
+		<transition id="id22" color="#ffa500">
 			<source ref="id4"/>
 			<target ref="id3"/>
 			<label kind="guard" x="-170" y="-476">pos == MAIN_POS &amp;&amp; c1&gt;=speed &amp;&amp; health&gt;0</label>
 		</transition>
-		<transition id="id24" color="#ffa500">
+		<transition id="id23" color="#ffa500">
 			<source ref="id5"/>
 			<target ref="id3"/>
-			<label kind="guard" x="-187" y="-289">pos == MAIN_POS
+			<label kind="guard" x="-161" y="-306">pos == MAIN_POS
 &amp;&amp; c1&gt;=speed
 &amp;&amp; health&gt;0</label>
 		</transition>
-		<transition id="id25">
+		<transition id="id24">
 			<source ref="id2"/>
 			<target ref="id2"/>
 			<label kind="guard" x="-671" y="-654">c1&lt;speed &amp;&amp; health&gt;0</label>
@@ -230,7 +226,7 @@ void next()
 			<nail x="-620" y="-603"/>
 			<nail x="-680" y="-620"/>
 		</transition>
-		<transition id="id26">
+		<transition id="id25">
 			<source ref="id2"/>
 			<target ref="id2"/>
 			<label kind="guard" x="-1139" y="-629">c1&gt;=speed &amp;&amp; pos != ENEMIES_PATH2[5] &amp;&amp; health&gt;0</label>
@@ -238,7 +234,7 @@ void next()
 			<nail x="-756" y="-561"/>
 			<nail x="-731" y="-620"/>
 		</transition>
-		<transition id="id27">
+		<transition id="id26">
 			<source ref="id1"/>
 			<target ref="id1"/>
 			<label kind="guard" x="-662" y="119">c1&lt;speed &amp;&amp; health&gt;0</label>
@@ -246,7 +242,7 @@ void next()
 			<nail x="-654" y="119"/>
 			<nail x="-696" y="127"/>
 		</transition>
-		<transition id="id28">
+		<transition id="id27">
 			<source ref="id1"/>
 			<target ref="id1"/>
 			<label kind="guard" x="-1181" y="85">c1&gt;=speed &amp;&amp; pos != ENEMIES_PATH5[13] &amp;&amp; health&gt;0</label>
@@ -255,13 +251,13 @@ void next()
 			<nail x="-739" y="119"/>
 			<nail x="-722" y="119"/>
 		</transition>
-		<transition id="id29" color="#ffa500">
+		<transition id="id28" color="#ffa500">
 			<source ref="id1"/>
 			<target ref="id3"/>
 			<label kind="guard" x="-340" y="59">pos == MAIN_POS &amp;&amp; c1&gt;=speed &amp;&amp; health&gt;0</label>
 			<nail x="59" y="85"/>
 		</transition>
-		<transition id="id30" color="#ffa500">
+		<transition id="id29" color="#ffa500">
 			<source ref="id2"/>
 			<target ref="id5"/>
 			<label kind="guard" x="-518" y="-510">pos == ENEMIES_PATH2[5]
@@ -269,25 +265,25 @@ void next()
 &amp;&amp; health&gt;0</label>
 			<label kind="assignment" x="-535" y="-442">changePath(4),next()</label>
 		</transition>
-		<transition id="id31" color="#ffa500">
+		<transition id="id30" color="#ffa500">
 			<source ref="id2"/>
 			<target ref="id4"/>
 			<label kind="guard" x="-459" y="-603">pos == ENEMIES_PATH2[5] &amp;&amp; c1&gt;=speed &amp;&amp; health&gt;0</label>
 			<label kind="assignment" x="-391" y="-561">changePath(3),next()</label>
 		</transition>
-		<transition id="id32" color="#ffa500">
+		<transition id="id31" color="#ffa500">
 			<source ref="id0"/>
 			<target ref="id1"/>
 			<label kind="guard" x="-884" y="-68">pos == ENEMIES_PATH1[11] &amp;&amp; c1&gt;=speed &amp;&amp; health&gt;0</label>
 			<label kind="assignment" x="-850" y="-51">changePath(5),next()</label>
 		</transition>
-		<transition id="id33" color="#ffa500">
+		<transition id="id32" color="#ffa500">
 			<source ref="id0"/>
 			<target ref="id2"/>
 			<label kind="guard" x="-1122" y="-442">pos == ENEMIES_PATH1[11] &amp;&amp; health&gt;0 &amp;&amp; c1&gt;=speed</label>
 			<label kind="assignment" x="-935" y="-416">changePath(2),next()</label>
 		</transition>
-		<transition id="id34">
+		<transition id="id33">
 			<source ref="id0"/>
 			<target ref="id0"/>
 			<label kind="guard" x="-901" y="-170">c1&lt;speed &amp;&amp; health&gt;0</label>
@@ -295,7 +291,7 @@ void next()
 			<nail x="-714" y="-161"/>
 			<nail x="-756" y="-187"/>
 		</transition>
-		<transition id="id35">
+		<transition id="id34">
 			<source ref="id0"/>
 			<target ref="id0"/>
 			<label kind="guard" x="-1122" y="-323">c1&gt;=speed &amp;&amp; pos != ENEMIES_PATH1[11] &amp;&amp; health&gt;0</label>
@@ -303,7 +299,7 @@ void next()
 			<nail x="-756" y="-246"/>
 			<nail x="-722" y="-280"/>
 		</transition>
-		<transition id="id36">
+		<transition id="id35">
 			<source ref="id3"/>
 			<target ref="id8"/>
 			<label kind="guard" x="127" y="-306">health&gt;0 &amp;&amp; c1&gt;=speed</label>
@@ -318,12 +314,12 @@ void next()
     {
         life = life - DAMAGE_TO_MT;   
     }</declaration>
-		<location id="id37" x="-1113" y="-578" color="#00ff00">
+		<location id="id36" x="-1113" y="-578" color="#00ff00">
 		</location>
-		<init ref="id37"/>
-		<transition id="id38">
-			<source ref="id37"/>
-			<target ref="id37"/>
+		<init ref="id36"/>
+		<transition id="id37">
+			<source ref="id36"/>
+			<target ref="id36"/>
 			<label kind="guard" x="-1265" y="-611">life&gt;0</label>
 			<label kind="synchronisation" x="-1257" y="-594">STMT?</label>
 			<label kind="assignment" x="-1282" y="-577">decDamage()</label>
@@ -331,9 +327,9 @@ void next()
 			<nail x="-1173" y="-544"/>
 			<nail x="-1173" y="-612"/>
 		</transition>
-		<transition id="id39">
-			<source ref="id37"/>
-			<target ref="id37"/>
+		<transition id="id38">
+			<source ref="id36"/>
+			<target ref="id36"/>
 			<label kind="guard" x="-1054" y="-595">life &lt;= 0</label>
 			<label kind="synchronisation" x="-1045" y="-578">STMT?</label>
 			<nail x="-1062" y="-595"/>
@@ -346,11 +342,11 @@ en0 = circle(0);
 //en1 = square(1);
 //en2 = circle(0);
 //en3 = square(1);
-//mt = mainTower(MT.health);
+mt = mainTower(MT.health);
 
 
 
-system en0;//, en1, /*en2, en3*/mt;
+system en0, mt;//, en1, /*en2, en3*/mt;
 
 
 
@@ -362,6 +358,12 @@ system en0;//, en1, /*en2, en3*/mt;
 			<comment/>
 		</query>
 		<query>
+			<formula>A[](deadlock imply (en0.dead || en0.ended))</formula>
+			<comment/>
+			<result outcome="success" type="quality" timestamp="2025-05-15 19:12:55 +0200">
+			</result>
+		</query>
+		<query>
 			<formula>A[](en0.pos==INVALID_POS
 	|| exists(i : int[0, PATH_LENGHTS[0]-1]) (ENEMIES_PATH1[i] == en0.pos)
 	|| exists(i : int[0, PATH_LENGHTS[1]-1]) (ENEMIES_PATH2[i] == en0.pos)
@@ -369,14 +371,14 @@ system en0;//, en1, /*en2, en3*/mt;
 	|| exists(i : int[0, PATH_LENGHTS[3]-1]) (ENEMIES_PATH4[i] == en0.pos)
 	|| exists(i : int[0, PATH_LENGHTS[4]-1]) (ENEMIES_PATH5[i] == en0.pos))</formula>
 			<comment/>
-			<result outcome="success" type="quality" timestamp="2025-05-15 08:48:46 +0200">
+			<result outcome="success" type="quality" timestamp="2025-05-15 19:18:28 +0200">
 			</result>
 		</query>
 		<query>
 			<formula>E&lt;&gt;(en0.pos==MAIN_POS)
 </formula>
 			<comment/>
-			<result outcome="success" type="quality" timestamp="2025-05-15 08:40:23 +0200">
+			<result outcome="success" type="quality" timestamp="2025-05-15 18:44:47 +0200">
 			</result>
 		</query>
 	</queries>
