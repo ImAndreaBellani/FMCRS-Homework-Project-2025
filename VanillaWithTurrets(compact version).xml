@@ -1,0 +1,519 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.6//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_6.dtd'>
+<nta>
+	<declaration>//type definitions:
+
+typedef struct {
+    int[-1,15] x;
+    int[-1,15] y;
+} Cell;
+
+typedef struct {
+    int health;
+} MainTowerConfiguration;
+
+typedef struct {
+    int speed;
+    int health;
+    int damage;
+    int spawningTime;
+} EnemyConfiguration;
+
+typedef struct {
+    int range;
+    int speed;
+    int damage;
+} TurretConfiguration;
+
+typedef struct {
+    Cell pos;
+    int lifeTime;
+    bool kind;
+    bool available;
+} EnemyRecord;
+
+typedef struct {
+    int id;
+    int damage;
+} TargetRecord;
+
+//configuration definitions:
+
+const MainTowerConfiguration MT := {10};
+
+const EnemyConfiguration SQUARE := {3, 20, 4, 3};
+const EnemyConfiguration CIRCLE := {1, 10, 2, 2};
+
+const TurretConfiguration BASIC := {2,2,2};
+const TurretConfiguration CANNON := {1,7,5};
+const TurretConfiguration SNIPER := {4,20,8};
+
+//map definitions
+
+const Cell MAIN_POS = {15,4};
+
+const Cell TURRET0_POS = {5,5};
+const Cell TURRET1_POS = {8,2};
+const Cell TURRET2_POS = {8,6};
+const Cell TURRET3_POS = {14,2};
+const Cell TURRET4_POS = {14,6};
+const Cell TURRET5_POS = {2,3};
+const Cell TURRET6_POS = {11,5};
+
+const Cell INVALID_POS = {-1,-1};
+const Cell START_POS = {0,0};
+
+const int MAX_PATH_LENGTH = 25;
+
+//wave parameters
+
+const int MAX_ENEMIES := 3;
+int ENEMIES_COUNT = MAX_ENEMIES;
+
+//channels and shared parameters
+
+    //enemies --&gt; MT
+
+    urgent chan STMT;
+    int DAMAGE_TO_MT;
+
+    //turrets --&gt; enemies
+
+    EnemyRecord SHOOT_TABLE[MAX_ENEMIES];
+    
+    broadcast chan SHOOT_TO_ENEMY;
+    
+    TargetRecord TARGET_RECORD;
+    
+   // int countEnemies=MAX_ENEMIES;
+
+bool isValid (Cell c)
+    {
+        if (c == INVALID_POS)
+            {
+                return (true);
+            }
+        if (c.y == 7)
+            {
+                return (c.x&gt;=7 &amp;&amp; c.x&lt;=15);
+            } 
+        if (c.y == 6 || c.y == 5)
+            {
+                return (c.x == 7 || c.x == 10 || c.x == 15);
+            }
+        if (c.y == 4)
+            {
+                return (c.x != 8 &amp;&amp; c.x != 9);
+            }
+        if (c.y == 3 || c.y == 2)
+            {
+                return (c.x == 0 || c.x == 7 || c.x == 15);
+            }
+        if (c.y == 1)
+            {
+                return (c.x == 0 || (c.x &gt;=7 &amp;&amp; c.x&lt;=15));
+            }
+        if (c.y == 0)
+            {
+                return (c.x == 0);
+            }
+
+        return (false);
+    }</declaration>
+	<template>
+		<name>compactEnemy</name>
+		<parameter>const int id, const int speed, int health, const int damage, const int spawningTime, const bool kind</parameter>
+		<declaration>int c1 := 0;
+int c2 := 0;
+Cell pos := INVALID_POS;
+int age := 0;
+int choice := 0;
+
+void initEnemy (int i)
+    {
+        pos = START_POS;
+        SHOOT_TABLE[id].lifeTime = 0;
+        SHOOT_TABLE[id].kind = kind;
+        SHOOT_TABLE[id].available = true;
+        choice = i;
+    }
+void takeDamage ()
+    {
+        if (TARGET_RECORD.id == id)
+            {
+                health = health - TARGET_RECORD.damage;
+                TARGET_RECORD.damage = 0;
+            }
+    }
+void dismiss ()
+    {
+        SHOOT_TABLE[id].available = false;
+        ENEMIES_COUNT--;
+    }
+void initRecord ()
+    {
+        SHOOT_TABLE[id].pos = pos;
+        SHOOT_TABLE[id].lifeTime = age;
+    }
+void updateRecord ()
+    {
+        SHOOT_TABLE[id].pos = pos;
+        age++;
+        SHOOT_TABLE[id].lifeTime = age;        
+    }
+void next()
+    {
+        if (pos.x == 0)
+            {
+                if (pos.y &lt;=3)
+                    pos.y = pos.y+1;
+                else
+                    if (pos.y == 4)
+                        pos.x = 1;
+                
+                return;
+            }
+        if (pos.x &gt;=1 &amp;&amp; pos.x &lt;= 6)
+            {
+                pos.x = pos.x +1;
+                return;
+            }
+        if (pos.x == 7)
+            {
+                if (pos.y == 4)
+                    {
+                        if (choice == 0 || choice == 1)
+                            pos.y = pos.y + 1;
+                        else
+                            pos.y = pos.y - 1;
+                    }
+                else
+                    if (pos.y == 5 || pos.y == 6)
+                        pos.y = pos.y + 1;
+                    else
+                        if (pos.y == 3 || pos.y == 2)
+                            pos.y = pos.y - 1;
+                        else
+                            if (pos.y == 7 || pos.y == 1)
+                                pos.x = pos.x + 1;
+                return;
+            }
+        if (pos.x &gt;= 8 &amp;&amp; pos.x &lt;= 9)
+            {
+                if (pos.y == 7 || pos.y == 1)
+                    pos.x = pos.x + 1;
+                return;
+            }
+        if (pos.x == 10)
+            {
+                if (pos.y == 7)
+                    {
+                        if (choice == 0)
+                            pos.y = pos.y - 1;
+                        else
+                            pos.x = pos.x + 1;
+                    }
+                else
+                    if (pos.y == 6 || pos.y == 5)
+                        pos.y = pos.y - 1;
+                    else
+                        if (pos.y == 1 || pos.y == 4)
+                            pos.x = pos.x + 1;
+                return;
+            }
+        if (pos.x &gt;= 11 &amp;&amp; pos.x &lt;= 14)
+            {
+                if (pos.y == 7 || pos.y == 1 || pos.y == 4)
+                    pos.x = pos.x + 1;
+                return;
+            }
+        if (pos.x == 15)
+            {
+                if (pos.y &lt; 4 &amp;&amp; pos.y &gt;= 1)
+                    pos.y = pos.y + 1;
+                else
+                    if (pos.y &gt; 4 &amp;&amp; pos.y &lt;= 7)
+                        pos.y = pos.y - 1;
+                return;
+            }
+    }</declaration>
+		<location id="id0" x="505" y="430" color="#ffa500">
+		</location>
+		<location id="id1" x="612" y="612" color="#ff0000">
+			<name x="629" y="612">dead</name>
+		</location>
+		<location id="id2" x="-93" y="433" color="#00ff00">
+		</location>
+		<location id="id3" x="1045" y="433" color="#000000">
+			<name x="1035" y="399">ended</name>
+		</location>
+		<init ref="id2"/>
+		<transition id="id4">
+			<source ref="id2"/>
+			<target ref="id0"/>
+			<label kind="guard" x="127" y="476">c2==spawningTime</label>
+			<label kind="assignment" x="85" y="510">initEnemy(2),initRecord()</label>
+			<nail x="187" y="510"/>
+		</transition>
+		<transition id="id5">
+			<source ref="id2"/>
+			<target ref="id0"/>
+			<label kind="guard" x="136" y="314">c2==spawningTime</label>
+			<label kind="assignment" x="85" y="348">initEnemy(0),initRecord()</label>
+			<nail x="178" y="340"/>
+		</transition>
+		<transition id="id6">
+			<source ref="id2"/>
+			<target ref="id2"/>
+			<label kind="guard" x="-263" y="399">c2&lt;spawningTime</label>
+			<label kind="assignment" x="-170" y="425">c2++</label>
+			<nail x="-127" y="450"/>
+			<nail x="-127" y="399"/>
+		</transition>
+		<transition id="id7">
+			<source ref="id0"/>
+			<target ref="id0"/>
+			<label kind="guard" x="569" y="442">health&gt;0</label>
+			<label kind="synchronisation" x="561" y="459">SHOOT_TO_ENEMY?</label>
+			<label kind="assignment" x="552" y="476">takeDamage()</label>
+			<nail x="578" y="442"/>
+			<nail x="544" y="459"/>
+		</transition>
+		<transition id="id8" color="#00ff00">
+			<source ref="id2"/>
+			<target ref="id0"/>
+			<label kind="guard" x="144" y="408">c2==spawningTime</label>
+			<label kind="assignment" x="102" y="433">initEnemy(1),initRecord()</label>
+		</transition>
+		<transition id="id9" color="#ff0000">
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="guard" x="595" y="544">health&lt;=0</label>
+			<label kind="assignment" x="603" y="561">dismiss()</label>
+		</transition>
+		<transition id="id10" color="#ffa500">
+			<source ref="id0"/>
+			<target ref="id3"/>
+			<label kind="guard" x="722" y="408">pos == MAIN_POS &amp;&amp; health&gt;0</label>
+			<label kind="synchronisation" x="875" y="382">STMT!</label>
+			<label kind="assignment" x="731" y="442">DAMAGE_TO_MT = damage,dismiss()</label>
+		</transition>
+		<transition id="id11">
+			<source ref="id0"/>
+			<target ref="id0"/>
+			<label kind="guard" x="323" y="493">pos != MAIN_POS &amp;&amp; c1&lt;speed &amp;&amp; health&gt;0</label>
+			<label kind="assignment" x="374" y="518">c1++,updateRecord()</label>
+			<nail x="510" y="493"/>
+			<nail x="476" y="476"/>
+		</transition>
+		<transition id="id12">
+			<source ref="id0"/>
+			<target ref="id0"/>
+			<label kind="guard" x="357" y="323">c1==speed &amp;&amp; pos != MAIN_POS &amp;&amp; health&gt;0</label>
+			<label kind="assignment" x="442" y="348">next(),c1=0,updateRecord()</label>
+			<nail x="510" y="374"/>
+			<nail x="552" y="391"/>
+		</transition>
+	</template>
+	<template>
+		<name>turret</name>
+		<parameter>int id, Cell pos, int range, int speed, int damage</parameter>
+		<declaration>int c1=0;
+
+int max (int v1, int v2)
+    {
+        if (v1 &gt;= v2)
+            return (v1);
+        else
+            return (v2);
+    }
+int dist(const Cell c1, const Cell c2)
+    {
+        return (max(abs(c1.x - c2.x), abs(c1.y - c2.y)));
+    }
+void target (int id)
+    {
+        TARGET_RECORD.id = id;
+        TARGET_RECORD.damage = damage;
+        c1=speed;
+    }
+void aim()
+    {
+        int k, i, app[MAX_ENEMIES], appLen = 0, maxLife, lifeLen = 0;
+
+        for (k = 1 ; k&lt;=range ; k++)
+            {
+                for (i = 0 ; i &lt; MAX_ENEMIES ; i++)
+                    {
+                        if (SHOOT_TABLE[i].available &amp;&amp; dist(SHOOT_TABLE[i].pos, pos) == k)
+                            {
+                                app[appLen] = i;
+                                appLen++;
+                            }
+                    }
+                if (appLen &gt; 0)
+                    {
+                        maxLife = SHOOT_TABLE[app[0]].lifeTime;
+                        lifeLen = 1;
+                        for (i = 1 ; i &lt; appLen ; i++)
+                            {
+                                if (SHOOT_TABLE[app[i]].lifeTime &gt; maxLife)
+                                    {
+                                        maxLife = SHOOT_TABLE[app[i]].lifeTime;
+                                        app[0] = app[i];
+                                        lifeLen=1;
+                                    }
+                                else
+                                    {
+                                        if (SHOOT_TABLE[app[i]].lifeTime == maxLife)
+                                            {
+                                                app[lifeLen] = app[i];
+                                                lifeLen++;
+                                            }
+                                    }
+                            }
+                        lifeLen--;
+                        for (i = 0 ; i &lt; lifeLen ; i++)
+                            {
+                                if (SHOOT_TABLE[app[i]].kind)
+                                    {
+                                        target(app[i]);
+                                        return;
+                                    }
+                            }
+                        target(app[i]);
+                        return;
+                    }
+            }                
+    }
+bool shootable()
+    {
+        int i;
+        
+        for (i = 0 ; i&lt;MAX_ENEMIES ; i++)
+            {
+                if (SHOOT_TABLE[i].available &amp;&amp; dist(SHOOT_TABLE[i].pos, pos)&lt;=range)
+                    {
+                         return (true);
+                    }
+            }
+
+        return (false);
+    }
+</declaration>
+		<location id="id13" x="-416" y="-280">
+		</location>
+		<location id="id14" x="-323" y="-178">
+		</location>
+		<init ref="id13"/>
+		<transition id="id15">
+			<source ref="id13"/>
+			<target ref="id14"/>
+			<label kind="guard" x="-398" y="-263">ENEMIES_COUNT == 0</label>
+		</transition>
+		<transition id="id16">
+			<source ref="id13"/>
+			<target ref="id13"/>
+			<label kind="guard" x="-365" y="-357">c1&gt;0 &amp;&amp; shootable()</label>
+			<label kind="assignment" x="-365" y="-339">c1=c1-1</label>
+			<nail x="-407" y="-348"/>
+			<nail x="-339" y="-297"/>
+		</transition>
+		<transition id="id17">
+			<source ref="id13"/>
+			<target ref="id13"/>
+			<label kind="guard" x="-748" y="-272">c1==0 &amp;&amp; shootable()</label>
+			<label kind="synchronisation" x="-688" y="-289">SHOOT_TO_ENEMY!</label>
+			<label kind="assignment" x="-612" y="-255">aim()</label>
+			<nail x="-553" y="-280"/>
+			<nail x="-476" y="-212"/>
+		</transition>
+	</template>
+	<template>
+		<name x="5" y="5">mainTower</name>
+		<parameter>int life</parameter>
+		<declaration>void decDamage()
+    {
+        life = life - DAMAGE_TO_MT;
+        DAMAGE_TO_MT = 0;
+    }</declaration>
+		<location id="id18" x="-1113" y="-578" color="#00ff00">
+		</location>
+		<init ref="id18"/>
+		<transition id="id19">
+			<source ref="id18"/>
+			<target ref="id18"/>
+			<label kind="guard" x="-1265" y="-611">life&gt;0</label>
+			<label kind="synchronisation" x="-1257" y="-594">STMT?</label>
+			<label kind="assignment" x="-1282" y="-577">decDamage()</label>
+			<nail x="-1164" y="-527"/>
+			<nail x="-1173" y="-544"/>
+			<nail x="-1173" y="-612"/>
+		</transition>
+		<transition id="id20">
+			<source ref="id18"/>
+			<target ref="id18"/>
+			<label kind="guard" x="-1054" y="-595">life &lt;= 0</label>
+			<label kind="synchronisation" x="-1045" y="-578">STMT?</label>
+			<nail x="-1062" y="-595"/>
+			<nail x="-1054" y="-535"/>
+		</transition>
+	</template>
+	<system>circlec(const int id) = compactEnemy(id, CIRCLE.speed, CIRCLE.health, CIRCLE.damage, CIRCLE.spawningTime, false);
+squarec(const int id) = compactEnemy(id, SQUARE.speed, SQUARE.health, SQUARE.damage, SQUARE.spawningTime, true);
+basic(const int id, const Cell pos) = turret(id, pos, BASIC.range, BASIC.speed, BASIC.damage);
+cannon(const int id, const Cell pos) = turret(id, pos, CANNON.range, CANNON.speed, CANNON.damage);
+sniper(const int id, const Cell pos) = turret(id, pos, SNIPER.range, SNIPER.speed, SNIPER.damage);
+
+enc0 = circlec(0);
+enc1 = squarec(1);
+enc2 = circlec(2);
+enc3 = squarec(3);
+mt = mainTower(MT.health);
+t0 = basic(0, TURRET0_POS);
+t1 = cannon(1, TURRET1_POS);
+t2 = cannon(2, TURRET2_POS);
+t3 = cannon(3, TURRET3_POS);
+t4 = cannon(4, TURRET4_POS);
+t5 = sniper(5, TURRET5_POS);
+t6 = sniper(6, TURRET6_POS);
+
+system mt, enc0, enc1, t0;//, enc2;//, enc1;//, enc1, enc2;//, t0, t5;//, en1, t0, t5;
+
+
+
+
+</system>
+	<queries>
+		<query>
+			<formula>A[](deadlock imply ENEMIES_COUNT==0)</formula>
+			<comment/>
+		</query>
+		<query>
+			<formula>E&lt;&gt;(enc0.pos == MAIN_POS &amp;&amp; enc1.pos == MAIN_POS)</formula>
+			<comment/>
+			<result outcome="success" type="quality" timestamp="2025-05-17 09:35:34 +0200">
+			</result>
+		</query>
+		<query>
+			<formula>A[](enc0.pos == MAIN_POS imply enc0.age&lt;=(MAX_PATH_LENGTH*(CIRCLE.speed+1)))</formula>
+			<comment/>
+			<result outcome="success" type="quality" timestamp="2025-05-17 10:56:29 +0200">
+			</result>
+		</query>
+		<query>
+			<formula>A[](enc1.pos == MAIN_POS imply enc1.age&lt;=(MAX_PATH_LENGTH*(SQUARE.speed+1)))</formula>
+			<comment/>
+			<result outcome="success" type="quality" timestamp="2025-05-17 10:56:27 +0200">
+			</result>
+		</query>
+		<query>
+			<formula>A[](isValid(enc0.pos) &amp;&amp; isValid(enc1.pos))</formula>
+			<comment/>
+			<option key="--statespace-consumption" value="3"/>
+			<result outcome="success" type="quality" timestamp="2025-05-17 10:56:31 +0200">
+				<option key="--statespace-consumption" value="3"/>
+			</result>
+		</query>
+	</queries>
+</nta>
