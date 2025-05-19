@@ -68,7 +68,7 @@ const int MAX_PATH_LENGTH = 25;
 
 //wave parameters
 
-const int MAX_ENEMIES := 1; //how many enemies will eventually get into the match
+const int MAX_ENEMIES := 3; //how many enemies will eventually get into the match
 int not_dead_enemies := MAX_ENEMIES; //how many enemies are currently alive or about to spawn
 int available_enemies := 0; //how many enemies are currently available (already spawned and not dead)
 
@@ -280,8 +280,8 @@ void next()
 		<transition id="id6">
 			<source ref="id2"/>
 			<target ref="id2"/>
-			<label kind="guard" x="-425" y="416">spawning_timer&gt;0</label>
-			<label kind="assignment" x="-280" y="416">spawning_timer--</label>
+			<label kind="guard" x="-433" y="416">spawning_timer&gt;0</label>
+			<label kind="assignment" x="-289" y="416">spawning_timer--</label>
 			<nail x="-144" y="450"/>
 			<nail x="-144" y="399"/>
 		</transition>
@@ -511,7 +511,7 @@ t4 = cannon(4, TURRET4_POS);
 t5 = sniper(5, TURRET5_POS);
 t6 = sniper(6, TURRET6_POS);
 
-system mt,enc0, t0, t1, t2, t3, t4, t5, t6;
+system mt,enc0, enc1, enc2;
 
 
 
@@ -521,31 +521,31 @@ system mt,enc0, t0, t1, t2, t3, t4, t5, t6;
 		<query>
 			<formula>A[](deadlock imply matchEnded())</formula>
 			<comment/>
-			<result outcome="success" type="quality" timestamp="2025-05-19 12:06:34 +0200">
+			<option key="--exploration" value="0"/>
+			<result outcome="success" type="quality" timestamp="2025-05-19 13:32:56 +0200">
+				<option key="--exploration" value="0"/>
 			</result>
 		</query>
 		<query>
 			<formula>E&lt;&gt;(enc0.pos == MAIN_POS)</formula>
 			<comment/>
-			<result outcome="success" type="quality" timestamp="2025-05-19 06:30:00 +0200">
+			<option key="--exploration" value="0"/>
+			<result outcome="success" type="quality" timestamp="2025-05-19 13:28:39 +0200">
+				<option key="--exploration" value="0"/>
 			</result>
 		</query>
 		<query>
-			<formula>A[](enc0.pos == MAIN_POS imply enc0.age&lt;=(MAX_PATH_LENGTH*(CIRCLE.speed+1)))</formula>
+			<formula>A[](enc0.pos == MAIN_POS imply enc0.lifeTime&lt;=(MAX_PATH_LENGTH*(CIRCLE.speed+1)))</formula>
 			<comment/>
-			<result outcome="success" type="quality" timestamp="2025-05-19 06:30:08 +0200">
-			</result>
 		</query>
 		<query>
-			<formula>A[](enc1.pos == MAIN_POS imply enc1.age&lt;=(MAX_PATH_LENGTH*(SQUARE.speed+1)))</formula>
+			<formula>A[](enc1.pos == MAIN_POS imply enc1.lifeTime&lt;=(MAX_PATH_LENGTH*(SQUARE.speed+1)))</formula>
 			<comment/>
-			<result outcome="success" type="quality" timestamp="2025-05-18 17:38:05 +0200">
-			</result>
 		</query>
 		<query>
 			<formula>A[](isValid(enc0.pos) &amp;&amp; isValid(enc1.pos))</formula>
 			<comment/>
-			<result outcome="success" type="quality" timestamp="2025-05-18 17:38:09 +0200">
+			<result outcome="success" type="quality" timestamp="2025-05-19 13:31:01 +0200">
 			</result>
 		</query>
 		<query>
