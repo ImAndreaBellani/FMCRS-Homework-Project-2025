@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.6//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_6.dtd'>
 <nta>
-	<declaration>//type definitions:
+	<declaration>/*
+   -&gt; è giusto lo spawn?
+   -&gt; chiarire la roba "winning or losing"
+   -&gt; query "can reach the main tower" ha il problema che se la conf. è tale per cui la MT muore non è vero che tutti gli enemy possono raggiungere la MT
+*/
 
-const int[5,5] MAX_ENEMIES := 5; //how many enemies will eventually get into the match
+//type definitions:
+
+const int[6,6] MAX_ENEMIES := 6; //how many enemies will eventually get into the match
 
 typedef int[0,MAX_ENEMIES] id_t;
 typedef int[0,7] idt_t;
@@ -71,18 +77,9 @@ const Cell START_POS = {0,0};
 
 const int[25,25] MAX_PATH_LENGTH = 25;
 
-/*
-const Cell paths[MAX_PATH_LENGTH+1][3] = {
-    {{0,0},{0,1},{0,2},{0,3},{0,4},{1,4},{2,4},{3,4},{4,4},{5,4},{6,4},{7,4},{7,5},{7,6},{7,7},{8,7},{9,7},{10,7},{11,7},{12,7},{13,7},{14,7},{15,7},{15,6},{15,5},{15,4}},
-    {{0,0},{0,1},{0,2},{0,3},{0,4},{1,4},{2,4},{3,4},{4,4},{5,4},{6,4},{7,4},{7,5},{7,6},{7,7},{8,7},{9,7},{10,7},{10,6},{10,5},{10,4},{11,4},{12,4},{13,4},{14,4},{15,4}},
-    {{0,0},{0,1},{0,2},{0,3},{0,4},{1,4},{2,4},{3,4},{4,4},{5,4},{6,4},{7,4},{7,3},{7,2},{7,1},{8,1},{9,1},{10,1},{11,1},{12,1},{13,1},{14,1},{15,1},{15,2},{15,3},{15,4}}
-};
-*/
-
 //wave parameters
 
 int[-20,MT.health] mt_life := MT.health;
-
 
 int[0,MAX_ENEMIES] ended_enemies := MAX_ENEMIES; //how many enemies are currently alive or about to spawn
 int[0,MAX_ENEMIES] available_enemies := 0; //how many enemies are currently available (already spawned and not dead)
@@ -143,7 +140,6 @@ void initialize(const int[0,2] i)
         pos = START_POS;
         chosenPath = i;
 
-        shoot_table[id].lifeTime = 0;
         shoot_table[id].kind = kind;
         shoot_table[id].available = true;
         shoot_table[id].pos = pos;
@@ -174,12 +170,6 @@ void takeDamage ()
                 target_record.damage = 0;
                 target_record.id = -1;
             }
-    }
-
-void updateRecord ()
-    {
-        shoot_table[id].pos = pos;
-        shoot_table[id].lifeTime++;
     }
 void next()
     {     
@@ -256,86 +246,91 @@ void next()
                         pos.y = pos.y - 1;
                 return;
             }
+    }
+bool canMove()
+    {
+        return (!matchEnded() &amp;&amp; pos!=MAIN_POS &amp;&amp; health&gt;0);
     }</declaration>
-		<location id="id0" x="297" y="425" color="#ffa500">
-			<label kind="invariant" x="287" y="442">x&lt;=speed &amp;&amp; z&lt;=1</label>
+		<location id="id0" x="357" y="425" color="#00ff00">
+			<label kind="invariant" x="238" y="374">x&lt;=speed &amp;&amp; z&lt;=1</label>
 		</location>
-		<location id="id1" x="-102" y="425" color="#00ff00">
-			<label kind="invariant" x="-153" y="434">x&lt;=spawningTime</label>
+		<location id="id1" x="-110" y="510" color="#00ffff">
+			<label kind="invariant" x="-161" y="518">x&lt;=spawningTime</label>
 		</location>
-		<location id="id2" x="297" y="195" color="#000000">
-			<name x="272" y="161">ended</name>
-			<label kind="invariant" x="287" y="212">x&lt;=speed</label>
+		<location id="id2" x="467" y="263" color="#ffa500">
+			<name x="442" y="229">afterShot</name>
+			<label kind="invariant" x="484" y="255">x&lt;=speed</label>
 		</location>
-		<location id="id3" x="476" y="195">
+		<location id="id3" x="229" y="263" color="#ff0000">
+			<name x="204" y="229">ended</name>
 		</location>
 		<init ref="id1"/>
 		<transition id="id4">
 			<source ref="id0"/>
 			<target ref="id0"/>
-			<label kind="guard" x="357" y="340">z==1 &amp;&amp; !matchEnded() &amp;&amp; health&gt;0 &amp;&amp; pos!=MAIN_POS</label>
-			<label kind="assignment" x="357" y="357">updateRecord(),z=0</label>
-			<nail x="323" y="323"/>
-			<nail x="357" y="365"/>
+			<label kind="guard" x="408" y="382">z&gt;=1 &amp;&amp; x&lt;speed &amp;&amp; canMove()</label>
+			<label kind="assignment" x="408" y="399">shoot_table[id].lifeTime++,z=0</label>
+			<nail x="399" y="391"/>
+			<nail x="408" y="425"/>
 		</transition>
 		<transition id="id5">
 			<source ref="id2"/>
 			<target ref="id3"/>
-			<label kind="guard" x="348" y="170">x&gt;=speed</label>
-			<label kind="assignment" x="340" y="195">dismiss()</label>
+			<label kind="guard" x="323" y="238">x&gt;=speed</label>
+			<label kind="assignment" x="314" y="263">dismiss()</label>
 		</transition>
 		<transition id="id6">
 			<source ref="id0"/>
 			<target ref="id3"/>
-			<label kind="guard" x="467" y="289">health&lt;=0</label>
-			<label kind="assignment" x="476" y="306">dismiss()</label>
-			<nail x="416" y="357"/>
-			<nail x="442" y="314"/>
+			<label kind="guard" x="170" y="297">health&lt;=0</label>
+			<label kind="assignment" x="187" y="314">dismiss()</label>
 		</transition>
 		<transition id="id7">
 			<source ref="id0"/>
 			<target ref="id0"/>
-			<label kind="guard" x="262" y="510">health&gt;0</label>
-			<label kind="synchronisation" x="236" y="493">SHOOT_TO_ENEMY?</label>
-			<label kind="assignment" x="245" y="527">takeDamage()</label>
-			<nail x="279" y="493"/>
-			<nail x="321" y="493"/>
+			<label kind="guard" x="297" y="501">health&gt;0</label>
+			<label kind="synchronisation" x="272" y="484">SHOOT_TO_ENEMY?</label>
+			<label kind="assignment" x="280" y="518">takeDamage()</label>
+			<nail x="323" y="467"/>
+			<nail x="348" y="484"/>
 		</transition>
 		<transition id="id8">
 			<source ref="id0"/>
 			<target ref="id0"/>
-			<label kind="guard" x="382" y="416">x&gt;=speed &amp;&amp; health&gt;0 &amp;&amp; pos!=MAIN_POS &amp;&amp; !matchEnded()</label>
-			<label kind="assignment" x="382" y="433">next(),shoot_table[id].pos =pos,x=0</label>
-			<nail x="348" y="459"/>
-			<nail x="374" y="408"/>
+			<label kind="guard" x="399" y="433">x&gt;=speed &amp;&amp; canMove()</label>
+			<label kind="assignment" x="399" y="450">next(),shoot_table[id].pos =pos,shoot_table[id].lifeTime++,x=0,z=0</label>
+			<nail x="374" y="476"/>
+			<nail x="399" y="459"/>
 		</transition>
 		<transition id="id9">
 			<source ref="id1"/>
 			<target ref="id0"/>
-			<label kind="guard" x="-59" y="484">x==spawningTime</label>
-			<label kind="assignment" x="17" y="518">initialize(2)</label>
+			<label kind="guard" x="-68" y="484">x==spawningTime</label>
+			<label kind="assignment" x="76" y="484">initialize(2)</label>
 			<nail x="-25" y="510"/>
 			<nail x="187" y="510"/>
 		</transition>
 		<transition id="id10">
 			<source ref="id1"/>
 			<target ref="id0"/>
-			<label kind="guard" x="-59" y="323">x==spawningTime</label>
-			<label kind="assignment" x="51" y="348">initialize(0)</label>
-			<nail x="25" y="348"/>
-			<nail x="187" y="348"/>
+			<label kind="guard" x="-102" y="365">x==spawningTime</label>
+			<label kind="assignment" x="42" y="365">initialize(0)</label>
+			<nail x="-110" y="391"/>
+			<nail x="187" y="391"/>
 		</transition>
-		<transition id="id11" color="#00ff00">
+		<transition id="id11">
 			<source ref="id1"/>
 			<target ref="id0"/>
-			<label kind="guard" x="-59" y="399">x == spawningTime</label>
-			<label kind="assignment" x="59" y="425">initialize(1)</label>
+			<label kind="guard" x="-68" y="416">x == spawningTime</label>
+			<label kind="assignment" x="93" y="416">initialize(1)</label>
+			<nail x="-59" y="442"/>
+			<nail x="204" y="442"/>
 		</transition>
-		<transition id="id12" color="#ffa500">
+		<transition id="id12">
 			<source ref="id0"/>
 			<target ref="id2"/>
-			<label kind="guard" x="-110" y="255">pos == MAIN_POS &amp;&amp; health&gt;0 &amp;&amp; !matchEnded() &amp;&amp; z==0</label>
-			<label kind="assignment" x="93" y="280">shoot(), x=0</label>
+			<label kind="guard" x="450" y="306">pos == MAIN_POS &amp;&amp; health&gt;0 &amp;&amp; !matchEnded() &amp;&amp; z&gt;=1</label>
+			<label kind="assignment" x="433" y="323">shoot(), x=0</label>
 		</transition>
 	</template>
 	<template>
@@ -345,10 +340,12 @@ void next()
 
 int dist(const Cell c1, const Cell c2)
     {
-        if (abs(c1.x - c2.x)&gt;=abs(c1.y - c2.y))
-            return (abs(c1.x - c2.x));
+        int[-1,15] v1=abs(c1.x - c2.x), v2=abs(c1.y - c2.y);
+
+        if (v1&gt;=v2)
+            return (v1);
         else
-            return (abs(c1.y - c2.y));
+            return (v2);
     }
 void shoot (const id_t id)
     {
@@ -442,24 +439,28 @@ bool shootable()
         return (false);
     }
 </declaration>
-		<location id="id13" x="-459" y="-306">
+		<location id="id13" x="-459" y="-306" color="#00ff00">
+			<name x="-469" y="-340">readyToShoot</name>
 		</location>
-		<location id="id14" x="-637" y="-306">
-			<label kind="invariant" x="-731" y="-306">y&lt;=speed</label>
+		<location id="id14" x="-697" y="-306" color="#ffa500">
+			<name x="-722" y="-340">wait</name>
+			<label kind="invariant" x="-791" y="-306">y&lt;=speed</label>
 		</location>
 		<init ref="id13"/>
 		<transition id="id15">
 			<source ref="id14"/>
 			<target ref="id13"/>
-			<label kind="guard" x="-586" y="-238">y&gt;=speed</label>
-			<nail x="-552" y="-246"/>
+			<label kind="guard" x="-688" y="-221">y&gt;=speed &amp;&amp; !matchEnded()</label>
+			<nail x="-697" y="-229"/>
+			<nail x="-459" y="-229"/>
 		</transition>
 		<transition id="id16">
 			<source ref="id13"/>
 			<target ref="id14"/>
-			<label kind="guard" x="-586" y="-348">shootable()</label>
-			<label kind="synchronisation" x="-619" y="-323">SHOOT_TO_ENEMY!</label>
-			<label kind="assignment" x="-612" y="-306">target()</label>
+			<label kind="guard" x="-629" y="-348">shootable()</label>
+			<label kind="synchronisation" x="-646" y="-365">SHOOT_TO_ENEMY!</label>
+			<label kind="assignment" x="-612" y="-331">target()</label>
+			<nail x="-578" y="-306"/>
 		</transition>
 	</template>
 	<system>circlec(const id_t id, const int coeff) = compactEnemy(id, CIRCLE.speed, CIRCLE.health, CIRCLE.damage, coeff*CIRCLE.spawningTime, CIRCLE.kind);
@@ -482,7 +483,7 @@ t4 = cannon(4, TURRET4_POS);
 t5 = sniper(5, TURRET5_POS);
 t6 = sniper(6, TURRET6_POS);
 
-system enc0,enc1,enc2,enc3,enc4,t0,t1, t2,t3,t4,t5,t6;
+system enc0,enc1,enc2,enc3,enc4,enc5,t0,t1,t2, t3,t4,t5,t6;
 
 
 
@@ -492,33 +493,32 @@ system enc0,enc1,enc2,enc3,enc4,t0,t1, t2,t3,t4,t5,t6;
 		<query>
 			<formula>A[](deadlock imply matchEnded())</formula>
 			<comment/>
-			<result outcome="success" type="quality" timestamp="2025-05-25 15:12:38 +0200">
+		</query>
+		<query>
+			<formula>E&lt;&gt;(!matchEnded() imply forall(i:int[0,MAX_ENEMIES-1])(shoot_table[i].pos == MAIN_POS))</formula>
+			<comment/>
+			<result outcome="success" type="quality" timestamp="2025-05-25 18:55:01 +0200">
 			</result>
 		</query>
 		<query>
-			<formula>E&lt;&gt;(enc0.pos == MAIN_POS)</formula>
+			<formula>A[](
+	(forall(i:int[0,MAX_ENEMIES-1])((shoot_table[i].pos == MAIN_POS &amp;&amp; !shoot_table[i].kind) imply shoot_table[i].lifeTime==(MAX_PATH_LENGTH*CIRCLE.speed))) &amp;&amp;
+	(forall(i:int[0,MAX_ENEMIES-1])((shoot_table[i].pos == MAIN_POS &amp;&amp; shoot_table[i].kind) imply shoot_table[i].lifeTime==(MAX_PATH_LENGTH*SQUARE.speed)))
+)</formula>
 			<comment/>
-		</query>
-		<query>
-			<formula>A[](enc0.pos == MAIN_POS imply enc0.lifeTime&lt;=(MAX_PATH_LENGTH*(CIRCLE.speed+1)))</formula>
-			<comment/>
-		</query>
-		<query>
-			<formula>A[](enc1.pos == MAIN_POS imply enc1.lifeTime&lt;=(MAX_PATH_LENGTH*(SQUARE.speed+1)))</formula>
-			<comment/>
-			<result outcome="success" type="quality" timestamp="2025-05-21 07:56:09 +0200">
+			<result outcome="success" type="quality" timestamp="2025-05-25 18:55:12 +0200">
 			</result>
 		</query>
 		<query>
-			<formula>A[](isValid(enc0.pos))</formula>
+			<formula>A[](forall(i:int[0,MAX_ENEMIES-1])(isValid(shoot_table[i].pos)))</formula>
 			<comment/>
-			<result outcome="success" type="quality" timestamp="2025-05-25 13:44:08 +0200">
+			<result outcome="success" type="quality" timestamp="2025-05-25 18:55:23 +0200">
 			</result>
 		</query>
 		<query>
-			<formula>E&lt;&gt;(mt_life &gt; 0)</formula>
+			<formula>A[](mt_life &gt; 0)</formula>
 			<comment/>
-			<result outcome="success" type="quality" timestamp="2025-05-24 19:15:20 +0200">
+			<result outcome="success" type="quality" timestamp="2025-05-25 20:23:07 +0200">
 			</result>
 		</query>
 	</queries>
