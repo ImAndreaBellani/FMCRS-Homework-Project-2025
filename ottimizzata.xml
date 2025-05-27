@@ -2,18 +2,22 @@
 <!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.6//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_6.dtd'>
 <nta>
 	<declaration>/*
-   -&gt; è giusto lo spawn?
-   -&gt; chiarire la roba "winning or losing"
+   -&gt; è giusto lo spawn? SECONDO ME SI'
+   -&gt; chiarire la roba "winning or losing" SECONDO ME E' RISOLTA CON L'URGENT BROADCAST
    -&gt; query "can reach the main tower" ha il problema che se la conf. è tale per cui la MT muore non è vero che tutti gli enemy possono raggiungere la MT
+        SECONDO ME ORA E' RISOLTO
+
+    -&gt; MAGARI SI PUO' TOGLIERE MT-LIFE&lt;=0 DA MATCH ENDED, DATO CHE ALLA FINE ORA QUESTO E' COMUNQUE IGNORATO DALLE TRANSIZIONI E ANCHE DALLA QUERY DELLA DEADLOCK CREDO
 */
 
 //type definitions:
 
 const int[6,6] MAX_ENEMIES := 6; //how many enemies will eventually get into the match
+const int[7,7] MAX_TURRETS := 7;
 
-typedef int[0,MAX_ENEMIES] id_t;
-typedef int[0,7] idt_t;
-typedef int[0,100] life_t;
+typedef int[-1,MAX_ENEMIES] id_t;
+typedef int[0,MAX_TURRETS] idt_t;
+typedef int life_t;
 
 typedef struct {
     int[-1,15] x;
@@ -46,10 +50,17 @@ typedef struct {
 } EnemyRecord;
 
 typedef struct {
-    int id;
+    id_t id;
     int damage;
 } TargetRecord;
-//configuration definitions:
+
+typedef struct {
+    Cell pos;
+    bool ready;
+    int range;
+} TurretRecord;
+
+//configurations definitions:
 
 const MainTowerConfiguration MT := {10};
 
@@ -63,14 +74,6 @@ const TurretConfiguration SNIPER := {4,20,8};
 //map definitions
 
 const Cell MAIN_POS = {15,4};
-
-const Cell TURRET0_POS = {5,5};
-const Cell TURRET1_POS = {8,2};
-const Cell TURRET2_POS = {8,6};
-const Cell TURRET3_POS = {14,2};
-const Cell TURRET4_POS = {14,6};
-const Cell TURRET5_POS = {2,3};
-const Cell TURRET6_POS = {11,5};
 
 const Cell INVALID_POS = {-1,-1};
 const Cell START_POS = {0,0};
@@ -86,6 +89,15 @@ int[0,MAX_ENEMIES] available_enemies := 0; //how many enemies are currently avai
 
 EnemyRecord shoot_table[MAX_ENEMIES];
 TargetRecord target_record := {-1,0};
+TurretRecord turret_board[MAX_TURRETS] := {
+    {{5,5},true, BASIC.range},
+    {{8,2},true, CANNON.range},
+    {{8,6},true , CANNON.range},
+    {{14,2},true , CANNON.range},
+    {{14,6},true , CANNON.range},
+    {{2,3},true , SNIPER.range},
+    {{11,5},true , SNIPER.range}
+};
 
 urgent broadcast chan SHOOT_TO_ENEMY;
 
@@ -125,13 +137,21 @@ bool isValid (Cell c)
 bool matchEnded()
     {
         return (ended_enemies == 0 || mt_life&lt;=0);
+    }
+int dist(const Cell c1, const Cell c2)
+    {
+        int[-1,15] v1=abs(c1.x - c2.x), v2=abs(c1.y - c2.y);
+
+        if (v1&gt;=v2)
+            return (v1);
+        else
+            return (v2);
     }</declaration>
 	<template>
 		<name>compactEnemy</name>
 		<parameter>const id_t id, const int speed, int health, const int damage, const int spawningTime, const bool kind</parameter>
 		<declaration>clock x;
 clock z;
-
 Cell pos := INVALID_POS;
 int[0,2] chosenPath := 0;
 
@@ -172,7 +192,7 @@ void takeDamage ()
             }
     }
 void next()
-    {     
+    {  
           if (pos.x == 0)
             {
                 if (pos.y &lt;=3)
@@ -247,12 +267,30 @@ void next()
                 return;
             }
     }
+bool targettable()
+    {
+        int i;
+
+        for (i = 0 ; i &lt; MAX_TURRETS ; i++)
+            {
+                if (turret_board[i].ready &amp;&amp; dist(turret_board[i].pos, pos)&lt;=turret_board[i].range)
+                    {
+                        return (true);
+                    }
+            }
+
+        return (false);
+    }
 bool canMove()
     {
-        return (!matchEnded() &amp;&amp; pos!=MAIN_POS &amp;&amp; health&gt;0);
+        return (pos!=MAIN_POS &amp;&amp; health&gt;0 &amp;&amp; !targettable());
+    }
+bool readyToShoot()
+    {
+        return (!matchEnded() &amp;&amp; pos==MAIN_POS &amp;&amp; health&gt;0 &amp;&amp; !targettable());
     }</declaration>
 		<location id="id0" x="357" y="425" color="#00ff00">
-			<label kind="invariant" x="238" y="374">x&lt;=speed &amp;&amp; z&lt;=1</label>
+			<label kind="invariant" x="229" y="365">z&lt;=1 &amp;&amp; x &lt;=speed</label>
 		</location>
 		<location id="id1" x="-110" y="510" color="#00ffff">
 			<label kind="invariant" x="-161" y="518">x&lt;=spawningTime</label>
@@ -282,7 +320,7 @@ bool canMove()
 		<transition id="id6">
 			<source ref="id0"/>
 			<target ref="id3"/>
-			<label kind="guard" x="170" y="297">health&lt;=0</label>
+			<label kind="guard" x="-127" y="297">health&lt;=0 || (pos==MAIN_POS &amp;&amp; matchEnded())</label>
 			<label kind="assignment" x="187" y="314">dismiss()</label>
 		</transition>
 		<transition id="id7">
@@ -297,7 +335,7 @@ bool canMove()
 		<transition id="id8">
 			<source ref="id0"/>
 			<target ref="id0"/>
-			<label kind="guard" x="399" y="433">x&gt;=speed &amp;&amp; canMove()</label>
+			<label kind="guard" x="399" y="433">z&gt;=1 &amp;&amp; x&gt;=speed &amp;&amp; canMove()</label>
 			<label kind="assignment" x="399" y="450">next(),shoot_table[id].pos =pos,shoot_table[id].lifeTime++,x=0,z=0</label>
 			<nail x="374" y="476"/>
 			<nail x="399" y="459"/>
@@ -305,7 +343,7 @@ bool canMove()
 		<transition id="id9">
 			<source ref="id1"/>
 			<target ref="id0"/>
-			<label kind="guard" x="-68" y="484">x==spawningTime</label>
+			<label kind="guard" x="-68" y="484">x&gt;=spawningTime</label>
 			<label kind="assignment" x="76" y="484">initialize(2)</label>
 			<nail x="-25" y="510"/>
 			<nail x="187" y="510"/>
@@ -313,7 +351,7 @@ bool canMove()
 		<transition id="id10">
 			<source ref="id1"/>
 			<target ref="id0"/>
-			<label kind="guard" x="-102" y="365">x==spawningTime</label>
+			<label kind="guard" x="-102" y="365">x&gt;=spawningTime</label>
 			<label kind="assignment" x="42" y="365">initialize(0)</label>
 			<nail x="-110" y="391"/>
 			<nail x="187" y="391"/>
@@ -321,7 +359,7 @@ bool canMove()
 		<transition id="id11">
 			<source ref="id1"/>
 			<target ref="id0"/>
-			<label kind="guard" x="-68" y="416">x == spawningTime</label>
+			<label kind="guard" x="-68" y="416">x&gt;= spawningTime</label>
 			<label kind="assignment" x="93" y="416">initialize(1)</label>
 			<nail x="-59" y="442"/>
 			<nail x="204" y="442"/>
@@ -329,29 +367,21 @@ bool canMove()
 		<transition id="id12">
 			<source ref="id0"/>
 			<target ref="id2"/>
-			<label kind="guard" x="450" y="306">pos == MAIN_POS &amp;&amp; health&gt;0 &amp;&amp; !matchEnded() &amp;&amp; z&gt;=1</label>
+			<label kind="guard" x="450" y="306">readyToShoot()</label>
 			<label kind="assignment" x="433" y="323">shoot(), x=0</label>
 		</transition>
 	</template>
 	<template>
 		<name>turret</name>
-		<parameter>const idt_t id, const Cell pos, const int range, const int speed, const int damage</parameter>
+		<parameter>const idt_t id, const int range, const int speed, const int damage</parameter>
 		<declaration>clock y;
 
-int dist(const Cell c1, const Cell c2)
+void shoot (const id_t targetId)
     {
-        int[-1,15] v1=abs(c1.x - c2.x), v2=abs(c1.y - c2.y);
-
-        if (v1&gt;=v2)
-            return (v1);
-        else
-            return (v2);
-    }
-void shoot (const id_t id)
-    {
-        target_record.id = id;
+        target_record.id = targetId;
         target_record.damage = damage;
         y=0;
+        turret_board[id].ready = false;
     }
 void target()
     {
@@ -367,7 +397,7 @@ void target()
                 found = false;
                 while (i &lt; MAX_ENEMIES &amp;&amp; !found)
                     {
-                        if (shoot_table[i].available &amp;&amp; dist(shoot_table[i].pos, pos)&lt;=range)
+                        if (shoot_table[i].available &amp;&amp; dist(shoot_table[i].pos, turret_board[id].pos)&lt;=range)
                             {
                                 found = true;
                             }
@@ -376,7 +406,7 @@ void target()
                 if (found)
                     {
                         target_id = i-1;
-                        target_dist = dist(shoot_table[i-1].pos, pos);
+                        target_dist = dist(shoot_table[i-1].pos, turret_board[id].pos);
                         target_lifeTime = shoot_table[i-1].lifeTime;
                         cont++;
                         for (i = i ; i&lt;MAX_ENEMIES &amp;&amp; cont &lt; available_enemies; i++)
@@ -384,7 +414,7 @@ void target()
                                 if (shoot_table[i].available)
                                     {
                                         cont++;
-                                        d = dist(shoot_table[i].pos, pos);
+                                        d = dist(shoot_table[i].pos, turret_board[id].pos);
                                         if (d &lt;target_dist)
                                             {
                                                 target_id = i;
@@ -429,7 +459,7 @@ bool shootable()
                 if (shoot_table[i].available)
                     {
                         cont++;
-                        if (dist(shoot_table[i].pos, pos)&lt;=range)
+                        if (dist(shoot_table[i].pos, turret_board[id].pos)&lt;=range)
                            {
                                return (true);
                            }
@@ -444,30 +474,31 @@ bool shootable()
 		</location>
 		<location id="id14" x="-697" y="-306" color="#ffa500">
 			<name x="-722" y="-340">wait</name>
-			<label kind="invariant" x="-791" y="-306">y&lt;=speed</label>
+			<label kind="invariant" x="-790" y="-323">y&lt;=speed</label>
 		</location>
 		<init ref="id13"/>
 		<transition id="id15">
 			<source ref="id14"/>
 			<target ref="id13"/>
-			<label kind="guard" x="-688" y="-221">y&gt;=speed &amp;&amp; !matchEnded()</label>
-			<nail x="-697" y="-229"/>
-			<nail x="-459" y="-229"/>
+			<label kind="guard" x="-604" y="-221">y&gt;=speed</label>
+			<label kind="assignment" x="-680" y="-204">turret_board[id].ready = true</label>
+			<nail x="-698" y="-221"/>
+			<nail x="-460" y="-221"/>
 		</transition>
 		<transition id="id16">
 			<source ref="id13"/>
 			<target ref="id14"/>
-			<label kind="guard" x="-629" y="-348">shootable()</label>
-			<label kind="synchronisation" x="-646" y="-365">SHOOT_TO_ENEMY!</label>
+			<label kind="guard" x="-629" y="-374">shootable()</label>
+			<label kind="synchronisation" x="-646" y="-348">SHOOT_TO_ENEMY!</label>
 			<label kind="assignment" x="-612" y="-331">target()</label>
 			<nail x="-578" y="-306"/>
 		</transition>
 	</template>
 	<system>circlec(const id_t id, const int coeff) = compactEnemy(id, CIRCLE.speed, CIRCLE.health, CIRCLE.damage, coeff*CIRCLE.spawningTime, CIRCLE.kind);
 squarec(const id_t id, const int coeff) = compactEnemy(id, SQUARE.speed, SQUARE.health, SQUARE.damage, coeff*SQUARE.spawningTime, SQUARE.kind);
-basic(const idt_t id, const Cell pos) = turret(id, pos, BASIC.range, BASIC.speed, BASIC.damage);
-cannon(const idt_t id, const Cell pos) = turret(id, pos, CANNON.range, CANNON.speed, CANNON.damage);
-sniper(const idt_t id, const Cell pos) = turret(id, pos, SNIPER.range, SNIPER.speed, SNIPER.damage);
+basic(const idt_t id) = turret(id, BASIC.range, BASIC.speed, BASIC.damage);
+cannon(const idt_t id) = turret(id, CANNON.range, CANNON.speed, CANNON.damage);
+sniper(const idt_t id) = turret(id, SNIPER.range, SNIPER.speed, SNIPER.damage);
 
 enc0 = circlec(0, 1);
 enc1 = squarec(1, 1);
@@ -475,15 +506,15 @@ enc2 = circlec(2, 2);
 enc3 = squarec(3, 2);
 enc4 = circlec(4, 3);
 enc5 = squarec(5, 3);
-t0 = basic(0, TURRET0_POS);
-t1 = cannon(1, TURRET1_POS);
-t2 = cannon(2, TURRET2_POS);
-t3 = cannon(3, TURRET3_POS);
-t4 = cannon(4, TURRET4_POS);
-t5 = sniper(5, TURRET5_POS);
-t6 = sniper(6, TURRET6_POS);
+t0 = basic(0);
+t1 = cannon(1);
+t2 = cannon(2);
+t3 = cannon(3);
+t4 = cannon(4);
+t5 = sniper(5);
+t6 = sniper(6);
 
-system enc0,enc1,enc2,enc3,enc4,enc5,t0,t1,t2, t3,t4,t5,t6;
+system enc0,enc1,enc2,enc3,enc4,enc5,t0,t1,t2,t3, t4, t5, t6;
 
 
 
@@ -493,11 +524,13 @@ system enc0,enc1,enc2,enc3,enc4,enc5,t0,t1,t2, t3,t4,t5,t6;
 		<query>
 			<formula>A[](deadlock imply matchEnded())</formula>
 			<comment/>
+			<result outcome="success" type="quality" timestamp="2025-05-27 19:01:30 +0200">
+			</result>
 		</query>
 		<query>
-			<formula>E&lt;&gt;(!matchEnded() imply forall(i:int[0,MAX_ENEMIES-1])(shoot_table[i].pos == MAIN_POS))</formula>
+			<formula>E&lt;&gt;(forall(i:int[0,MAX_ENEMIES-1]) (shoot_table[i].pos == MAIN_POS))</formula>
 			<comment/>
-			<result outcome="success" type="quality" timestamp="2025-05-25 18:55:01 +0200">
+			<result outcome="success" type="quality" timestamp="2025-05-27 14:55:00 +0200">
 			</result>
 		</query>
 		<query>
@@ -506,19 +539,19 @@ system enc0,enc1,enc2,enc3,enc4,enc5,t0,t1,t2, t3,t4,t5,t6;
 	(forall(i:int[0,MAX_ENEMIES-1])((shoot_table[i].pos == MAIN_POS &amp;&amp; shoot_table[i].kind) imply shoot_table[i].lifeTime==(MAX_PATH_LENGTH*SQUARE.speed)))
 )</formula>
 			<comment/>
-			<result outcome="success" type="quality" timestamp="2025-05-25 18:55:12 +0200">
+			<result outcome="success" type="quality" timestamp="2025-05-27 09:41:21 +0200">
 			</result>
 		</query>
 		<query>
 			<formula>A[](forall(i:int[0,MAX_ENEMIES-1])(isValid(shoot_table[i].pos)))</formula>
 			<comment/>
-			<result outcome="success" type="quality" timestamp="2025-05-25 18:55:23 +0200">
+			<result outcome="success" type="quality" timestamp="2025-05-27 09:41:19 +0200">
 			</result>
 		</query>
 		<query>
 			<formula>A[](mt_life &gt; 0)</formula>
 			<comment/>
-			<result outcome="success" type="quality" timestamp="2025-05-25 20:23:07 +0200">
+			<result outcome="success" type="quality" timestamp="2025-05-27 19:03:33 +0200">
 			</result>
 		</query>
 	</queries>
