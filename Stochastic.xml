@@ -183,6 +183,11 @@ void takeDamage ()
                 health = health - target_record.damage;
                 target_record.damage = 0;
                 target_record.id = -1;
+                
+                if (health&lt;=0)
+                    {
+                        dismiss();
+                    }
             }
     }
 void next()
@@ -267,7 +272,7 @@ bool canMove()
     }
 bool readyToShoot()
     {
-        return (mt_life&gt;0 &amp;&amp; pos==MAIN_POS &amp;&amp; health&gt;0);
+        return (pos==MAIN_POS &amp;&amp; health&gt;0);
     }</declaration>
 		<location id="id0" x="357" y="425" color="#00ff00">
 			<label kind="exponentialrate" x="323" y="391">speed:10</label>
@@ -276,7 +281,7 @@ bool readyToShoot()
 			<label kind="invariant" x="-161" y="518">x&lt;=spawningTime</label>
 		</location>
 		<location id="id2" x="467" y="263" color="#ffa500">
-			<name x="442" y="229">afterShot</name>
+			<name x="493" y="246">afterShot</name>
 			<label kind="exponentialrate" x="467" y="272">speed:10</label>
 		</location>
 		<location id="id3" x="229" y="263" color="#ff0000">
@@ -286,15 +291,31 @@ bool readyToShoot()
 		<transition id="id4">
 			<source ref="id2"/>
 			<target ref="id3"/>
-			<label kind="assignment" x="314" y="263">dismiss()</label>
+			<label kind="guard" x="314" y="272">health&lt;=0</label>
+			<nail x="348" y="306"/>
 		</transition>
 		<transition id="id5">
-			<source ref="id0"/>
-			<target ref="id3"/>
-			<label kind="guard" x="-127" y="297">health&lt;=0 || (pos==MAIN_POS &amp;&amp; mt_life&lt;=0)</label>
-			<label kind="assignment" x="187" y="314">dismiss()</label>
+			<source ref="id2"/>
+			<target ref="id2"/>
+			<label kind="guard" x="484" y="178">health&gt;0</label>
+			<label kind="synchronisation" x="476" y="195">SHOOT_TO_ENEMY?</label>
+			<label kind="assignment" x="484" y="212">takeDamage()</label>
+			<nail x="467" y="221"/>
+			<nail x="501" y="238"/>
 		</transition>
 		<transition id="id6">
+			<source ref="id2"/>
+			<target ref="id3"/>
+			<label kind="guard" x="340" y="178">health&gt;0</label>
+			<label kind="assignment" x="340" y="195">dismiss()</label>
+			<nail x="297" y="187"/>
+		</transition>
+		<transition id="id7">
+			<source ref="id0"/>
+			<target ref="id3"/>
+			<label kind="guard" x="204" y="331">health&lt;=0</label>
+		</transition>
+		<transition id="id8">
 			<source ref="id0"/>
 			<target ref="id0"/>
 			<label kind="guard" x="331" y="501">health&gt;0</label>
@@ -303,7 +324,7 @@ bool readyToShoot()
 			<nail x="340" y="476"/>
 			<nail x="374" y="476"/>
 		</transition>
-		<transition id="id7">
+		<transition id="id9">
 			<source ref="id0"/>
 			<target ref="id0"/>
 			<label kind="guard" x="425" y="408">canMove()</label>
@@ -311,7 +332,7 @@ bool readyToShoot()
 			<nail x="408" y="442"/>
 			<nail x="408" y="408"/>
 		</transition>
-		<transition id="id8">
+		<transition id="id10">
 			<source ref="id1"/>
 			<target ref="id0"/>
 			<label kind="guard" x="-68" y="484">x&gt;=spawningTime</label>
@@ -319,7 +340,7 @@ bool readyToShoot()
 			<nail x="-25" y="510"/>
 			<nail x="187" y="510"/>
 		</transition>
-		<transition id="id9">
+		<transition id="id11">
 			<source ref="id1"/>
 			<target ref="id0"/>
 			<label kind="guard" x="-102" y="365">x&gt;=spawningTime</label>
@@ -327,7 +348,7 @@ bool readyToShoot()
 			<nail x="-110" y="391"/>
 			<nail x="187" y="391"/>
 		</transition>
-		<transition id="id10">
+		<transition id="id12">
 			<source ref="id1"/>
 			<target ref="id0"/>
 			<label kind="guard" x="-51" y="416">x&gt;=spawningTime</label>
@@ -335,7 +356,7 @@ bool readyToShoot()
 			<nail x="-59" y="442"/>
 			<nail x="204" y="442"/>
 		</transition>
-		<transition id="id11">
+		<transition id="id13">
 			<source ref="id0"/>
 			<target ref="id2"/>
 			<label kind="guard" x="425" y="340">readyToShoot()</label>
@@ -440,31 +461,34 @@ bool shootable()
         return (false);
     }
 </declaration>
-		<location id="id12" x="-459" y="-306" color="#00ff00">
+		<location id="id14" x="-459" y="-306" color="#00ff00">
 			<name x="-469" y="-340">readyToShoot</name>
 		</location>
-		<location id="id13" x="-697" y="-306" color="#ffa500">
+		<location id="id15" x="-697" y="-306" color="#ffa500">
 			<name x="-722" y="-340">wait</name>
 			<label kind="exponentialrate" x="-773" y="-297">1:speed</label>
 		</location>
-		<init ref="id12"/>
-		<transition id="id14">
-			<source ref="id13"/>
-			<target ref="id12"/>
+		<init ref="id14"/>
+		<transition id="id16">
+			<source ref="id15"/>
+			<target ref="id14"/>
 			<nail x="-698" y="-221"/>
 			<nail x="-460" y="-221"/>
 		</transition>
-		<transition id="id15">
-			<source ref="id12"/>
-			<target ref="id13"/>
+		<transition id="id17">
+			<source ref="id14"/>
+			<target ref="id15"/>
 			<label kind="guard" x="-629" y="-374">shootable()</label>
 			<label kind="synchronisation" x="-646" y="-348">SHOOT_TO_ENEMY!</label>
 			<label kind="assignment" x="-612" y="-331">target()</label>
 			<nail x="-578" y="-306"/>
 		</transition>
 	</template>
-	<system>circle(const int[0,399] id) = compactEnemy(id, CIRCLE.speed, CIRCLE.health, CIRCLE.damage, (id+1)*CIRCLE.spawningTime, CIRCLE.kind);
-square(const int[400,699] id) = compactEnemy(id, SQUARE.speed, SQUARE.health, SQUARE.damage, (id-399)*SQUARE.spawningTime, SQUARE.kind);
+	<system>const int[400,400] N_CIRCLES = 400;
+
+circle(const int[0,N_CIRCLES-1] id) = compactEnemy(id, CIRCLE.speed, CIRCLE.health, CIRCLE.damage, (id+1)*CIRCLE.spawningTime, CIRCLE.kind);
+square(const int[N_CIRCLES,MAX_ENEMIES-1] id) = compactEnemy(id, SQUARE.speed, SQUARE.health, SQUARE.damage, (id-(N_CIRCLES-1))*SQUARE.spawningTime, SQUARE.kind);
+
 basic(const int[0,0] id) = turret(id,BASIC.range, BASIC.speed, BASIC.damage);
 cannon(const int[1,4] id) = turret(id,CANNON.range, CANNON.speed, CANNON.damage);
 sniper(const int[5,6] id) = turret(id,SNIPER.range, SNIPER.speed, SNIPER.damage);
@@ -479,18 +503,18 @@ system circle,square,basic,cannon,sniper;
 		<query>
 			<formula>Pr[&lt;=200]([](mt_life&gt;0))</formula>
 			<comment/>
-			<result outcome="success" type="quantity" value="0.589329 ± 0.0492968 (95% CI)" timestamp="2025-06-15 12:00:49 +0200">
-				<details>0.589329 ± 0.0492968 (95% CI)</details>
+			<result outcome="success" type="quantity" value="0.669731 ± 0.0485999 (95% CI)" timestamp="2025-06-15 21:24:28 +0200">
+				<details>0.669731 ± 0.0485999 (95% CI)</details>
 			</result>
 		</query>
 		<query>
 			<formula>simulate[&lt;=200]{mt_life == MT.health}</formula>
 			<comment/>
-			<result outcome="success" type="quality" timestamp="2025-06-15 11:58:15 +0200">
+			<result outcome="success" type="quality" timestamp="2025-06-15 21:22:17 +0200">
 				<plot title="Simulations (1)" xaxis="time" yaxis="value">
 					<series title="mt_life == MT.health" type="l" color="0xff0000" encoding="csv">0.0,1.0
-73.96144089940208,1.0
-73.96144089940208,0.0
+76.90168484716745,1.0
+76.90168484716745,0.0
 200.0,0.0
 					</series>
 					<comment/>

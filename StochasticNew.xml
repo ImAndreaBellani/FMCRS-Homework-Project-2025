@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.6//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_6.dtd'>
 <nta>
-	<declaration>const int MAX_ENEMIES := 6; //how many enemies will eventually get into the match
+	<declaration>const int MAX_ENEMIES := 700; //how many enemies will eventually get into the match
 const int MAX_TURRETS := 7; //the maximum number of turrets that can be placed on the map
 
 //map's definitions:
@@ -50,7 +50,7 @@ const TurretConfiguration BASIC := {2,2,2};
 const TurretConfiguration CANNON := {1,7,5};
 const TurretConfiguration SNIPER := {4,20,8};
 
-const MTConfiguration MT := {10};
+const MTConfiguration MT := {100};
 
 // shoot-related definitions:
 
@@ -60,7 +60,7 @@ typedef int Life_t;
 
 typedef struct {
     Cell pos; //actual position of the enemy
-    Life_t lifeTime; //actual lifetime of an enemy
+    int entering; //*
     bool kind; //"true" for SQUARE, "false" for CIRCLE
     bool targettable; //indicates if the enemy is targettable at the moment
 } EnemyRecord;
@@ -81,6 +81,7 @@ int[0,MAX_ENEMIES] targettable_enemies := 0; //how many enemies are currently ta
                                              //"shoot_table" to verify the presence of targettable enemies)
 
 urgent broadcast chan SHOOT_TO_ENEMY; //sender: turret; receiver: enemy(s)
+urgent broadcast chan SHOOT_TO_MT; //*
 
 //useful procedures:
 
@@ -142,7 +143,6 @@ bool matchEnded()
 		<declaration>clock x; //clock to ensure that "shoot_table[id].lifeTime" is updated in one and only one time
          //for each instant after the enemy has spawned until it is dismissed
 
-clock z; //clock to count the speed delay
 Cell pos; //enemy's current position on the map
 int[0,2] chosenPath := 0; //which one of the three paths was non-deterministically chosen at spawning time
 
@@ -158,12 +158,11 @@ void initialize(const int[0,2] i)
         shoot_table[id].kind = kind;
         shoot_table[id].targettable = true;
         shoot_table[id].pos = pos;
-        shoot_table[id].lifeTime = 0;
+        shoot_table[id].entering = spawningTime; //*
 
         targettable_enemies++; //the enemy is now targettable
         
         x = 0;
-        z = 0;
     }
 void shoot()
 /**
@@ -303,7 +302,7 @@ bool readyToShoot()
     }</declaration>
 		<location id="id0" x="357" y="425" color="#00ff00">
 			<name x="374" y="408">OnTrip</name>
-			<label kind="invariant" x="289" y="391">z&lt;=1 &amp;&amp; x&lt;=speed</label>
+			<label kind="exponentialrate" x="331" y="391">speed:10</label>
 			<label kind="comments" x="-170" y="952">OnTrip:
 
 In few words, an enemy stays in this state (in the sense that only takes self-transitions) as long as the MT
@@ -338,8 +337,8 @@ In other words, the path to the MT an enemy will non-deterministically take is c
 the spawn and not upon arriving at a junction.</label>
 		</location>
 		<location id="id2" x="663" y="425" color="#ffa500">
-			<name x="570" y="425">AfterShoot</name>
-			<label kind="invariant" x="570" y="383">z&lt;=1 &amp;&amp; x&lt;=speed</label>
+			<name x="612" y="442">AfterShoot</name>
+			<label kind="exponentialrate" x="671" y="391">speed:10</label>
 			<label kind="comments" x="-161" y="1224">AfterShoot:
 
 If the MT has been reached and the enemy is alive, it tries to shoot it (even if the MT has been already
@@ -357,48 +356,31 @@ be stuck only in this state and no elsewhere.</label>
 		<init ref="id1"/>
 		<transition id="id4">
 			<source ref="id2"/>
-			<target ref="id2"/>
-			<label kind="guard" x="714" y="391">z&gt;=1 &amp;&amp; x&lt;speed &amp;&amp; health&gt;0</label>
-			<label kind="assignment" x="723" y="408">shoot_table[id].lifeTime++,z=0</label>
-			<nail x="697" y="391"/>
-			<nail x="705" y="425"/>
-		</transition>
-		<transition id="id5">
-			<source ref="id2"/>
 			<target ref="id3"/>
 			<label kind="guard" x="544" y="306">health&lt;=0</label>
 		</transition>
-		<transition id="id6">
+		<transition id="id5">
 			<source ref="id2"/>
 			<target ref="id2"/>
-			<label kind="guard" x="689" y="485">health&gt;0</label>
-			<label kind="synchronisation" x="680" y="468">SHOOT_TO_ENEMY?</label>
-			<label kind="assignment" x="680" y="502">takeDamage()</label>
-			<nail x="714" y="451"/>
-			<nail x="680" y="468"/>
+			<label kind="guard" x="722" y="425">health&gt;0</label>
+			<label kind="synchronisation" x="722" y="408">SHOOT_TO_ENEMY?</label>
+			<label kind="assignment" x="722" y="442">takeDamage()</label>
+			<nail x="714" y="416"/>
+			<nail x="714" y="442"/>
 		</transition>
-		<transition id="id7">
-			<source ref="id0"/>
-			<target ref="id0"/>
-			<label kind="guard" x="400" y="459">z&gt;=1 &amp;&amp; x&lt;speed &amp;&amp; canMove()</label>
-			<label kind="assignment" x="400" y="476">shoot_table[id].lifeTime++,
-z=0</label>
-			<nail x="408" y="451"/>
-			<nail x="383" y="476"/>
-		</transition>
-		<transition id="id8">
+		<transition id="id6">
 			<source ref="id2"/>
 			<target ref="id3"/>
-			<label kind="guard" x="663" y="281">x&gt;=speed &amp;&amp; health&gt;0</label>
+			<label kind="guard" x="663" y="281">health&gt;0</label>
 			<label kind="assignment" x="663" y="298">dismiss()</label>
 			<nail x="655" y="281"/>
 		</transition>
-		<transition id="id9">
+		<transition id="id7">
 			<source ref="id0"/>
 			<target ref="id3"/>
 			<label kind="guard" x="391" y="306">health&lt;=0</label>
 		</transition>
-		<transition id="id10">
+		<transition id="id8">
 			<source ref="id0"/>
 			<target ref="id0"/>
 			<label kind="guard" x="255" y="340">health&gt;0</label>
@@ -407,20 +389,17 @@ z=0</label>
 			<nail x="349" y="374"/>
 			<nail x="315" y="391"/>
 		</transition>
-		<transition id="id11">
+		<transition id="id9">
 			<source ref="id0"/>
 			<target ref="id0"/>
-			<label kind="guard" x="272" y="476">z&gt;=1 &amp;&amp;
-x&gt;=speed
-&amp;&amp; canMove()</label>
-			<label kind="assignment" x="238" y="536">next(),
+			<label kind="guard" x="314" y="484">canMove()</label>
+			<label kind="assignment" x="314" y="510">next(),
 shoot_table[id].pos=pos,
-shoot_table[id].lifeTime++,
-x=0,z=0</label>
-			<nail x="315" y="468"/>
-			<nail x="349" y="476"/>
+x=0</label>
+			<nail x="331" y="476"/>
+			<nail x="374" y="476"/>
 		</transition>
-		<transition id="id12">
+		<transition id="id10">
 			<source ref="id1"/>
 			<target ref="id0"/>
 			<label kind="guard" x="43" y="459">x&gt;=spawningTime</label>
@@ -428,7 +407,7 @@ x=0,z=0</label>
 			<nail x="-51" y="459"/>
 			<nail x="264" y="459"/>
 		</transition>
-		<transition id="id13">
+		<transition id="id11">
 			<source ref="id1"/>
 			<target ref="id0"/>
 			<label kind="guard" x="34" y="349">x&gt;=spawningTime</label>
@@ -436,32 +415,30 @@ x=0,z=0</label>
 			<nail x="-51" y="391"/>
 			<nail x="264" y="391"/>
 		</transition>
-		<transition id="id14">
+		<transition id="id12">
 			<source ref="id1"/>
 			<target ref="id0"/>
 			<label kind="guard" x="34" y="400">x&gt;=spawningTime</label>
 			<label kind="assignment" x="51" y="425">initialize(1)</label>
 		</transition>
-		<transition id="id15">
+		<transition id="id13">
 			<source ref="id0"/>
 			<target ref="id2"/>
 			<label kind="guard" x="442" y="400">readyToShoot()</label>
-			<label kind="assignment" x="434" y="425">shoot(),x=0,z=0</label>
+			<label kind="synchronisation" x="450" y="382">SHOOT_TO_MT!</label>
+			<label kind="assignment" x="442" y="425">shoot(),x=0</label>
 		</transition>
 	</template>
 	<template>
 		<name>turret</name>
 		<parameter>int id, const int range, const int speed, const int damage</parameter>
-		<declaration>clock y;
-
-void shoot (const EnemyID_t targetId)
+		<declaration>void shoot (const EnemyID_t targetId)
 /**
     to shoot to the enemy with id "targetId"
 */
     {
         target_record.id = targetId;
         target_record.damage = damage;
-        y=0;
     }
 bool shootable()
 /**
@@ -491,26 +468,14 @@ bool shootable()
     }
 void target()
 /**
-    this function embedded the entire decision process that a turret takes once it recognizes that at least one enemy
-    is inside its shooting range.
-    
-    First, the turrets finds the first targettable enemy in the shooting range. Then it scans the other targettable enemys
-    in the shooting range to find the preffered one accordingly to the criterions given. At the end, if two enemy
-    create a tie for distance and lifetimes:
-    -&gt; only one of them is a square : the square is preffered;
-    -&gt; no one of them is a square : the enemy with the lowest id is preffered;
-    -&gt; no one of them is a circle : the enemy with the highest id is preffered.
-    Note that ties between enemies of the same kind can't really happen in the configurations used since lifetime, in each time
-    instant, can't be the same for enemies of the same kind (since they spawn at regular time instants).
-    
-    The complexity of the procedure is linear in the number of enemies.
+    *
 */
     {
         bool found;
         int[0,MAX_ENEMIES] i, cont=0;
         EnemyID_t target_id;
         int[MIN_CELL_X,MAX_CELL_X] target_dist, d;
-        Life_t target_lifeTime;
+        int target_entering;
 
         if (targettable_enemies &gt; 0)
             {
@@ -528,7 +493,7 @@ void target()
                     {
                         target_id = i-1;
                         target_dist = dist(shoot_table[i-1].pos, turrets_board[id]);
-                        target_lifeTime = shoot_table[i-1].lifeTime;
+                        target_entering = shoot_table[i-1].entering;
                         cont++;
                         for (i = i ; i&lt;MAX_ENEMIES &amp;&amp; cont &lt; targettable_enemies; i++)
                             {
@@ -540,20 +505,20 @@ void target()
                                             {
                                                 target_id = i;
                                                 target_dist = d;
-                                                target_lifeTime = shoot_table[i].lifeTime;
+                                                target_entering = shoot_table[i].entering;
                                             }
                                         else
                                             {        
                                                 if (d == target_dist)
                                                     {
-                                                        if (shoot_table[i].lifeTime &lt; target_lifeTime)
+                                                        if (shoot_table[i].entering &gt; target_entering)
                                                             {
                                                                 target_id = i;
-                                                                target_lifeTime = shoot_table[i].lifeTime;
+                                                                target_entering = shoot_table[i].entering;
                                                             }
                                                         else
                                                             {
-                                                                if (target_lifeTime == shoot_table[i].lifeTime)
+                                                                if (target_entering == shoot_table[i].entering)
                                                                     {
                                                                         if (shoot_table[i].kind)
                                                                             {
@@ -570,42 +535,42 @@ void target()
                     }
             }   
     }</declaration>
-		<location id="id16" x="-459" y="-306" color="#00ff00">
+		<location id="id14" x="-459" y="-306" color="#00ff00">
 			<name x="-484" y="-340">ReadyToShoot</name>
 			<label kind="comments" x="-1028" y="-178">ReadyToShoot:
 
 The turret stays in this state as long as there are no enemies to shoot otherwise, the most preffered of them
 is shot with target().</label>
 		</location>
-		<location id="id17" x="-697" y="-306" color="#ffa500">
+		<location id="id15" x="-697" y="-306" color="#ffa500">
 			<name x="-722" y="-340">Wait</name>
-			<label kind="invariant" x="-782" y="-314">y&lt;=speed</label>
+			<label kind="exponentialrate" x="-773" y="-297">1:speed</label>
 			<label kind="comments" x="-1028" y="-85">Wait:
 
 The turret stays in this state as long as the speed delay has not expired. Once it is, it goes to ReadyToShoot and
 looks for enemies to shoot.</label>
 		</location>
-		<init ref="id16"/>
-		<transition id="id18">
-			<source ref="id17"/>
-			<target ref="id16"/>
-			<label kind="guard" x="-603" y="-221">y&gt;=speed</label>
+		<init ref="id14"/>
+		<transition id="id16">
+			<source ref="id15"/>
+			<target ref="id14"/>
 			<nail x="-698" y="-221"/>
 			<nail x="-460" y="-221"/>
 		</transition>
-		<transition id="id19">
-			<source ref="id16"/>
-			<target ref="id17"/>
+		<transition id="id17">
+			<source ref="id14"/>
+			<target ref="id15"/>
 			<label kind="guard" x="-629" y="-348">shootable()</label>
 			<label kind="synchronisation" x="-637" y="-331">SHOOT_TO_ENEMY!</label>
 			<label kind="assignment" x="-612" y="-306">target()</label>
 			<nail x="-578" y="-306"/>
 		</transition>
 	</template>
-	<system>const int N_CIRCLES = 3;
+	<system>const int N_CIRCLES = 400;
 
 circle(const int[0,N_CIRCLES-1] id) = compactEnemy(id, CIRCLE.speed, CIRCLE.health, CIRCLE.damage, (id+1)*CIRCLE.spawningTime, CIRCLE.kind);
 square(const int[N_CIRCLES,MAX_ENEMIES-1] id) = compactEnemy(id, SQUARE.speed, SQUARE.health, SQUARE.damage, (id-(N_CIRCLES-1))*SQUARE.spawningTime, SQUARE.kind);
+
 basic(const int[0,0] id) = turret(id,BASIC.range, BASIC.speed, BASIC.damage);
 cannon(const int[1,4] id) = turret(id,CANNON.range, CANNON.speed, CANNON.damage);
 sniper(const int[5,6] id) = turret(id,SNIPER.range, SNIPER.speed, SNIPER.damage);
@@ -613,36 +578,24 @@ sniper(const int[5,6] id) = turret(id,SNIPER.range, SNIPER.speed, SNIPER.damage)
 system circle,square,basic,cannon,sniper;</system>
 	<queries>
 		<query>
-			<formula>A[](deadlock imply matchEnded())</formula>
+			<formula>Pr[&lt;=200]([](mt_life&gt;0))</formula>
 			<comment/>
-			<result outcome="success" type="quality" timestamp="2025-06-24 21:29:41 +0200">
+			<result outcome="success" type="quantity" value="0.68682 ± 0.0484613 (95% CI)" timestamp="2025-06-24 23:39:25 +0200">
+				<details>0.68682 ± 0.0484613 (95% CI)</details>
 			</result>
 		</query>
 		<query>
-			<formula>E&lt;&gt;(forall(i:int[0,N_CIRCLES-1])(circle(i).pos == MAIN_POS) &amp;&amp; forall(i:int[N_CIRCLES,MAX_ENEMIES-1])(square(i).pos == MAIN_POS))</formula>
+			<formula>simulate[&lt;=200]{mt_life == MT.health}</formula>
 			<comment/>
-			<result outcome="success" type="quality" timestamp="2025-06-22 15:04:24 +0200">
-			</result>
-		</query>
-		<query>
-			<formula>A[](
-	(forall(i:int[0,N_CIRCLES-1])((shoot_table[i].pos == MAIN_POS &amp;&amp; !shoot_table[i].kind &amp;&amp; circle(i).OnTrip) imply shoot_table[i].lifeTime&lt;=(MAX_PATH_LENGTH*CIRCLE.speed))) &amp;&amp;
-	(forall(i:int[N_CIRCLES,MAX_ENEMIES-1])((shoot_table[i].pos == MAIN_POS &amp;&amp; shoot_table[i].kind &amp;&amp; square(i).OnTrip) imply shoot_table[i].lifeTime&lt;=(MAX_PATH_LENGTH*SQUARE.speed)))
-)</formula>
-			<comment/>
-			<result outcome="success" type="quality" timestamp="2025-06-22 15:04:52 +0200">
-			</result>
-		</query>
-		<query>
-			<formula>A[](forall(i:int[0,N_CIRCLES-1])(isValid(circle(i).pos)) &amp;&amp; forall(i:int[N_CIRCLES,MAX_ENEMIES-1])(isValid(square(i).pos)))</formula>
-			<comment/>
-			<result outcome="success" type="quality" timestamp="2025-06-22 15:05:22 +0200">
-			</result>
-		</query>
-		<query>
-			<formula>A[](mt_life &gt; 0)</formula>
-			<comment/>
-			<result outcome="success" type="quality" timestamp="2025-06-24 21:32:13 +0200">
+			<result outcome="success" type="quality" timestamp="2025-06-24 23:40:58 +0200">
+				<plot title="Simulations (1)" xaxis="time" yaxis="value">
+					<series title="mt_life == MT.health" type="l" color="0xff0000" encoding="csv">0.0,1.0
+117.18173564243543,1.0
+117.18173564243543,0.0
+200.000002,0.0
+					</series>
+					<comment/>
+				</plot>
 			</result>
 		</query>
 	</queries>
