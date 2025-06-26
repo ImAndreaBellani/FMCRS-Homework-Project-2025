@@ -3,7 +3,7 @@
 <nta>
 	<declaration>const int MAX_ENEMIES := 6; //how many enemies will eventually get into the match
 const int MAX_TURRETS := 7; //the maximum number of turrets that can be placed on the map
-
+//RICORDARSI DI COMMENTARE ANCHE LE QUERY
 //map's definitions:
 
 const int MAX_CELL_X := 15;
@@ -602,35 +602,61 @@ looks for enemies to shoot.</label>
 			<nail x="-578" y="-306"/>
 		</transition>
 	</template>
-	<system>const int N_CIRCLES = 3;
+	<system>//NO TURRETS CONFIG
+/*
+    const int N_CIRCLES = 3;
 
-circle(const int[0,N_CIRCLES-1] id) = compactEnemy(id, CIRCLE.speed, CIRCLE.health, CIRCLE.damage, (id+1)*CIRCLE.spawningTime, CIRCLE.kind);
-square(const int[N_CIRCLES,MAX_ENEMIES-1] id) = compactEnemy(id, SQUARE.speed, SQUARE.health, SQUARE.damage, (id-(N_CIRCLES-1))*SQUARE.spawningTime, SQUARE.kind);
-basic(const int[0,0] id) = turret(id,BASIC.range, BASIC.speed, BASIC.damage);
-cannon(const int[1,4] id) = turret(id,CANNON.range, CANNON.speed, CANNON.damage);
-sniper(const int[5,6] id) = turret(id,SNIPER.range, SNIPER.speed, SNIPER.damage);
+    circle(const int[0,N_CIRCLES-1] id) = compactEnemy(id, CIRCLE.speed, CIRCLE.health, CIRCLE.damage, (id+1)*CIRCLE.spawningTime, CIRCLE.kind);
+    square(const int[N_CIRCLES,MAX_ENEMIES-1] id) = compactEnemy(id, SQUARE.speed, SQUARE.health, SQUARE.damage, (id-(N_CIRCLES-1))*SQUARE.spawningTime, SQUARE.kind);
 
-system circle,square,basic,cannon,sniper;</system>
+    system circle, square;
+*/
+//WITH TURRETS "DEFAULT" CONFIG
+/*
+    const int N_CIRCLES = 3;
+
+    circle(const int[0,N_CIRCLES-1] id) = compactEnemy(id, CIRCLE.speed, CIRCLE.health, CIRCLE.damage, (id+1)*CIRCLE.spawningTime, CIRCLE.kind);
+    square(const int[N_CIRCLES,MAX_ENEMIES-1] id) = compactEnemy(id, SQUARE.speed, SQUARE.health, SQUARE.damage, (id-(N_CIRCLES-1))*SQUARE.spawningTime, SQUARE.kind);
+    basic(const int[0,0] id) = turret(id,BASIC.range, BASIC.speed, BASIC.damage);
+    cannon(const int[1,4] id) = turret(id,CANNON.range, CANNON.speed, CANNON.damage);
+    sniper(const int[5,6] id) = turret(id,SNIPER.range, SNIPER.speed, SNIPER.damage);
+
+    system circle, square ,basic,cannon,sniper;
+*/
+//WITH TURRETS FIRST CONFIG
+/*
+    const int N_CIRCLES = 3;
+
+    circle(const int[0,N_CIRCLES-1] id) = compactEnemy(id, CIRCLE.speed, CIRCLE.health, CIRCLE.damage, (id+1)*CIRCLE.spawningTime, CIRCLE.kind);
+    square(const int[N_CIRCLES,MAX_ENEMIES-1] id) = compactEnemy(id, SQUARE.speed, SQUARE.health, SQUARE.damage, (id-(N_CIRCLES-1))*SQUARE.spawningTime, SQUARE.kind);
+    basic(const int[0,0] id) = turret(id,BASIC.range, BASIC.speed, BASIC.damage);
+    cannon(const int[1,4] id) = turret(id,CANNON.range, CANNON.speed, CANNON.damage);
+    sniper(const int[5,6] id) = turret(id,SNIPER.range, SNIPER.speed, SNIPER.damage);
+
+    system circle, square ,basic,cannon,sniper;
+*/
+//WITH TURRETS SECOND CONFIG
+/*
+*/
+//WITH TURRETS THIRD CONFIG
+/*
+*/</system>
 	<queries>
 		<query>
 			<formula>A[](deadlock imply matchEnded())</formula>
 			<comment/>
-			<result outcome="success" type="quality" timestamp="2025-06-24 21:29:41 +0200">
-			</result>
 		</query>
 		<query>
-			<formula>E&lt;&gt;(forall(i:int[0,N_CIRCLES-1])(circle(i).pos == MAIN_POS) &amp;&amp; forall(i:int[N_CIRCLES,MAX_ENEMIES-1])(square(i).pos == MAIN_POS))</formula>
+			<formula>A&lt;&gt;(forall(i:int[0,N_CIRCLES-1])(circle(i).pos == MAIN_POS) &amp;&amp; forall(i:int[N_CIRCLES,MAX_ENEMIES-1])(square(i).pos == MAIN_POS))</formula>
 			<comment/>
-			<result outcome="success" type="quality" timestamp="2025-06-22 15:04:24 +0200">
-			</result>
 		</query>
 		<query>
 			<formula>A[](
-	(forall(i:int[0,N_CIRCLES-1])((shoot_table[i].pos == MAIN_POS &amp;&amp; !shoot_table[i].kind &amp;&amp; circle(i).OnTrip) imply shoot_table[i].lifeTime&lt;=(MAX_PATH_LENGTH*CIRCLE.speed))) &amp;&amp;
-	(forall(i:int[N_CIRCLES,MAX_ENEMIES-1])((shoot_table[i].pos == MAIN_POS &amp;&amp; shoot_table[i].kind &amp;&amp; square(i).OnTrip) imply shoot_table[i].lifeTime&lt;=(MAX_PATH_LENGTH*SQUARE.speed)))
+	(forall(i:int[0,N_CIRCLES-1])((shoot_table[i].pos == MAIN_POS &amp;&amp; circle(i).OnTrip) imply shoot_table[i].lifeTime&lt;=(MAX_PATH_LENGTH*CIRCLE.speed))) &amp;&amp;
+	(forall(i:int[N_CIRCLES,MAX_ENEMIES-1])((shoot_table[i].pos == MAIN_POS &amp;&amp; square(i).OnTrip) imply shoot_table[i].lifeTime&lt;=(MAX_PATH_LENGTH*SQUARE.speed)))
 )</formula>
 			<comment/>
-			<result outcome="success" type="quality" timestamp="2025-06-22 15:04:52 +0200">
+			<result outcome="success" type="quality" timestamp="2025-06-25 22:46:47 +0200">
 			</result>
 		</query>
 		<query>
@@ -642,7 +668,7 @@ system circle,square,basic,cannon,sniper;</system>
 		<query>
 			<formula>A[](mt_life &gt; 0)</formula>
 			<comment/>
-			<result outcome="success" type="quality" timestamp="2025-06-24 21:32:13 +0200">
+			<result outcome="success" type="quality" timestamp="2025-06-25 23:00:08 +0200">
 			</result>
 		</query>
 	</queries>

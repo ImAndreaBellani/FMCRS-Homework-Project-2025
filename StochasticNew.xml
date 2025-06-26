@@ -5,7 +5,7 @@
 const int MAX_TURRETS := 7; //the maximum number of turrets that can be placed on the map
 
 //map's definitions:
-
+//RICORDARSI DI METTERE I COMMENTI ALLE QUERY
 const int MAX_CELL_X := 15;
 const int MIN_CELL_X := 0;
 const int MAX_CELL_Y := 7;
@@ -578,25 +578,22 @@ sniper(const int[5,6] id) = turret(id,SNIPER.range, SNIPER.speed, SNIPER.damage)
 system circle,square,basic,cannon,sniper;</system>
 	<queries>
 		<query>
-			<formula>Pr[&lt;=200]([](mt_life&gt;0))</formula>
-			<comment/>
-			<result outcome="success" type="quantity" value="0.68682 ± 0.0484613 (95% CI)" timestamp="2025-06-24 23:39:25 +0200">
-				<details>0.68682 ± 0.0484613 (95% CI)</details>
-			</result>
-		</query>
-		<query>
 			<formula>simulate[&lt;=200]{mt_life == MT.health}</formula>
 			<comment/>
-			<result outcome="success" type="quality" timestamp="2025-06-24 23:40:58 +0200">
+			<result outcome="success" type="quality" timestamp="2025-06-25 23:30:12 +0200">
 				<plot title="Simulations (1)" xaxis="time" yaxis="value">
 					<series title="mt_life == MT.health" type="l" color="0xff0000" encoding="csv">0.0,1.0
-117.18173564243543,1.0
-117.18173564243543,0.0
-200.000002,0.0
+96.05877978005711,1.0
+96.05877978005711,0.0
+200.0,0.0
 					</series>
 					<comment/>
 				</plot>
 			</result>
+		</query>
+		<query>
+			<formula>Pr[&lt;=200]([](mt_life&gt;0))</formula>
+			<comment/>
 		</query>
 	</queries>
 </nta>
