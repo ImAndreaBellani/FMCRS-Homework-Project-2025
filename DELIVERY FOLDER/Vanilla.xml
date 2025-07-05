@@ -16,7 +16,7 @@ typedef struct {
     int[MIN_CELL_Y,MAX_CELL_Y] y;
 } Cell;
 
-const Cell turrets_board[MAX_TURRETS] := {{5,5},{8,2},{8,6},{14,2},{14,6},{2,3},{11,5}}; //feasible turrets spots
+const Cell turrets_board[MAX_TURRETS] := {{8,6},{14,6},{5,5},{11,5},{2,3},{8,2},{14,2}}; //feasible turrets spots
 
 const Cell MAIN_POS := {15,4}; //MT spot
 const Cell START_POS := {0,0}; //enemys starting spot
@@ -602,49 +602,62 @@ looks for enemies to shoot.</label>
 			<nail x="-578" y="-306"/>
 		</transition>
 	</template>
-	<system>//NO TURRETS CONFIG
+	<system>const int N_CIRCLES = 3;
+
+circle(const int[0,N_CIRCLES-1] id) = compactEnemy(id, CIRCLE.speed, CIRCLE.health, CIRCLE.damage, (id+1)*CIRCLE.spawningTime, CIRCLE.kind);
+square(const int[N_CIRCLES,MAX_ENEMIES-1] id) = compactEnemy(id, SQUARE.speed, SQUARE.health, SQUARE.damage, (id-(N_CIRCLES-1))*SQUARE.spawningTime, SQUARE.kind);
+
+//NO TURRETS CONFIG
 /*
-    const int N_CIRCLES = 3;
-
-    circle(const int[0,N_CIRCLES-1] id) = compactEnemy(id, CIRCLE.speed, CIRCLE.health, CIRCLE.damage, (id+1)*CIRCLE.spawningTime, CIRCLE.kind);
-    square(const int[N_CIRCLES,MAX_ENEMIES-1] id) = compactEnemy(id, SQUARE.speed, SQUARE.health, SQUARE.damage, (id-(N_CIRCLES-1))*SQUARE.spawningTime, SQUARE.kind);
-
-    system circle, square;
+system circle, square;
 */
 //WITH TURRETS "DEFAULT" CONFIG
 /*
-    const int N_CIRCLES = 3;
+t0 = turret(0,CANNON.range, CANNON.speed, CANNON.damage);
+t1 = turret(1,CANNON.range, CANNON.speed, CANNON.damage);
+t2 = turret(2, BASIC.range,  BASIC.speed,  BASIC.damage);
+t3 = turret(3,SNIPER.range, SNIPER.speed, SNIPER.damage);
+t4 = turret(4,SNIPER.range, SNIPER.speed, SNIPER.damage);
+t5 = turret(5,CANNON.range, CANNON.speed, CANNON.damage);
+t6 = turret(6,CANNON.range, CANNON.speed, CANNON.damage);
 
-    circle(const int[0,N_CIRCLES-1] id) = compactEnemy(id, CIRCLE.speed, CIRCLE.health, CIRCLE.damage, (id+1)*CIRCLE.spawningTime, CIRCLE.kind);
-    square(const int[N_CIRCLES,MAX_ENEMIES-1] id) = compactEnemy(id, SQUARE.speed, SQUARE.health, SQUARE.damage, (id-(N_CIRCLES-1))*SQUARE.spawningTime, SQUARE.kind);
-    basic(const int[0,0] id) = turret(id,BASIC.range, BASIC.speed, BASIC.damage);
-    cannon(const int[1,4] id) = turret(id,CANNON.range, CANNON.speed, CANNON.damage);
-    sniper(const int[5,6] id) = turret(id,SNIPER.range, SNIPER.speed, SNIPER.damage);
-
-    system circle, square ,basic,cannon,sniper;
+system circle,square,t0,t1,t2,t3,t4,t5,t6;
 */
-//WITH TURRETS FIRST CONFIG
+//WITH TURRETS "DEFAULT" CONFIG
 /*
-    const int N_CIRCLES = 3;
+t0 = turret(0,CANNON.range, CANNON.speed, CANNON.damage);
+t1 = turret(1,CANNON.range, CANNON.speed, CANNON.damage);
+t2 = turret(2, BASIC.range,  BASIC.speed,  BASIC.damage);
+t3 = turret(3,SNIPER.range, SNIPER.speed, SNIPER.damage);
+t4 = turret(4,SNIPER.range, SNIPER.speed, SNIPER.damage);
 
-    circle(const int[0,N_CIRCLES-1] id) = compactEnemy(id, CIRCLE.speed, CIRCLE.health, CIRCLE.damage, (id+1)*CIRCLE.spawningTime, CIRCLE.kind);
-    square(const int[N_CIRCLES,MAX_ENEMIES-1] id) = compactEnemy(id, SQUARE.speed, SQUARE.health, SQUARE.damage, (id-(N_CIRCLES-1))*SQUARE.spawningTime, SQUARE.kind);
-    basic(const int[0,0] id) = turret(id,BASIC.range, BASIC.speed, BASIC.damage);
-    cannon(const int[1,4] id) = turret(id,CANNON.range, CANNON.speed, CANNON.damage);
-    sniper(const int[5,6] id) = turret(id,SNIPER.range, SNIPER.speed, SNIPER.damage);
+system circle,square,t0,t1,t2,t3,t4;
+*/
+//
+/*
+t0 = turret(0,CANNON.range, CANNON.speed, CANNON.damage);
+t1 = turret(1,CANNON.range, CANNON.speed, CANNON.damage);
+t3 = turret(3,SNIPER.range, SNIPER.speed, SNIPER.damage);
+t5 = turret(5,CANNON.range, CANNON.speed, CANNON.damage);
+t6 = turret(6,CANNON.range, CANNON.speed, CANNON.damage);
 
-    system circle, square ,basic,cannon,sniper;
+system circle,square,t0,t1,t3,t5,t6;
 */
-//WITH TURRETS SECOND CONFIG
-/*
-*/
-//WITH TURRETS THIRD CONFIG
-/*
-*/</system>
+//
+t0 = turret(0,CANNON.range, CANNON.speed, CANNON.damage);
+t1 = turret(1,CANNON.range, CANNON.speed, CANNON.damage);
+t3 = turret(3,SNIPER.range, SNIPER.speed, SNIPER.damage);
+t4 = turret(4,SNIPER.range, SNIPER.speed, SNIPER.damage);
+t5 = turret(5,CANNON.range, CANNON.speed, CANNON.damage);
+t6 = turret(6,CANNON.range, CANNON.speed, CANNON.damage);
+
+system circle,square,t0,t1,t3,t4,t5,t6;</system>
 	<queries>
 		<query>
-			<formula>A[](deadlock imply matchEnded())</formula>
+			<formula>A[]((deadlock imply matchEnded()) and (matchEnded() imply deadlock))</formula>
 			<comment/>
+			<result outcome="success" type="quality" timestamp="2025-07-03 13:10:39 +0200">
+			</result>
 		</query>
 		<query>
 			<formula>A&lt;&gt;(forall(i:int[0,N_CIRCLES-1])(circle(i).pos == MAIN_POS) &amp;&amp; forall(i:int[N_CIRCLES,MAX_ENEMIES-1])(square(i).pos == MAIN_POS))</formula>
@@ -668,7 +681,7 @@ looks for enemies to shoot.</label>
 		<query>
 			<formula>A[](mt_life &gt; 0)</formula>
 			<comment/>
-			<result outcome="success" type="quality" timestamp="2025-06-25 23:00:08 +0200">
+			<result outcome="failure" type="quality" timestamp="2025-07-05 11:59:45 +0200">
 			</result>
 		</query>
 	</queries>
