@@ -1,0 +1,822 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.6//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_6.dtd'>
+<nta>
+	<declaration>//type definitions:
+
+typedef struct {
+    int[-1,15] x;
+    int[-1,15] y;
+} Cell;
+
+typedef struct {
+    int health;
+} MainTowerConfiguration;
+
+typedef struct {
+    int speed;
+    int health;
+    int damage;
+    int spawningTime;
+} EnemyConfiguration;
+
+typedef struct {
+    int range;
+    int speed;
+    int damage;
+} TurretConfiguration;
+
+typedef struct {
+    Cell pos;
+    int lifeTime;
+    bool kind;
+    bool available;
+} EnemyRecord;
+
+typedef struct {
+    int id;
+    int damage;
+} TargetRecord;
+
+//configuration definitions:
+
+const MainTowerConfiguration MT := {10};
+
+const EnemyConfiguration SQUARE := {3, 20, 4, 3};
+const EnemyConfiguration CIRCLE := {1, 10, 2, 2};
+
+const TurretConfiguration BASIC := {2,2,2};
+const TurretConfiguration CANNON := {1,7,5};
+const TurretConfiguration SNIPER := {4,20,1};//QUI IL DAMAGE DEVE ESSERE "8". L'HO CAMBIATO PER TESTARE
+
+//map definitions
+
+const Cell MAIN_POS = {15,4};
+
+const Cell TURRET0_POS = {5,5};
+const Cell TURRET1_POS = {8,2};
+const Cell TURRET2_POS = {8,6};
+const Cell TURRET3_POS = {14,2};
+const Cell TURRET4_POS = {14,6};
+const Cell TURRET5_POS = {2,3};
+const Cell TURRET6_POS = {11,5};
+
+const Cell ENEMIES_PATH1[12] = {{ 0, 0},{ 0, 1},{ 0, 2},{ 0, 3},{ 0, 4},{ 1, 4},{ 2, 4},{ 3, 4},{ 4, 4},{ 5, 4},{ 6, 4},{ 7, 4}};
+const Cell ENEMIES_PATH2[6]  = {{ 7, 5},{ 7, 6},{ 7, 7},{ 8, 7},{ 9, 7},{10, 7}};
+const Cell ENEMIES_PATH3[8]  = {{11, 7},{12, 7},{13, 7},{14, 7},{15, 7},{15, 6},{15, 5},{15, 4}};
+const Cell ENEMIES_PATH4[8]  = {{10, 6},{10, 5},{10, 4},{11, 4},{12, 4},{13, 4},{14, 4},{15, 4}};
+const Cell ENEMIES_PATH5[14] = {{ 7, 3},{ 7, 2},{ 7, 1},{ 8, 1},{ 9, 1},{10, 1},{11, 1},{12, 1},{13, 1},{14, 1},{15, 1},{15, 2},{15, 3},{15, 4}};
+
+const int PATH_LENGHTS[5] = {12, 6, 8, 8, 14};
+
+const Cell INVALID_POS = {-1,-1};
+const Cell START_POS = {0,0};
+
+const int MAX_PATH_LENGTH = 26;
+
+//wave parameters
+
+const int MAX_ENEMIES := 2;
+int ENEMIES_COUNT = MAX_ENEMIES;
+
+//channels and shared parameters
+
+    //enemies --&gt; MT
+
+    urgent chan STMT;
+    int DAMAGE_TO_MT;
+
+    //turrets --&gt; enemies
+
+    EnemyRecord SHOOT_TABLE[MAX_ENEMIES];
+    
+    broadcast chan SHOOT_TO_ENEMY;
+    
+    TargetRecord TARGET_RECORD;
+    
+   // int countEnemies=MAX_ENEMIES;</declaration>
+	<template>
+		<name>compactEnemy</name>
+		<parameter>const int id, const int speed, int health, const int damage, const int spawningTime, const bool kind</parameter>
+		<declaration>int c1 := 0;
+int c2 := 0;
+Cell pos := INVALID_POS;
+int current_index := 1;
+int current_path := 1;
+int age := 0;
+int choice := 0;
+
+void initEnemy (int i)
+    {
+        pos = START_POS;
+        SHOOT_TABLE[id].lifeTime = 0;
+        SHOOT_TABLE[id].kind = kind;
+        SHOOT_TABLE[id].available = true;
+        choice = i;
+    }
+void takeDamage ()
+    {
+        if (TARGET_RECORD.id == id)
+            {
+                health = health - TARGET_RECORD.damage;
+                TARGET_RECORD.damage = 0;
+            }
+    }
+void dismiss ()
+    {
+        SHOOT_TABLE[id].available = false;
+        ENEMIES_COUNT--;
+    }
+void initRecord ()
+    {
+        SHOOT_TABLE[id].pos = pos;
+        SHOOT_TABLE[id].lifeTime = age;
+    }
+void updateRecord ()
+    {
+        SHOOT_TABLE[id].pos = pos;
+        age++;
+        SHOOT_TABLE[id].lifeTime = age;        
+    }
+void next()
+    {
+        if (pos.x == 0)
+            {
+                if (pos.y &lt;=3)
+                    pos.y = pos.y+1;
+                else
+                    if (pos.y == 4)
+                        pos.x = 1;
+            }
+        if (pos.x &gt;=1 &amp;&amp; pos.x &lt;= 6)
+            {
+                pos.x = pos.x +1;
+            }
+        if (pos.x == 7)
+            {
+                if (pos.y == 4)
+                    {
+                        if (choice == 0 || choice == 1)
+                            pos.y = pos.y + 1;
+                        else
+                            pos.y = pos.y - 1;
+                    }
+                else
+                    if (pos.y == 5 || pos.y == 6)
+                        pos.y = pos.y + 1;
+                    else
+                        if (pos.y == 3 || pos.y == 2)
+                            pos.y = pos.y - 1;
+                        else
+                            if (pos.y == 7 || pos.y == 1)
+                                pos.x = pos.x + 1;
+            }
+        if (pos.x &gt;= 8 &amp;&amp; pos.x &lt;= 9)
+            {
+                if (pos.y == 7 || pos.y == 1)
+                    pos.x = pos.x + 1;
+            }
+        if (pos.x == 10)
+            {
+                if (pos.y == 7)
+                    {
+                        if (choice == 0)
+                            pos.y = pos.y - 1;
+                        else
+                            pos.x = pos.x + 1;
+                    }
+                else
+                    if (pos.y == 6 || pos.y == 5)
+                        pos.y = pos.y - 1;
+                    else
+                        if (pos.y == 1 || pos.y == 4)
+                            pos.x = pos.x + 1;
+            }
+        if (pos.x &gt;= 11 &amp;&amp; pos.x &lt;= 14)
+            {
+                if (pos.y == 7 || pos.y == 1 || pos.y == 4)
+                    pos.x = pos.x + 1;   
+            }
+        if (pos.x == 15)
+            {
+                if (pos.y &lt; 4 &amp;&amp; pos.y &gt;= 1)
+                    pos.y = pos.y + 1;
+                else
+                    if (pos.y &gt; 4 &amp;&amp; pos.y &lt;= 7)
+                        pos.y = pos.y - 1;
+            }
+        c1 = 0;
+    }</declaration>
+		<location id="id0" x="505" y="430" color="#ffa500">
+		</location>
+		<location id="id1" x="612" y="612" color="#ff0000">
+			<name x="629" y="612">dead</name>
+		</location>
+		<location id="id2" x="-93" y="433" color="#00ff00">
+		</location>
+		<location id="id3" x="1045" y="433" color="#000000">
+			<name x="1035" y="399">ended</name>
+		</location>
+		<init ref="id2"/>
+		<transition id="id4">
+			<source ref="id2"/>
+			<target ref="id0"/>
+			<label kind="guard" x="127" y="476">c2==spawningTime</label>
+			<label kind="assignment" x="85" y="510">initEnemy(2),initRecord()</label>
+			<nail x="187" y="510"/>
+		</transition>
+		<transition id="id5">
+			<source ref="id2"/>
+			<target ref="id0"/>
+			<label kind="guard" x="136" y="314">c2==spawningTime</label>
+			<label kind="assignment" x="85" y="348">initEnemy(0),initRecord()</label>
+			<nail x="178" y="340"/>
+		</transition>
+		<transition id="id6">
+			<source ref="id2"/>
+			<target ref="id2"/>
+			<label kind="guard" x="-263" y="399">c2&lt;spawningTime</label>
+			<label kind="assignment" x="-170" y="425">c2++</label>
+			<nail x="-127" y="450"/>
+			<nail x="-127" y="399"/>
+		</transition>
+		<transition id="id7">
+			<source ref="id0"/>
+			<target ref="id0"/>
+			<label kind="guard" x="569" y="442">health&gt;0</label>
+			<label kind="synchronisation" x="561" y="459">SHOOT_TO_ENEMY?</label>
+			<label kind="assignment" x="552" y="476">takeDamage()</label>
+			<nail x="578" y="442"/>
+			<nail x="544" y="459"/>
+		</transition>
+		<transition id="id8" color="#00ff00">
+			<source ref="id2"/>
+			<target ref="id0"/>
+			<label kind="guard" x="144" y="408">c2==spawningTime</label>
+			<label kind="assignment" x="102" y="433">initEnemy(1),initRecord()</label>
+		</transition>
+		<transition id="id9" color="#ff0000">
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="guard" x="595" y="544">health&lt;=0</label>
+			<label kind="assignment" x="603" y="561">dismiss()</label>
+		</transition>
+		<transition id="id10" color="#ffa500">
+			<source ref="id0"/>
+			<target ref="id3"/>
+			<label kind="guard" x="722" y="408">pos == MAIN_POS &amp;&amp; health&gt;0</label>
+			<label kind="synchronisation" x="875" y="382">STMT!</label>
+			<label kind="assignment" x="731" y="442">DAMAGE_TO_MT = damage,dismiss()</label>
+		</transition>
+		<transition id="id11">
+			<source ref="id0"/>
+			<target ref="id0"/>
+			<label kind="guard" x="323" y="493">pos != MAIN_POS &amp;&amp; c1&lt;speed &amp;&amp; health&gt;0</label>
+			<label kind="assignment" x="374" y="518">c1++,updateRecord()</label>
+			<nail x="510" y="493"/>
+			<nail x="476" y="476"/>
+		</transition>
+		<transition id="id12">
+			<source ref="id0"/>
+			<target ref="id0"/>
+			<label kind="guard" x="357" y="323">c1&gt;=speed &amp;&amp; pos != MAIN_POS &amp;&amp; health&gt;0</label>
+			<label kind="assignment" x="442" y="348">next(),updateRecord()</label>
+			<nail x="510" y="374"/>
+			<nail x="552" y="391"/>
+		</transition>
+	</template>
+	<template>
+		<name>turret</name>
+		<parameter>int id, Cell pos, int range, int speed, int damage</parameter>
+		<declaration>int c1=0;
+
+int max (int v1, int v2)
+    {
+        if (v1 &gt;= v2)
+            return (v1);
+        else
+            return (v2);
+    }
+int dist(const Cell c1, const Cell c2)
+    {
+        return (max(abs(c1.x - c2.x), abs(c1.y - c2.y)));
+    }
+void target (int id)
+    {
+        TARGET_RECORD.id = id;
+        TARGET_RECORD.damage = damage;
+        c1=speed;
+    }
+void aim()
+    {
+        int k, i, app[MAX_ENEMIES], appLen = 0, maxLife, lifeLen = 0;
+
+        for (k = 1 ; k&lt;=range ; k++)
+            {
+                for (i = 0 ; i &lt; MAX_ENEMIES ; i++)
+                    {
+                        if (SHOOT_TABLE[i].available &amp;&amp; dist(SHOOT_TABLE[i].pos, pos) == k)
+                            {
+                                app[appLen] = i;
+                                appLen++;
+                            }
+                    }
+                if (appLen &gt; 0)
+                    {
+                        maxLife = SHOOT_TABLE[app[0]].lifeTime;
+                        lifeLen = 1;
+                        for (i = 1 ; i &lt; appLen ; i++)
+                            {
+                                if (SHOOT_TABLE[app[i]].lifeTime &gt; maxLife)
+                                    {
+                                        maxLife = SHOOT_TABLE[app[i]].lifeTime;
+                                        app[0] = app[i];
+                                        lifeLen=1;
+                                    }
+                                else
+                                    {
+                                        if (SHOOT_TABLE[app[i]].lifeTime == maxLife)
+                                            {
+                                                app[lifeLen] = app[i];
+                                                lifeLen++;
+                                            }
+                                    }
+                            }
+                        lifeLen--;
+                        for (i = 0 ; i &lt; lifeLen ; i++)
+                            {
+                                if (SHOOT_TABLE[app[i]].kind)
+                                    {
+                                        target(app[i]);
+                                        return;
+                                    }
+                            }
+                        target(app[i]);
+                        return;
+                    }
+            }                
+    }
+bool shootable()
+    {
+        int i;
+        
+        for (i = 0 ; i&lt;MAX_ENEMIES ; i++)
+            {
+                if (SHOOT_TABLE[i].available &amp;&amp; dist(SHOOT_TABLE[i].pos, pos)&lt;=range)
+                    {
+                         return (true);
+                    }
+            }
+
+        return (false);
+    }
+</declaration>
+		<location id="id13" x="-416" y="-280">
+		</location>
+		<location id="id14" x="-323" y="-178">
+		</location>
+		<init ref="id13"/>
+		<transition id="id15">
+			<source ref="id13"/>
+			<target ref="id14"/>
+			<label kind="guard" x="-398" y="-263">ENEMIES_COUNT == 0</label>
+		</transition>
+		<transition id="id16">
+			<source ref="id13"/>
+			<target ref="id13"/>
+			<label kind="guard" x="-365" y="-357">c1&gt;0 &amp;&amp; shootable()</label>
+			<label kind="assignment" x="-365" y="-339">c1=c1-1</label>
+			<nail x="-407" y="-348"/>
+			<nail x="-339" y="-297"/>
+		</transition>
+		<transition id="id17">
+			<source ref="id13"/>
+			<target ref="id13"/>
+			<label kind="guard" x="-748" y="-272">c1==0 &amp;&amp; shootable()</label>
+			<label kind="synchronisation" x="-688" y="-289">SHOOT_TO_ENEMY!</label>
+			<label kind="assignment" x="-612" y="-255">aim()</label>
+			<nail x="-553" y="-280"/>
+			<nail x="-476" y="-212"/>
+		</transition>
+	</template>
+	<template>
+		<name>enemy</name>
+		<parameter>const int id, const int speed, int health, const int damage, const int spawningTime, const bool kind</parameter>
+		<declaration>int c1 := 0;
+int c2 := 0;
+Cell pos := INVALID_POS;
+int current_index := 1;
+int current_path := 1;
+int age := 0;
+
+void initEnemy ()
+    {
+        pos = START_POS;
+        SHOOT_TABLE[id].lifeTime = 0;
+        SHOOT_TABLE[id].kind = kind;
+        SHOOT_TABLE[id].available = true;
+    }
+void takeDamage ()
+    {
+        if (TARGET_RECORD.id == id)
+            {
+                health = health - TARGET_RECORD.damage;
+                TARGET_RECORD.damage = 0;
+            }
+    }
+void dismiss ()
+    {
+        SHOOT_TABLE[id].available = false;
+        ENEMIES_COUNT--;
+    }
+void initRecord ()
+    {
+        SHOOT_TABLE[id].pos = pos;
+        SHOOT_TABLE[id].lifeTime = age;
+    }
+void updateRecord ()
+    {
+        SHOOT_TABLE[id].pos = pos;
+        age++;
+        SHOOT_TABLE[id].lifeTime = age;        
+    }
+void changePath(const int i)
+    {
+        current_index = 0;
+        current_path = i;
+    }
+void next()
+    {
+        if (current_path == 1)
+            {
+                pos = ENEMIES_PATH1[current_index];
+            }
+        if(current_path == 2)
+            {
+                pos = ENEMIES_PATH2[current_index];
+            }
+        if (current_path == 3)
+            {
+                pos = ENEMIES_PATH3[current_index];
+            }
+        if (current_path == 4)
+            {
+                pos = ENEMIES_PATH4[current_index];
+            }
+        if (current_path == 5)
+            {
+                pos = ENEMIES_PATH5[current_index];
+            }
+
+        current_index++;
+        c1=0;
+    }</declaration>
+		<location id="id18" x="-688" y="-221" color="#ffa500">
+		</location>
+		<location id="id19" x="-688" y="85" color="#ffa500">
+		</location>
+		<location id="id20" x="-688" y="-569" color="#ffa500">
+		</location>
+		<location id="id21" x="59" y="-569" color="#ffa500">
+		</location>
+		<location id="id22" x="-306" y="-280" color="#ffa500">
+		</location>
+		<location id="id23" x="-306" y="-76" color="#ff0000">
+			<name x="-306" y="-59">dead</name>
+		</location>
+		<location id="id24" x="-1147" y="-221" color="#00ff00">
+		</location>
+		<location id="id25" x="314" y="-280" color="#000000">
+			<name x="304" y="-314">ended</name>
+		</location>
+		<init ref="id24"/>
+		<transition id="id26">
+			<source ref="id24"/>
+			<target ref="id24"/>
+			<label kind="guard" x="-1161" y="-277">c2&lt;spawningTime</label>
+			<label kind="assignment" x="-1113" y="-263">c2++</label>
+			<nail x="-1173" y="-255"/>
+			<nail x="-1113" y="-255"/>
+		</transition>
+		<transition id="id27">
+			<source ref="id22"/>
+			<target ref="id22"/>
+			<label kind="guard" x="-280" y="-272">health&gt;0</label>
+			<label kind="synchronisation" x="-323" y="-255">SHOOT_TO_ENEMY?</label>
+			<label kind="assignment" x="-297" y="-238">takeDamage()</label>
+			<nail x="-246" y="-263"/>
+			<nail x="-272" y="-238"/>
+		</transition>
+		<transition id="id28">
+			<source ref="id21"/>
+			<target ref="id21"/>
+			<label kind="guard" x="-25" y="-527">health&gt;0</label>
+			<label kind="synchronisation" x="-42" y="-510">SHOOT_TO_ENEMY?</label>
+			<label kind="assignment" x="-42" y="-484">takeDamage()</label>
+			<nail x="51" y="-527"/>
+			<nail x="17" y="-535"/>
+		</transition>
+		<transition id="id29">
+			<source ref="id19"/>
+			<target ref="id19"/>
+			<label kind="guard" x="-799" y="8">health&gt;0</label>
+			<label kind="synchronisation" x="-858" y="25">SHOOT_TO_ENEMY?</label>
+			<label kind="assignment" x="-867" y="42">takeDamage()</label>
+			<nail x="-756" y="68"/>
+			<nail x="-714" y="34"/>
+		</transition>
+		<transition id="id30">
+			<source ref="id20"/>
+			<target ref="id20"/>
+			<label kind="guard" x="-841" y="-544">health&gt;0</label>
+			<label kind="synchronisation" x="-884" y="-527">SHOOT_TO_ENEMY?</label>
+			<label kind="assignment" x="-833" y="-510">takeDamage()</label>
+			<nail x="-765" y="-535"/>
+			<nail x="-739" y="-510"/>
+		</transition>
+		<transition id="id31">
+			<source ref="id18"/>
+			<target ref="id18"/>
+			<label kind="guard" x="-654" y="-289">health&gt;0</label>
+			<label kind="synchronisation" x="-654" y="-272">SHOOT_TO_ENEMY?</label>
+			<label kind="assignment" x="-646" y="-255">takeDamage()</label>
+			<nail x="-654" y="-272"/>
+			<nail x="-629" y="-238"/>
+		</transition>
+		<transition id="id32" color="#ff0000">
+			<source ref="id21"/>
+			<target ref="id23"/>
+			<label kind="guard" x="-59" y="-102">health&lt;=0</label>
+			<label kind="assignment" x="-68" y="-68">dismiss()</label>
+			<nail x="493" y="-569"/>
+			<nail x="493" y="-76"/>
+		</transition>
+		<transition id="id33" color="#ff0000">
+			<source ref="id22"/>
+			<target ref="id23"/>
+			<label kind="guard" x="-331" y="-195">health&lt;=0</label>
+			<label kind="assignment" x="-340" y="-178">dismiss()</label>
+		</transition>
+		<transition id="id34" color="#00ff00">
+			<source ref="id24"/>
+			<target ref="id18"/>
+			<label kind="guard" x="-1003" y="-246">c2==spawningTime</label>
+			<label kind="assignment" x="-1045" y="-221">initEnemy(),initRecord()</label>
+		</transition>
+		<transition id="id35" color="#ff0000">
+			<source ref="id19"/>
+			<target ref="id23"/>
+			<label kind="guard" x="-501" y="-17">health&lt;=0</label>
+			<label kind="assignment" x="-518" y="0">dismiss()</label>
+		</transition>
+		<transition id="id36" color="#ff0000">
+			<source ref="id20"/>
+			<target ref="id23"/>
+			<label kind="guard" x="-484" y="-289">health&lt;=0</label>
+			<label kind="assignment" x="-501" y="-272">dismiss()</label>
+		</transition>
+		<transition id="id37" color="#ff0000">
+			<source ref="id18"/>
+			<target ref="id23"/>
+			<label kind="guard" x="-527" y="-161">health&lt;=0</label>
+			<label kind="assignment" x="-527" y="-144">dismiss()</label>
+		</transition>
+		<transition id="id38">
+			<source ref="id22"/>
+			<target ref="id22"/>
+			<label kind="guard" x="-212" y="-382">c1&gt;=speed
+&amp;&amp; pos != ENEMIES_PATH4[7]
+&amp;&amp; health&gt;0</label>
+			<label kind="assignment" x="-246" y="-323">next(),updateRecord()</label>
+			<nail x="-281" y="-339"/>
+			<nail x="-247" y="-314"/>
+		</transition>
+		<transition id="id39">
+			<source ref="id22"/>
+			<target ref="id22"/>
+			<label kind="guard" x="-416" y="-399">c1&lt;speed &amp;&amp; health&gt;0</label>
+			<label kind="assignment" x="-391" y="-382">c1++,updateRecord()</label>
+			<nail x="-340" y="-348"/>
+			<nail x="-298" y="-348"/>
+			<nail x="-306" y="-305"/>
+		</transition>
+		<transition id="id40">
+			<source ref="id21"/>
+			<target ref="id21"/>
+			<label kind="guard" x="136" y="-628">c1&gt;=speed &amp;&amp; pos != ENEMIES_PATH3[7] &amp;&amp; health&gt;0</label>
+			<label kind="assignment" x="136" y="-603">next(),updateRecord()</label>
+			<nail x="93" y="-611"/>
+			<nail x="127" y="-594"/>
+		</transition>
+		<transition id="id41">
+			<source ref="id21"/>
+			<target ref="id21"/>
+			<label kind="guard" x="-68" y="-663">c1&lt;speed &amp;&amp; health&gt;0</label>
+			<label kind="assignment" x="-51" y="-646">c1++,updateRecord()</label>
+			<nail x="-1" y="-603"/>
+			<nail x="42" y="-620"/>
+		</transition>
+		<transition id="id42" color="#ffa500">
+			<source ref="id21"/>
+			<target ref="id25"/>
+			<label kind="guard" x="127" y="-425">pos == MAIN_POS &amp;&amp; health&gt;0</label>
+			<label kind="synchronisation" x="161" y="-450">STMT!</label>
+			<label kind="assignment" x="187" y="-399">DAMAGE_TO_MT = damage,
+dismiss()</label>
+			<nail x="306" y="-297"/>
+		</transition>
+		<transition id="id43" color="#ffa500">
+			<source ref="id22"/>
+			<target ref="id25"/>
+			<label kind="guard" x="-94" y="-280">pos == MAIN_POS &amp;&amp; health&gt;0</label>
+			<label kind="synchronisation" x="68" y="-306">STMT!</label>
+			<label kind="assignment" x="-77" y="-263">DAMAGE_TO_MT = damage,dismiss()</label>
+		</transition>
+		<transition id="id44">
+			<source ref="id20"/>
+			<target ref="id20"/>
+			<label kind="guard" x="-671" y="-654">c1&lt;speed &amp;&amp; health&gt;0</label>
+			<label kind="assignment" x="-646" y="-637">c1++,updateRecord()</label>
+			<nail x="-620" y="-603"/>
+			<nail x="-680" y="-620"/>
+		</transition>
+		<transition id="id45">
+			<source ref="id20"/>
+			<target ref="id20"/>
+			<label kind="guard" x="-1139" y="-629">c1&gt;=speed &amp;&amp; pos != ENEMIES_PATH2[5] &amp;&amp; health&gt;0</label>
+			<label kind="assignment" x="-918" y="-603">next(),updateRecord()</label>
+			<nail x="-756" y="-561"/>
+			<nail x="-731" y="-620"/>
+		</transition>
+		<transition id="id46">
+			<source ref="id19"/>
+			<target ref="id19"/>
+			<label kind="guard" x="-662" y="119">c1&lt;speed &amp;&amp; health&gt;0</label>
+			<label kind="assignment" x="-671" y="136">c1++,updateRecord()</label>
+			<nail x="-654" y="119"/>
+			<nail x="-696" y="127"/>
+		</transition>
+		<transition id="id47">
+			<source ref="id19"/>
+			<target ref="id19"/>
+			<label kind="guard" x="-1181" y="85">c1&gt;=speed &amp;&amp; pos != ENEMIES_PATH5[13] &amp;&amp; health&gt;0</label>
+			<label kind="assignment" x="-918" y="102">next(),updateRecord()</label>
+			<nail x="-747" y="85"/>
+			<nail x="-739" y="119"/>
+			<nail x="-722" y="119"/>
+		</transition>
+		<transition id="id48" color="#ffa500">
+			<source ref="id19"/>
+			<target ref="id25"/>
+			<label kind="guard" x="-280" y="59">pos == MAIN_POS &amp;&amp; health&gt;0</label>
+			<label kind="synchronisation" x="-153" y="42">STMT!</label>
+			<label kind="assignment" x="-289" y="85">DAMAGE_TO_MT = damage,
+dismiss()</label>
+			<nail x="314" y="85"/>
+		</transition>
+		<transition id="id49" color="#ffa500">
+			<source ref="id20"/>
+			<target ref="id22"/>
+			<label kind="guard" x="-518" y="-510">pos == ENEMIES_PATH2[5]
+&amp;&amp; c1&gt;=speed
+&amp;&amp; health&gt;0</label>
+			<label kind="assignment" x="-535" y="-442">changePath(4),next(),updateRecord()</label>
+		</transition>
+		<transition id="id50" color="#ffa500">
+			<source ref="id20"/>
+			<target ref="id21"/>
+			<label kind="guard" x="-459" y="-603">pos == ENEMIES_PATH2[5] &amp;&amp; c1&gt;=speed &amp;&amp; health&gt;0</label>
+			<label kind="assignment" x="-391" y="-561">changePath(3),next(),updateRecord()</label>
+		</transition>
+		<transition id="id51" color="#ffa500">
+			<source ref="id18"/>
+			<target ref="id19"/>
+			<label kind="guard" x="-884" y="-68">pos == ENEMIES_PATH1[11] &amp;&amp; c1&gt;=speed &amp;&amp; health&gt;0</label>
+			<label kind="assignment" x="-850" y="-51">changePath(5),next(),updateRecord()</label>
+		</transition>
+		<transition id="id52" color="#ffa500">
+			<source ref="id18"/>
+			<target ref="id20"/>
+			<label kind="guard" x="-1122" y="-442">pos == ENEMIES_PATH1[11] &amp;&amp; health&gt;0 &amp;&amp; c1&gt;=speed</label>
+			<label kind="assignment" x="-935" y="-416">changePath(2),next(),updateRecord()</label>
+		</transition>
+		<transition id="id53">
+			<source ref="id18"/>
+			<target ref="id18"/>
+			<label kind="guard" x="-901" y="-170">c1&lt;speed &amp;&amp; health&gt;0</label>
+			<label kind="assignment" x="-867" y="-153">c1++,updateRecord()</label>
+			<nail x="-714" y="-161"/>
+			<nail x="-756" y="-187"/>
+		</transition>
+		<transition id="id54">
+			<source ref="id18"/>
+			<target ref="id18"/>
+			<label kind="guard" x="-1122" y="-323">c1&gt;=speed &amp;&amp; pos != ENEMIES_PATH1[11] &amp;&amp; health&gt;0</label>
+			<label kind="assignment" x="-892" y="-306">next(),updateRecord()</label>
+			<nail x="-756" y="-246"/>
+			<nail x="-722" y="-280"/>
+		</transition>
+	</template>
+	<template>
+		<name x="5" y="5">mainTower</name>
+		<parameter>int life</parameter>
+		<declaration>void decDamage()
+    {
+        life = life - DAMAGE_TO_MT;
+        DAMAGE_TO_MT = 0;
+    }</declaration>
+		<location id="id55" x="-1113" y="-578" color="#00ff00">
+		</location>
+		<init ref="id55"/>
+		<transition id="id56">
+			<source ref="id55"/>
+			<target ref="id55"/>
+			<label kind="guard" x="-1265" y="-611">life&gt;0</label>
+			<label kind="synchronisation" x="-1257" y="-594">STMT?</label>
+			<label kind="assignment" x="-1282" y="-577">decDamage()</label>
+			<nail x="-1164" y="-527"/>
+			<nail x="-1173" y="-544"/>
+			<nail x="-1173" y="-612"/>
+		</transition>
+		<transition id="id57">
+			<source ref="id55"/>
+			<target ref="id55"/>
+			<label kind="guard" x="-1054" y="-595">life &lt;= 0</label>
+			<label kind="synchronisation" x="-1045" y="-578">STMT?</label>
+			<nail x="-1062" y="-595"/>
+			<nail x="-1054" y="-535"/>
+		</transition>
+	</template>
+	<system>circle(const int id) = enemy(id, CIRCLE.speed, CIRCLE.health, CIRCLE.damage, CIRCLE.spawningTime, false);
+square(const int id) = enemy(id, SQUARE.speed, SQUARE.health, SQUARE.damage, SQUARE.spawningTime, true);
+circlec(const int id) = enemy(id, CIRCLE.speed, CIRCLE.health, CIRCLE.damage, CIRCLE.spawningTime, false);
+squarec(const int id) = enemy(id, SQUARE.speed, SQUARE.health, SQUARE.damage, SQUARE.spawningTime, true);
+basic(const int id, const Cell pos) = turret(id, pos, BASIC.range, BASIC.speed, BASIC.damage);
+cannon(const int id, const Cell pos) = turret(id, pos, CANNON.range, CANNON.speed, CANNON.damage);
+sniper(const int id, const Cell pos) = turret(id, pos, SNIPER.range, SNIPER.speed, SNIPER.damage);
+
+en0 = circle(0);
+en1 = square(1);
+en2 = circle(2);
+en3 = square(3);
+enc0 = circlec(0);
+enc1 = squarec(1);
+mt = mainTower(MT.health);
+t0 = basic(0, TURRET0_POS);
+t1 = cannon(1, TURRET1_POS);
+t2 = cannon(2, TURRET2_POS);
+t3 = cannon(3, TURRET3_POS);
+t4 = cannon(4, TURRET4_POS);
+t5 = sniper(5, TURRET5_POS);
+t6 = sniper(6, TURRET6_POS);
+
+system mt, enc0, enc1, t0, t5;//, en1, t0, t5;
+
+
+
+
+</system>
+	<queries>
+		<query>
+			<formula>A[](deadlock imply ENEMIES_COUNT==0)</formula>
+			<comment/>
+		</query>
+		<query>
+			<formula>E&lt;&gt;(en0.pos == MAIN_POS &amp;&amp; en1.pos == MAIN_POS)</formula>
+			<comment/>
+			<result outcome="success" type="quality" timestamp="2025-05-16 16:19:39 +0200">
+			</result>
+		</query>
+		<query>
+			<formula>A[](en0.pos == MAIN_POS imply en0.age&lt;=(MAX_PATH_LENGTH*(CIRCLE.speed+1)))</formula>
+			<comment/>
+			<result outcome="success" type="quality" timestamp="2025-05-16 20:42:05 +0200">
+			</result>
+		</query>
+		<query>
+			<formula>A[](en1.pos == MAIN_POS imply en1.age&lt;=(MAX_PATH_LENGTH*(SQUARE.speed+1)))</formula>
+			<comment/>
+			<result outcome="success" type="quality" timestamp="2025-05-16 20:42:22 +0200">
+			</result>
+		</query>
+		<query>
+			<formula>A[]((en0.pos==INVALID_POS
+	|| exists(i : int[0, PATH_LENGHTS[0]-1]) (ENEMIES_PATH1[i] == en0.pos)
+	|| exists(i : int[0, PATH_LENGHTS[1]-1]) (ENEMIES_PATH2[i] == en0.pos)
+	|| exists(i : int[0, PATH_LENGHTS[2]-1]) (ENEMIES_PATH3[i] == en0.pos)
+	|| exists(i : int[0, PATH_LENGHTS[3]-1]) (ENEMIES_PATH4[i] == en0.pos)
+	|| exists(i : int[0, PATH_LENGHTS[4]-1]) (ENEMIES_PATH5[i] == en0.pos))
+	&amp;&amp;
+	(en1.pos==INVALID_POS
+	|| exists(i : int[0, PATH_LENGHTS[0]-1]) (ENEMIES_PATH1[i] == en1.pos)
+	|| exists(i : int[0, PATH_LENGHTS[1]-1]) (ENEMIES_PATH2[i] == en1.pos)
+	|| exists(i : int[0, PATH_LENGHTS[2]-1]) (ENEMIES_PATH3[i] == en1.pos)
+	|| exists(i : int[0, PATH_LENGHTS[3]-1]) (ENEMIES_PATH4[i] == en1.pos)
+	|| exists(i : int[0, PATH_LENGHTS[4]-1]) (ENEMIES_PATH5[i] == en1.pos)))</formula>
+			<comment/>
+			<option key="--statespace-consumption" value="3"/>
+			<result outcome="success" type="quality" timestamp="2025-05-16 20:42:31 +0200">
+				<option key="--statespace-consumption" value="3"/>
+			</result>
+		</query>
+	</queries>
+</nta>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.6//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_6.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+</declaration>
+	<template>
+		<name x="5" y="5">AverageCounter</name>
+		<parameter>int N, double lambda</parameter>
+		<declaration>double acc = 0;
+int cont = 0;
+double average;
+
+clock x;
+
+void finalize()
+    {
+         average = acc/N; 
+    }
+
+
+</declaration>
+		<location id="id0" x="-187" y="-68">
+			<name x="-197" y="-102">running</name>
+			<label kind="exponentialrate" x="-255" y="-68">lambda</label>
+		</location>
+		<location id="id1" x="-187" y="42">
+			<name x="-170" y="42">ended</name>
+		</location>
+		<init ref="id0"/>
+		<transition id="id2">
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="guard" x="-170" y="-34">cont == N</label>
+			<label kind="assignment" x="-170" y="-17">finalize()</label>
+		</transition>
+		<transition id="id3">
+			<source ref="id0"/>
+			<target ref="id0"/>
+			<label kind="guard" x="-204" y="-161">cont&lt;N</label>
+			<label kind="assignment" x="-263" y="-144">acc = acc + x,cont++,x=0</label>
+			<nail x="-229" y="-119"/>
+			<nail x="-127" y="-119"/>
+		</transition>
+	</template>
+	<system>
+Process = AverageCounter(1500,10); //first parameter is the number of iterations and the second one is the rate of exponential for "running"
+
+system Process;
+</system>
+	<queries>
+		<query>
+			<formula/>
+			<comment/>
+		</query>
+	</queries>
+</nta>
