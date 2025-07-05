@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.9.9)  4 JUL 2025 11:35
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.9.9)  5 JUL 2025 21:22
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -838,34 +838,34 @@ Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
 ) (./article_4.aux)
 \openout1 = `article_4.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 59.
-LaTeX Font Info:    ... okay on input line 59.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 59.
-LaTeX Font Info:    ... okay on input line 59.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 59.
-LaTeX Font Info:    ... okay on input line 59.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 59.
-LaTeX Font Info:    ... okay on input line 59.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 59.
-LaTeX Font Info:    ... okay on input line 59.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 59.
-LaTeX Font Info:    ... okay on input line 59.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 59.
-LaTeX Font Info:    ... okay on input line 59.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 59.
-LaTeX Font Info:    ... okay on input line 59.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 59.
-LaTeX Font Info:    ... okay on input line 59.
-Package scrbase Info: activating english \abstractname on input line 59.
-Package scrbase Info: activating english \partname on input line 59.
-Package scrbase Info: activating english \figurename on input line 59.
-Package scrbase Info: activating english \tablename on input line 59.
-Package scrbase Info: activating english \contentsname on input line 59.
-Package scrbase Info: activating english \listfigurename on input line 59.
-Package scrbase Info: activating english \listtablename on input line 59.
-Package scrbase Info: activating english \refname on input line 59.
-Package scrbase Info: activating english \indexname on input line 59.
-Package hyperref Info: Link coloring ON on input line 59.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 56.
+LaTeX Font Info:    ... okay on input line 56.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 56.
+LaTeX Font Info:    ... okay on input line 56.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 56.
+LaTeX Font Info:    ... okay on input line 56.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 56.
+LaTeX Font Info:    ... okay on input line 56.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 56.
+LaTeX Font Info:    ... okay on input line 56.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 56.
+LaTeX Font Info:    ... okay on input line 56.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 56.
+LaTeX Font Info:    ... okay on input line 56.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 56.
+LaTeX Font Info:    ... okay on input line 56.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 56.
+LaTeX Font Info:    ... okay on input line 56.
+Package scrbase Info: activating english \abstractname on input line 56.
+Package scrbase Info: activating english \partname on input line 56.
+Package scrbase Info: activating english \figurename on input line 56.
+Package scrbase Info: activating english \tablename on input line 56.
+Package scrbase Info: activating english \contentsname on input line 56.
+Package scrbase Info: activating english \listfigurename on input line 56.
+Package scrbase Info: activating english \listtablename on input line 56.
+Package scrbase Info: activating english \refname on input line 56.
+Package scrbase Info: activating english \indexname on input line 56.
+Package hyperref Info: Link coloring ON on input line 56.
 
 (./article_4.out) (./article_4.out)
 \@outlinefile=\write3
@@ -878,7 +878,7 @@ Class scrartcl Info: loading recommended package `bookmark'.
 (scrartcl)           `bookmarkpackage=false' before \begin{document} and
 (scrartcl)           you can avoid this message adding:
 (scrartcl)             \usepackage{bookmark}
-(scrartcl)           before \begin{document} on input line 59.
+(scrartcl)           before \begin{document} on input line 56.
 
 (c:/texlive/2023/texmf-dist/tex/latex/bookmark/bookmark.sty
 Package: bookmark 2020-11-06 v1.29 PDF bookmarks (HO)
@@ -909,12 +909,12 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-LaTeX Info: Redefining \microtypecontext on input line 59.
-Package microtype Info: Applying patch `item' on input line 59.
-Package microtype Info: Applying patch `toc' on input line 59.
-Package microtype Info: Applying patch `eqnum' on input line 59.
-Package microtype Info: Applying patch `footnote' on input line 59.
-Package microtype Info: Applying patch `verbatim' on input line 59.
+LaTeX Info: Redefining \microtypecontext on input line 56.
+Package microtype Info: Applying patch `item' on input line 56.
+Package microtype Info: Applying patch `toc' on input line 56.
+Package microtype Info: Applying patch `eqnum' on input line 56.
+Package microtype Info: Applying patch `footnote' on input line 56.
+Package microtype Info: Applying patch `verbatim' on input line 56.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
@@ -965,7 +965,7 @@ Package caption Info: End \AtBeginDocument code.
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
 LaTeX Font Info:    Trying to load font information for T1+iwona on input line 
-76.
+64.
 (c:/texlive/2023/texmf-dist/tex/latex/iwona/t1iwona.fd
 File: t1iwona.fd 2008/07/22 v0.995 font definition file for T1/iwona (MW)
 )
@@ -974,12 +974,12 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 LaTeX Font Info:    Trying to load font information for OT1+pplj on input line 
-76.
+64.
 
 (c:/texlive/2023/texmf-dist/tex/latex/psnfss/ot1pplj.fd
 File: ot1pplj.fd 2004/09/06 font definitions for OT1/pplj.
 )
-LaTeX Font Info:    Trying to load font information for U+zeur on input line 76
+LaTeX Font Info:    Trying to load font information for U+zeur on input line 64
 .
 
 (c:/texlive/2023/texmf-dist/tex/latex/eulervm/uzeur.fd
@@ -988,7 +988,7 @@ File: uzeur.fd 2005/01/11 v4.0 (WaS)
 (c:/texlive/2023/texmf-dist/tex/latex/microtype/mt-eur.cfg
 File: mt-eur.cfg 2006/07/31 v1.1 microtype config. file: AMS Euler Roman (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+zeus on input line 76
+LaTeX Font Info:    Trying to load font information for U+zeus on input line 64
 .
 
 (c:/texlive/2023/texmf-dist/tex/latex/eulervm/uzeus.fd
@@ -997,14 +997,14 @@ File: uzeus.fd 2005/01/11 v4.0 (WaS)
 (c:/texlive/2023/texmf-dist/tex/latex/microtype/mt-eus.cfg
 File: mt-eus.cfg 2006/07/28 v1.2 microtype config. file: AMS Euler Script (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+zeuex on input line 7
-6.
+LaTeX Font Info:    Trying to load font information for U+zeuex on input line 6
+4.
 
 (c:/texlive/2023/texmf-dist/tex/latex/eulervm/uzeuex.fd
 File: uzeuex.fd 2005/01/11 v4.0 (WaS)
 )
 LaTeX Font Info:    Trying to load font information for OT1+zplm on input line 
-76.
+64.
 
 (c:/texlive/2023/texmf-dist/tex/latex/psnfss/ot1zplm.fd
 File: ot1zplm.fd 2002/09/08 Fontinst v1.914 font definitions for OT1/zplm.
@@ -1020,16 +1020,12 @@ File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 (c:/texlive/2023/texmf-dist/tex/latex/microtype/mt-msb.cfg
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
-Package tocbasic Info: character protrusion at toc deactivated on input line 79
+Package tocbasic Info: character protrusion at toc deactivated on input line 70
 .
  (./article_4.toc
 Package microtype Info: Character `029' is missing
 (microtype)             in font `T1/pplj/m/sc/10'.
 (microtype)             Ignoring protrusion settings for this character.
-)
-\tf@toc=\write4
-\openout4 = `article_4.toc'.
-
 
 [1
 
@@ -1037,14 +1033,17 @@ Package microtype Info: Character `029' is missing
 {c:/texlive/2023/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{c:/texlive/2023/
 texmf-dist/fonts/enc/dvips/iwona/ec-iwona.enc}{c:/texlive/2023/texmf-dist/fonts
 /enc/dvips/iwona/ec-iwona-sc.enc}{c:/texlive/2023/texmf-dist/fonts/enc/dvips/ba
-se/8r.enc}]
-Package tocbasic Info: character protrusion at lof deactivated on input line 81
+se/8r.enc}])
+\tf@toc=\write4
+\openout4 = `article_4.toc'.
+
+Package tocbasic Info: character protrusion at lof deactivated on input line 72
 .
  (./article_4.lof)
 \tf@lof=\write5
 \openout5 = `article_4.lof'.
 
-Package tocbasic Info: character protrusion at lot deactivated on input line 83
+Package tocbasic Info: character protrusion at lot deactivated on input line 74
 .
  (./article_4.lot)
 \tf@lot=\write6
@@ -1057,74 +1056,71 @@ Package microtype Info: Character `029' is missing
 Package microtype Info: Character `029' is missing
 (microtype)             in font `T1/iwona/b/sc/10'.
 (microtype)             Ignoring protrusion settings for this character.
-LaTeX Font Info:    Trying to load font information for T1+fvm on input line 12
-3.
+LaTeX Font Info:    Trying to load font information for T1+fvm on input line 95
+.
 
 (c:/texlive/2023/texmf-dist/tex/latex/bera/t1fvm.fd
 File: t1fvm.fd 2004/09/07 scalable font definitions for T1/fvm.
 )
 LaTeX Font Info:    Font shape `T1/fvm/m/n' will be
-(Font)              scaled to size 8.50006pt on input line 123.
+(Font)              scaled to size 8.50006pt on input line 95.
 Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `fvm' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
+ [3]
 LaTeX Font Info:    Font shape `T1/fvm/b/n' will be
-(Font)              scaled to size 8.50006pt on input line 123.
-<Figures/EnemyTemplate.png, id=103, 742.775pt x 268.50313pt>
+(Font)              scaled to size 8.50006pt on input line 127.
+<Figures/EnemyTemplate.png, id=119, 742.775pt x 268.50313pt>
 File: Figures/EnemyTemplate.png Graphic file (type png)
 <use Figures/EnemyTemplate.png>
-Package pdftex.def Info: Figures/EnemyTemplate.png  used on input line 153.
+Package pdftex.def Info: Figures/EnemyTemplate.png  used on input line 157.
 (pdftex.def)             Requested size: 483.69687pt x 174.8527pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[3]
-<Figures/TurretTemplate.png, id=120, 308.65312pt x 108.90688pt>
+[4]
+<Figures/TurretTemplate.png, id=133, 308.65312pt x 108.90688pt>
 File: Figures/TurretTemplate.png Graphic file (type png)
 <use Figures/TurretTemplate.png>
-Package pdftex.def Info: Figures/TurretTemplate.png  used on input line 173.
+Package pdftex.def Info: Figures/TurretTemplate.png  used on input line 177.
 (pdftex.def)             Requested size: 241.84843pt x 85.33751pt.
-
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-[4 <./Figures/EnemyTemplate.png>]
-Overfull \hbox (5.9148pt too wide) in paragraph at lines 184--185
+ [5 <./Figures/EnemyTemplate.png> <./Figures/TurretTemplate.png>]
+Overfull \hbox (5.9148pt too wide) in paragraph at lines 188--189
 \T1/pplj/m/n/10 This, per-haps not in-tu-itive way of scan-ning en-e-mies guar-
 an-tees and asymp-totic com-plex-ity $\U/zeur/m/n/10 ^^B\U/zeus/m/n/10 ¨\U/zeur
 /m/n/10 MAX[]NEMIES\U/zeus/m/n/10 ©$\T1/pplj/m/n/10 ,
  []
 
-<Figures/stochasticEnemy.png, id=127, 497.35812pt x 286.57062pt>
+<Figures/stochasticEnemy.png, id=140, 497.35812pt x 286.57062pt>
 File: Figures/stochasticEnemy.png Graphic file (type png)
 <use Figures/stochasticEnemy.png>
-Package pdftex.def Info: Figures/stochasticEnemy.png  used on input line 196.
+Package pdftex.def Info: Figures/stochasticEnemy.png  used on input line 200.
 (pdftex.def)             Requested size: 261.19719pt x 150.49992pt.
-<Figures/stochasticTurret.png, id=128, 301.62688pt x 107.40125pt>
+<Figures/stochasticTurret.png, id=141, 301.62688pt x 107.40125pt>
 File: Figures/stochasticTurret.png Graphic file (type png)
 <use Figures/stochasticTurret.png>
-Package pdftex.def Info: Figures/stochasticTurret.png  used on input line 201.
+Package pdftex.def Info: Figures/stochasticTurret.png  used on input line 205.
 (pdftex.def)             Requested size: 174.12701pt x 62.00104pt.
-[5 <./Figures/TurretTemplate.png> <./Figures/stochasticEnemy.png> <./Figures/st
-ochasticTurret.png>] [6]
-<Figures/MT_Template.png, id=151, 431.11063pt x 138.5175pt>
+[6 <./Figures/stochasticEnemy.png> <./Figures/stochasticTurret.png>]
+(./article_4.bbl) [7]
+<Figures/MT_Template.png, id=163, 431.11063pt x 138.5175pt>
 File: Figures/MT_Template.png Graphic file (type png)
 <use Figures/MT_Template.png>
-Package pdftex.def Info: Figures/MT_Template.png  used on input line 271.
+Package pdftex.def Info: Figures/MT_Template.png  used on input line 290.
 (pdftex.def)             Requested size: 241.84843pt x 77.70665pt.
-<Figures/ENEMIES_PATHS.png, id=152, 564.60938pt x 268.00125pt>
+<Figures/ENEMIES_PATHS.png, id=164, 564.60938pt x 268.00125pt>
 File: Figures/ENEMIES_PATHS.png Graphic file (type png)
 <use Figures/ENEMIES_PATHS.png>
-Package pdftex.def Info: Figures/ENEMIES_PATHS.png  used on input line 280.
+Package pdftex.def Info: Figures/ENEMIES_PATHS.png  used on input line 299.
 (pdftex.def)             Requested size: 314.40001pt x 149.23726pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[7 <./Figures/MT_Template.png>] (./article_4.bbl) [8 <./Figures/ENEMIES_PATHS.p
-ng>] (./article_4.aux)
+[8 <./Figures/MT_Template.png>] [9 <./Figures/ENEMIES_PATHS.png>]
+(./article_4.aux)
  ***********
 LaTeX2e <2023-06-01> patch level 1
 L3 programming layer <2020/03/25>
@@ -1133,13 +1129,13 @@ Package rerunfilecheck Info: File `article_4.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 21701 strings out of 474934
- 401436 string characters out of 5763815
+ 21728 strings out of 474934
+ 401900 string characters out of 5763815
  1946801 words of memory out of 5000000
- 42819 multiletter control sequences out of 15000+600000
- 656333 words of font info for 141 fonts, out of 8000000 for 9000
+ 42837 multiletter control sequences out of 15000+600000
+ 662104 words of font info for 143 fonts, out of 8000000 for 9000
  1143 hyphenation exceptions out of 8191
- 108i,22n,111p,10955b,755s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 108i,22n,111p,10955b,763s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/tex
 live/2023/texmf-dist/fonts/type1/public/amsfonts/euler/eufm10.pfb><c:/texlive/2
 023/texmf-dist/fonts/type1/public/amsfonts/euler/eurm10.pfb><c:/texlive/2023/te
@@ -1152,10 +1148,10 @@ ve/2023/texmf-dist/fonts/type1/nowacki/iwona/iwonabi.pfb><c:/texlive/2023/texmf
 pe1/public/amsfonts/symbols/msam10.pfb><c:/texlive/2023/texmf-dist/fonts/type1/
 urw/palatino/uplb8a.pfb><c:/texlive/2023/texmf-dist/fonts/type1/urw/palatino/up
 lr8a.pfb><c:/texlive/2023/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on article_4.pdf (8 pages, 449167 bytes).
+Output written on article_4.pdf (9 pages, 472718 bytes).
 PDF statistics:
- 361 PDF objects out of 1000 (max. 8388607)
- 304 compressed objects within 4 object streams
- 61 named destinations out of 1000 (max. 500000)
- 20807 words of extra memory for PDF output out of 24883 (max. 10000000)
+ 373 PDF objects out of 1000 (max. 8388607)
+ 315 compressed objects within 4 object streams
+ 68 named destinations out of 1000 (max. 500000)
+ 21831 words of extra memory for PDF output out of 24883 (max. 10000000)
 
