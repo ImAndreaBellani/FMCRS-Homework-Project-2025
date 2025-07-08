@@ -1,0 +1,223 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.2 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global}
+    \entry{4}{unpublished}{}
+      \name{author}{1}{}{%
+        {{hash=a47d76d936d4b587b3b91e5295525e3d}{%
+           family={A.\bibnamedelimi Manini},
+           familyi={A\bibinitperiod\bibinitdelim M\bibinitperiod},
+           given={P.\bibnamedelimi San\bibnamedelima Pietro},
+           giveni={P\bibinitperiod\bibinitdelim S\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+      }
+      \strng{namehash}{a47d76d936d4b587b3b91e5295525e3d}
+      \strng{fullhash}{a47d76d936d4b587b3b91e5295525e3d}
+      \strng{bibnamehash}{a47d76d936d4b587b3b91e5295525e3d}
+      \strng{authorbibnamehash}{a47d76d936d4b587b3b91e5295525e3d}
+      \strng{authornamehash}{a47d76d936d4b587b3b91e5295525e3d}
+      \strng{authorfullhash}{a47d76d936d4b587b3b91e5295525e3d}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{The Uppaal Tool}
+      \field{year}{2005}
+      \true{nocite}
+      \verb{urlraw}
+      \verb https://webeep.polimi.it
+      \endverb
+      \verb{url}
+      \verb https://webeep.polimi.it
+      \endverb
+    \endentry
+    \entry{3}{article}{}
+      \name{author}{1}{}{%
+        {{hash=bd5ec04fd827742680a4a34303776321}{%
+           family={G.\bibnamedelimi Behrmann},
+           familyi={G\bibinitperiod\bibinitdelim B\bibinitperiod},
+           given={K.\bibnamedelimi G.\bibnamedelimi Larsen},
+           giveni={K\bibinitperiod\bibinitdelim G\bibinitperiod\bibinitdelim L\bibinitperiod},
+           suffix={A.\bibnamedelimi David},
+           suffixi={A\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+      }
+      \strng{namehash}{bd5ec04fd827742680a4a34303776321}
+      \strng{fullhash}{bd5ec04fd827742680a4a34303776321}
+      \strng{bibnamehash}{bd5ec04fd827742680a4a34303776321}
+      \strng{authorbibnamehash}{bd5ec04fd827742680a4a34303776321}
+      \strng{authornamehash}{bd5ec04fd827742680a4a34303776321}
+      \strng{authorfullhash}{bd5ec04fd827742680a4a34303776321}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{A Tutorial on Uppaal 4.0}
+      \field{year}{2006}
+      \true{nocite}
+      \verb{urlraw}
+      \verb https://uppaal.org/texts/new-tutorial.pdf
+      \endverb
+      \verb{url}
+      \verb https://uppaal.org/texts/new-tutorial.pdf
+      \endverb
+    \endentry
+    \entry{5}{online}{}
+      \name{author}{1}{}{%
+        {{hash=81322a46efec68c0b1f083d340d2fc1e}{%
+           family={Lee},
+           familyi={L\bibinitperiod},
+           given={I.},
+           giveni={I\bibinitperiod}}}%
+      }
+      \strng{namehash}{81322a46efec68c0b1f083d340d2fc1e}
+      \strng{fullhash}{81322a46efec68c0b1f083d340d2fc1e}
+      \strng{bibnamehash}{81322a46efec68c0b1f083d340d2fc1e}
+      \strng{authorbibnamehash}{81322a46efec68c0b1f083d340d2fc1e}
+      \strng{authornamehash}{81322a46efec68c0b1f083d340d2fc1e}
+      \strng{authorfullhash}{81322a46efec68c0b1f083d340d2fc1e}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{UPPAAL tutorial}
+      \field{year}{2009}
+      \true{nocite}
+      \verb{urlraw}
+      \verb https://www.seas.upenn.edu/~lee/09cis480/lec-part-4-uppaal-input.pdf
+      \endverb
+      \verb{url}
+      \verb https://www.seas.upenn.edu/~lee/09cis480/lec-part-4-uppaal-input.pdf
+      \endverb
+    \endentry
+    \entry{7}{unpublished}{}
+      \name{author}{1}{}{%
+        {{hash=633452f6b17baa8db6c83220c3a46be5}{%
+           family={Lestingi},
+           familyi={L\bibinitperiod},
+           given={L.},
+           giveni={L\bibinitperiod}}}%
+      }
+      \strng{namehash}{633452f6b17baa8db6c83220c3a46be5}
+      \strng{fullhash}{633452f6b17baa8db6c83220c3a46be5}
+      \strng{bibnamehash}{633452f6b17baa8db6c83220c3a46be5}
+      \strng{authorbibnamehash}{633452f6b17baa8db6c83220c3a46be5}
+      \strng{authornamehash}{633452f6b17baa8db6c83220c3a46be5}
+      \strng{authorfullhash}{633452f6b17baa8db6c83220c3a46be5}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Statistical Model Checking and Uppaal SMC}
+      \field{year}{2021}
+      \true{nocite}
+      \verb{urlraw}
+      \verb https://webeep.polimi.it
+      \endverb
+      \verb{url}
+      \verb https://webeep.polimi.it
+      \endverb
+    \endentry
+    \entry{2}{book}{}
+      \name{author}{1}{}{%
+        {{hash=0f6646a840cf2000b3bcae6a16338b38}{%
+           family={M.\bibnamedelimi Bernardo},
+           familyi={M\bibinitperiod\bibinitdelim B\bibinitperiod},
+           given={F.\bibnamedelimi Corradini},
+           giveni={F\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
+      }
+      \strng{namehash}{0f6646a840cf2000b3bcae6a16338b38}
+      \strng{fullhash}{0f6646a840cf2000b3bcae6a16338b38}
+      \strng{bibnamehash}{0f6646a840cf2000b3bcae6a16338b38}
+      \strng{authorbibnamehash}{0f6646a840cf2000b3bcae6a16338b38}
+      \strng{authornamehash}{0f6646a840cf2000b3bcae6a16338b38}
+      \strng{authorfullhash}{0f6646a840cf2000b3bcae6a16338b38}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Formal Methods for the Design of Real-Time systems}
+      \field{year}{2004}
+      \true{nocite}
+      \verb{urlraw}
+      \verb https://link.springer.com/book/10.1007/b110123
+      \endverb
+      \verb{url}
+      \verb https://link.springer.com/book/10.1007/b110123
+      \endverb
+    \endentry
+    \entry{1}{unpublished}{}
+      \name{author}{1}{}{%
+        {{hash=9d75443102342d93c698eb774bffb699}{%
+           family={Pietro},
+           familyi={P\bibinitperiod},
+           given={P.\bibnamedelimi San},
+           giveni={P\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+      }
+      \strng{namehash}{9d75443102342d93c698eb774bffb699}
+      \strng{fullhash}{9d75443102342d93c698eb774bffb699}
+      \strng{bibnamehash}{9d75443102342d93c698eb774bffb699}
+      \strng{authorbibnamehash}{9d75443102342d93c698eb774bffb699}
+      \strng{authornamehash}{9d75443102342d93c698eb774bffb699}
+      \strng{authorfullhash}{9d75443102342d93c698eb774bffb699}
+      \field{sortinit}{P}
+      \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Lecture slides of FORMAL METHODS FOR CONCURRENT AND REAL-TIME SYSTEMS course}
+      \field{year}{2025}
+      \true{nocite}
+      \verb{urlraw}
+      \verb https://webeep.polimi.it
+      \endverb
+      \verb{url}
+      \verb https://webeep.polimi.it
+      \endverb
+    \endentry
+    \entry{6}{online}{}
+      \name{author}{1}{}{%
+        {{hash=af8d6a570ee60f6a6482ffc9957f8613}{%
+           family={Schettini},
+           familyi={S\bibinitperiod},
+           given={A.\bibnamedelimi Maggiolo},
+           giveni={A\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+      }
+      \strng{namehash}{af8d6a570ee60f6a6482ffc9957f8613}
+      \strng{fullhash}{af8d6a570ee60f6a6482ffc9957f8613}
+      \strng{bibnamehash}{af8d6a570ee60f6a6482ffc9957f8613}
+      \strng{authorbibnamehash}{af8d6a570ee60f6a6482ffc9957f8613}
+      \strng{authornamehash}{af8d6a570ee60f6a6482ffc9957f8613}
+      \strng{authorfullhash}{af8d6a570ee60f6a6482ffc9957f8613}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Veryfing Real–Time Systems - The Uppaal Model Checker}
+      \field{year}{2007}
+      \true{nocite}
+      \verb{urlraw}
+      \verb http://groups.di.unipi.it/~maggiolo/Lucidi_TA/VerifyingTA-Uppaal
+      \endverb
+      \verb{url}
+      \verb http://groups.di.unipi.it/~maggiolo/Lucidi_TA/VerifyingTA-Uppaal
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

@@ -31,6 +31,12 @@ BCOR5mm, % Binding correction
 
 \newcommand\ytl[2]{
 	\parbox[b]{8em}{\hfill{\color{cyan}\bfseries\sffamily #1}~$\cdots\cdots$~}\makebox[0pt][c]{$\bullet$}\vrule\quad \parbox[c]{7cm}{\vspace{7pt}\color{red!40!black!80}\raggedright\sffamily #2.\\[7pt]}\\[-3pt]}
+\usepackage{tabularx}
+
+
+\usepackage[]{biblatex}
+\addbibresource{sample.bib}
+
 \usepackage[pdftex,
 pdfauthor={Andrea Bellani},
 pdftitle={UppaalTD: a Formal Tower Defense Game (report)},
@@ -41,13 +47,14 @@ pdfcreator={pdflatex}]{hyperref}
 
 \input{structure.tex} % Include the structure.tex file which specified the document structure and layout
 
+
 \hyphenation{Fortran hy-phen-ation} % Specify custom hyphenation points in words with dashes where you would like hyphenation to occur, or alternatively, don't put any dashes in a word to stop hyphenation altogether
 
 \title{\normalfont\spacedallcaps{UppaalTD: a Formal Tower Defense Game}} % The article title
 
 \subtitle{Formal Methods for Concurrent and Real-Time Systems Homework} % Uncomment to display a subtitle
 
-\author{\spacedlowsmallcaps{Andrea Bellani}} % The article author(s) - author affiliations need to be specified in the AUTHOR AFFILIATIONS block
+\author{\spacedlowsmallcaps{Andrea Bellani} (\href{mailto:andrea1.bellani@mail.polimi.it}{\nolinkurl{andrea1.bellani@mail.polimi.it}})}
 
 \date{\today} % An optional date to appear under the author(s)
 
@@ -79,9 +86,13 @@ pdfcreator={pdflatex}]{hyperref}
 		\subsection{Definitions}
 			\begin{itemize}
 				\item \textbf{requirements} : the official specifications of UppaalTD's parameters and rules;
+				\item \textbf{alive}, \textbf{targettable} or \textbf{shootable} enemy : the enemy has an health strictly greater than zero and is present on the map;
+				\item \textbf{dismissed} enemy : the enemy is dead or it shot the MT and the following delay has expired;
+				\item \textbf{configuration} : wave's composition and turrets configuration chosen (generalized definition from requirements one);
 				\item \textbf{ending} of a wave : a wave is considered \emph{ended} when each enemy is dismissed (i.e. it can't move or shoot anymore because it has already shoot or it was killed by turrets);
 				\item \textbf{location} : a location of an Uppaal template;
-				\item \textbf{state} : the entire game's state in a certain time instant (i.e. each automaton's position and each variable's or clock's value).
+				\item \textbf{state} : the entire game's state in a certain time instant (i.e. each automaton's position and each variable's or clock's value);
+				\item \emph{Chebyshev distance} : given two generic $n$-dimensional points $x=(x_1 \dots x_n)$ and $y=(y_1 \dots y_n)$, their Chebyshev distance can be computed as $\max\limits_{1\leq i\leq n}\{|x_i - y_i|\}$.
 			\end{itemize}					
 		\subsection{Project development timeline}
 			\begin{table}[h!]
@@ -100,7 +111,7 @@ pdfcreator={pdflatex}]{hyperref}
 					\ytl{june 15th}{First stochastic version}
 					\ytl{june 24th}{Started delivery procedures}
 					\ytl{june 26th}{Started report writing}
-					\ytl{july 6th}{Finished report writing}
+					\ytl{july 7th}{Finished report writing}
 					\bigskip
 					\rule{\linewidth}{1pt}%
 				\end{minipage}
@@ -110,18 +121,69 @@ pdfcreator={pdflatex}]{hyperref}
 			Main sections:
 			\begin{enumerate}
 				\item \textbf{Introduction} : sum up of our definitions for the terminologies used in the document and version history of our model;
-				\item \textbf{Model description} : in this section we describe all the design choices related to the modeling of the vanilla and the stochastic version of the game;
-				\item \textbf{Game configuration} : presentation of the configurations analyzed;
+				\item \textbf{Model description} : description of the models and focus on the most critical modeling choices;
 				\item \textbf{Verification results} : detailed analysis of the queries verified;
+				\item \textbf{Analysis of selected configurations} : presentation and deeper analysis of the models behaviors for some interesting configurations;
 				\item \textbf{Conclusions} : resume of the conclusions obtained.
 			\end{enumerate}
 			Appendixes:
 			\begin{enumerate}
-				\item[A] \textbf{Discarded choices} : presentation of the most interesting design choices together with the motivation behind their rejection.
+				\item[A] \textbf{Discarded choices} : presentation of the most interesting discarded design choices and the motivations behind their rejection.
 			\end{enumerate}
+		\subsection{Software and machines used}
+			\begin{table}[h!]
+				\centering
+				\begin{tabular}{lll}
+					\toprule
+					Usage     & Software & Versioning   \\
+					\midrule
+					Modeling, simulation and verification & Uppaal & 5.0.0  \\
+					\addlinespace
+					Report writing & TeXstudio & 4.6.3 \\
+					\addlinespace
+					Version  & Git & 2.40.0.windows.1  \\
+					\bottomrule
+				\end{tabular}
+				\caption{Software used}
+			\end{table}
+			Each query was verified used two different machines with different performances that here we briefly describe:
+			\begin{table}[h!]
+				\centering
+				\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{2.5cm} >{\raggedright\arraybackslash}p{3.5cm} >{\raggedright\arraybackslash}p{3.5cm} >{\raggedright\arraybackslash}p{3cm} >{\raggedright\arraybackslash}p{2.5cm}}
+					\toprule
+					Machine name & CPU & RAM & OS & Manufacturing year\\
+					\midrule
+					\textbf{Machine 1} & AMD Ryzen 5 3500U (2.1 GHz)  & 8 GB (5,95 GB usable) & Windows 11 Home & 2020  \\
+					\addlinespace
+					\textbf{Machine 2} & 11th Gen Intel(R) Core(TM) i5-1135G7 (2.4 GHz) & 24 GB (23,7 GB usable) & Windows 11 Pro & 2021\\
+					\bottomrule
+				\end{tabularx}
+				\caption{Machine specifications}
+			\end{table}
+			
+			This document was written over the template Arsclassica Article (\url{https://www.latextemplates.com/template/arsclassica-article}) with few adjustments by us.
+	\newpage
 	\section{Model description}
 		We modeled both the Vanilla and the Stochastic version of the game. In particular, we firstly modeled the Vanilla version and then proceeded to modify it to model the stochastic requirements. In this section we provide a detailed explanation of both versions and how the Stochastic one was obtained from the Vanilla. We clarify that our main purpose in this section is to clarify and support our design choices rather then explain the technical aspect underlying the Uppaal code, which can be read from the templates comments.
-	
+		\subsection{Entities modeling (for Vanilla version)}
+			\subsubsection{Map}
+			\subsubsection{Main Tower (MT)}
+			\subsubsection{Enemy}
+			\subsubsection{Turret}
+		\subsection{Communication modeling description (for Vanilla version)}
+			\subsubsection{How turrets shoot to enemies}
+			\subsubsection{How enemies shoot to the MT}
+		\subsection{Enrichment of Vanilla model with stochastic features}
+	\section{Verification results}
+		\subsection{Vanilla model verification}
+			\subsubsection{Verification without turrets}
+			\subsubsection{Verification with turrets}
+		\subsection{Stochastic model verification}
+	\section{Analysis of selected configurations}
+		\subsection{Chosen configurations for Vanilla version}
+		\subsection{Chosen configurations for Stochastic version}
+		\subsection{Stochastic version behaviors analysis}
+		
 	\subsection{Vanilla version's model}
 	\subsubsection{How game's state is modeled}
 	We refer as \emph{game's state} to the global state of match. It is represented by the two \texttt{\textbf{int}}:
@@ -209,7 +271,7 @@ pdfcreator={pdflatex}]{hyperref}
 	
 	For what strictly concerns the templates:
 	\begin{itemize}
-		\item enemy template :
+		\item enemy template:
 			\begin{itemize}
 				\item speed delay so no more modeled as a delay but as a exponential rate that determines the probability of coming out from the state. Since while enemy is approaching the MT the only available transition (provided that the enemy is alive) is the one that calls \texttt{next}, the probability of moving to the next cell is determined by the exponential rate \texttt{speed:10}. This is analogue also in \texttt{AfterShoot};
 				\item even if MT is still modeled as a variable and not as a template, an enemy that wants to shoot sends a message over the channel \texttt{SHOOT\_TO\_MT}, which simply is a \texttt{urgent broadcast} channel useful to force enemies to "not wait" before shoot when they can, otherwise also the probability of shooting to the MT at an instant would have been modeled, but requirements never ask for it, so it is better to model any outgoing transition that may change the game dynamics as \texttt{urgent} if no probabilistic delay should affect it (transition to \texttt{Dimissed} if \texttt{health$\leq$0} does not really affects game dynamics since the enemy has already died);
@@ -271,38 +333,69 @@ pdfcreator={pdflatex}]{hyperref}
 	%----------------------------------------------------------------------------------------
 	%	BIBLIOGRAPHY
 	%----------------------------------------------------------------------------------------
+
 	
-	\renewcommand{\refname}{\spacedlowsmallcaps{References}} % For modifying the bibliography heading
-	
-	\bibliographystyle{unsrt}
-	
-	\bibliography{sample.bib} % The file containing the bibliography
 	
 	%----------------------------------------------------------------------------------------
+	\newpage
 	\appendix
 	\section{Discarded choices}
-	We wanted to write this additional section mainly to better clarify our design choices however, we want to clarify that our design choices are what we believed to be more efficient and adequate for our interpretation of the game. Some of the discarded can possibly be the best ones in other contexts or with other needs, also for these reasons we wanted to state them in the report.
-	\subsection{MT template}
-	Originally, a template for MT was designed. It was, for its simplicity, the very first designed template. We removed it in an attempt of optimizing the model, since we understood (after reasoning more on the more important design choices) that a "passive" entity like the MT does not really need to be implemented with a dedicated template (\texttt{decDamage} decreases MT's life of the value set in a global variable from the firing enemy):
-	
-	\begin{figure}[h!]
-		\centering
-		\includegraphics[width=0.5\textwidth]{MT_Template.png}
-		\caption{Original MT's template}
-	\end{figure}
-	Dividing enemy and turret in two templates is necessary to model in a proper and clear way the interleaving between these entities but MT never needs to trigger other components or to implement non-deterministic choices. The only one centralized behavior a dedicated template could have implemented was controlling that the MT's life is not 0 before decreasing it, but this can be easily moved in enemy template (before an enemy shoots, it checks that MT's life is not 0) without loss of readability. Of course, different requirements may have lead us to different design choices.
-	\subsection{Hard-coded enemies paths}
-	The really first enemy version in fact used the concept of \texttt{next()} but there was no idea on how to model the non-deterministic path choices (unless using \texttt{random()}, which is not available in symbolic simulations). The only idea was to hard-code cells vectors representing each straight red path on the map and enemies template would choose between them non-deterministically with transitions (once an enemy arrives in the last cell of a path, then it will start to follow non-deterministically one of the "next paths"):
-	
-	\begin{figure}[h!]
-		\centering
-		\includegraphics[width=0.65\textwidth]{ENEMIES_PATHS.png}
-		\caption{Original non-deterministic path choices example}
-	\end{figure}
-	Then, we realized that since during the match there is event that can change the probability that a enemy takes a certain choice in a junction, without loss of generality path choices are always chosen by the time each enemy is spawned. This simple intuition really improved the readability of the enemy template.
-	\subsection{Quadratic enemies scanning strategy}
-	The very first turret version used to look for targetable enemies in this way: for each $k$ from $1$ to the shooting range, scan \texttt{SHOOT\_TABLE} to find all the available enemies at exactly $k$ cells of distance from the tower; then, choose the best iso-distant available enemy based on the criteria given in the requirements. The asymptotic complexity of this procedure is $\Theta(k\times MAX_ENEMIES)$ which is significantly worse than the final version.
-	\subsection{Locks}
-	[PRIMA O METTERLO]
-	
+		We wanted to write this additional section mainly to better clarify the reasons behind our final design choices. Nonetheless, we would like to clarify that our design choices are what we believed to be more efficient and adequate for our interpretation of the game, so some of the discarded can possibly be the best ones in other contexts or with different requirements and also for this reason we wanted to state them in the report.
+		\subsection{MT template}
+			Originally, a template for MT was designed. It was, for its simplicity, the very first one to be designed. We removed it in an attempt of optimizing the model, since we understood (after reasoning more on other more crucial design choices) that a so simple and "passive" entity like the MT does not really need to be implemented with a dedicated template (\texttt{decDamage} decreases MT's life by the value set in a global variable from the firing enemy):
+			
+			\begin{figure}[h!]
+				\centering
+				\includegraphics[width=0.5\textwidth]{MT_Template.png}
+				\caption{Original MT's template}
+			\end{figure}
+			
+			Decoupling enemy and turret in two templates is necessary to model in a proper and clear way the interleaving between these entities but MT neither needs to trigger other components nor has any non-deterministic behavior. The only one centralized aspect that a dedicated template could have implemented was controlling that MT's life is not $0$ before decreasing it, but this can be easily moved in enemy's template (before an enemy shoots, it checks that MT's life is not $0$) without loss of readability.
+		\subsection{Hard-coded enemies paths}
+			The very first enemy version used the concept of \texttt{next()} but there was no idea on how to model the non-deterministic moves (unless using \texttt{random()}, which is not available in symbolic simulations). The only idea was to hard-code vectors of cells representing each straight red path on the map and enemies template would have chosen between them non-deterministically with transitions (once an enemy arrives in the last cell of a path, then it will start to follow non-deterministically one of the "next paths"):
+			
+			\begin{figure}[h!]
+				\centering
+				\includegraphics[width=0.65\textwidth]{ENEMIES_PATHS.png}
+				\caption{Original non-deterministic path choices example}
+			\end{figure}
+			We realized that since during the game there is no event that may change the probability that an enemy takes a certain choice in a junction rather than another one, without loss of generality, these non-deterministic choices can be determined all at once by the time the enemy spawns (by calling \texttt{initialize()} with different parameters):
+			\begin{figure}[h!]
+				\centering
+				\includegraphics[width=0.65\textwidth]{COMPACT_ENEMIES_PATHS.png}
+				\caption{Close-up of the non-deterministic paths choice at spawning time}
+			\end{figure}
+			This simple intuition really improved the readability of the enemy template (in the project development timeline we called this new version \emph{compact enemy}).
+		\subsection{Quadratic enemies scanning strategy}
+			The very first turret version used to look for enemies to shoot in this way: for each $k$ from $1$ to the \texttt{range}, scan \texttt{SHOOT\_TABLE} to find all the available enemies at exactly $k$ cells of distance; then, choose the best iso-distant available enemy based on the requirements criteria. The worst-case asymptotic complexity of this procedure was $\Theta(k\times MAX\_ENEMIES)$ which was significantly worse than the one of the final version which is $\Theta(MAX\_ENEMIES)$ especially in the average case where there is no enemy inside the shooting range.
+		\subsection{Locks}
+			At the beginning, the first way of synchronizing entities was thought in a classical lock-unlock manner:
+			\begin{figure}[h!]
+				\centering
+				\begin{minipage}{.5\textwidth}
+					\centering
+					\includegraphics[width=.9\linewidth]{enemyLock.png}
+					\caption{Close-up of the enemy locking \texttt{STMT} channel}
+				\end{minipage}
+				\begin{minipage}{.4\textwidth}
+					\centering
+					\includegraphics[width=.9\linewidth]{controller.png}
+					\caption{\texttt{STMTCONTROLLER} template}
+				\end{minipage}
+			\end{figure}
+			Once an enemy reaches the MT (for the MT template please see the proper section of the appendix):
+			\begin{enumerate}
+				\item the enemy sends a message to \texttt{STMTCONTROLLER} and waits for its reply (more precisely, Uppaal chooses non-deterministically which one of the ready enemies can send the message to the controller);
+				\item once the controller replies the enemy places in the shared variable the damage for the MT;
+				\item the enemy shoots to the MT (i.e. sends a message over \texttt{STMT});
+				\item the enemy sends a message to \texttt{STMTCONTROLLER} to release the "lock".
+			\end{enumerate}
+			We understand that this solution is:
+			\begin{itemize}
+				\item deadlock-free: soon or later an acquired lock will be released and soon or later a lock request will be accepted;
+				\item not starvation-free: since it is not guaranteed that any enemy that requests a lock will eventually obtain it.
+			\end{itemize}
+			We removed this concept since we understood that a single transition that both changes the global variable and performs the shoot would have produced the same behavior, since, provided that this transition is not synchronized with other enemies, only one of them can perform it in a time instant, therefore there is no possibility that an enemy places the damage for the MT into the shared variable and before sending the shooting message another enemy changes the variable and (or not) shoots to the MT (which would clearly create an undesired behavior).
+	\nocite{1,2,3,4,5,6,7}
+	\printbibliography
 \end{document}

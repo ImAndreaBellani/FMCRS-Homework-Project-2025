@@ -1,5 +1,15 @@
 [0] Config.pm:307> INFO - This is Biber 2.19
-[0] Config.pm:310> INFO - Logfile is 'article_4.blg'
-[175] biber-MSWIN64:340> INFO - === 
-[757] Utils.pm:410> ERROR - Cannot find 'article_4.bcf'!
-[758] Biber.pm:136> INFO - ERRORS: 1
+[1] Config.pm:310> INFO - Logfile is 'article_4.blg'
+[167] biber-MSWIN64:340> INFO - === 
+[230] Biber.pm:419> INFO - Reading 'article_4.bcf'
+[422] Biber.pm:979> INFO - Found 7 citekeys in bib section 0
+[446] Biber.pm:4419> INFO - Processing section 0
+[463] Biber.pm:4610> INFO - Looking for bibtex file 'sample.bib' for section 0
+[570] bibtex.pm:1713> INFO - LaTeX decoding ...
+[599] bibtex.pm:1519> INFO - Found BibTeX data source 'sample.bib'
+[702] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[702] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[702] Biber.pm:4239> INFO - Sorting list 'nty/global//global/global' of type 'entry' with template 'nty' and locale 'en-US'
+[703] Biber.pm:4245> INFO - No sort tailoring available for locale 'en-US'
+[720] bbl.pm:660> INFO - Writing 'article_4.bbl' with encoding 'UTF-8'
+[724] bbl.pm:763> INFO - Output to article_4.bbl
