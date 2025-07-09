@@ -454,7 +454,7 @@ void shoot (const EnemyID_t targetId)
         target_record.damage = damage;
         y=0;
     }
-bool shootable()
+bool canShoot()
 /**
     It checks whether there are targettable enemies inside the shooting range.
 
@@ -584,7 +584,7 @@ looks for enemies to shoot.</label>
 		<transition id="id19">
 			<source ref="id16"/>
 			<target ref="id17"/>
-			<label kind="guard" x="-629" y="-348">shootable()</label>
+			<label kind="guard" x="-629" y="-348">canShoot()</label>
 			<label kind="synchronisation" x="-637" y="-331">SHOOT_TO_ENEMY!</label>
 			<label kind="assignment" x="-612" y="-306">target()</label>
 			<nail x="-578" y="-306"/>
@@ -675,7 +675,7 @@ t6 = cannon(6);
 In any state, the model must not be in deadlock.
 This query will still work with turrets.</comment>
 			<option key="--exploration" value="0"/>
-			<result outcome="success" type="quality" timestamp="2025-07-09 08:04:17 +0200">
+			<result outcome="success" type="quality" timestamp="2025-07-09 21:11:03 +0200">
 				<option key="--exploration" value="0"/>
 			</result>
 		</query>
@@ -689,12 +689,12 @@ This query will still work with turrets.</comment>
 Soon or later all enemies will always reach the MT.
 Note that "E&lt;&gt;" could also be used since the case where "E&lt;&gt;" is satisfied and "A&lt;&gt;" not is the case where there is at least one path that does not lead all enemy to reach
 the MT spot, and if we only want to verify that all enemies "can reach the MT", it does not mean that any enemy will eventually reach it in any possible path.
-To be more precise, the query verifies that for any path there exists a state where all enemy are at MAIN_POS in the same time, which would be false in models where an enemy changes
+To be more precise, the query verifies that for any path there exists a state where all enemies are at MAIN_POS in the same time, which would be false in models where an enemy changes
 its "pos" (for example, to "{-1,-1}") once it leaves the map (this is also the reason why we did not state this query with "OnTrip &amp;&amp; pos==MAIN_POS", since it is not true, neither with "E&lt;&gt;", that
 exists a state in which all enemies arrive at MAIN_POS simultaneously).
 This query MAY NOT work with turrets since some enemies may be killed before reaching the MT spot.</comment>
 			<option key="--exploration" value="0"/>
-			<result outcome="success" type="quality" timestamp="2025-07-09 08:00:26 +0200">
+			<result outcome="success" type="quality" timestamp="2025-07-09 22:00:04 +0200">
 				<option key="--exploration" value="0"/>
 			</result>
 		</query>
@@ -708,11 +708,14 @@ This query MAY NOT work with turrets since some enemies may be killed before rea
 In any state of any path, if any enemy reaches the MT, its trip time must be less or equal than the product between the maximum path length and its speed.
 This query will still work with turrets (turrets do not change the time limit to reach the MT).</comment>
 			<option key="--exploration" value="0"/>
+			<result outcome="success" type="quality" timestamp="2025-07-09 22:09:53 +0200">
+				<option key="--exploration" value="0"/>
+			</result>
 		</query>
 		<query>
 			<formula>A[](
-	(forall(i:int[0,N_CIRCLES-1])          (shoot_table[i].targettable imply isRed(circle(i).pos))) &amp;&amp;
-	(forall(i:int[N_CIRCLES,MAX_ENEMIES-1])(shoot_table[i].targettable imply isRed(square(i).pos)))
+	(forall(i:int[0,N_CIRCLES-1])          (shoot_table[i].targetable imply isRed(circle(i).pos))) &amp;&amp;
+	(forall(i:int[N_CIRCLES,MAX_ENEMIES-1])(shoot_table[i].targetable imply isRed(square(i).pos)))
 )</formula>
 			<comment>[THIS QUERY VERIFIES PROPERTY "V"]
 
@@ -727,7 +730,7 @@ are present on the map (we model the "leaving from the map" only as "shoot_table
 This query will still work with turrets (since the fact that enemies can be shot does not implies that they leave red spots and in case they are killed they are not targettable
 anymore).</comment>
 			<option key="--exploration" value="0"/>
-			<result outcome="success" type="quality" timestamp="2025-07-09 08:00:53 +0200">
+			<result outcome="success" type="quality" timestamp="2025-07-09 22:17:18 +0200">
 				<option key="--exploration" value="0"/>
 			</result>
 		</query>
@@ -738,6 +741,9 @@ anymore).</comment>
 This query is satisfied if and only if the MT is alive in any state of any possible path, therefore it is satisfied if and only if the configuration is "winning"
 (a configuration is "winning" there is no possibility that the MT is defeated).</comment>
 			<option key="--exploration" value="0"/>
+			<result outcome="success" type="quality" timestamp="2025-07-09 22:36:35 +0200">
+				<option key="--exploration" value="0"/>
+			</result>
 		</query>
 	</queries>
 </nta>

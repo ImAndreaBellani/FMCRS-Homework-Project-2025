@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.9.9)  9 JUL 2025 12:47
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.9.9)  9 JUL 2025 22:38
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1309,21 +1309,22 @@ Package tocbasic Info: character protrusion at toc deactivated on input line 77
 Package microtype Info: Character `029' is missing
 (microtype)             in font `T1/pplj/m/sc/10'.
 (microtype)             Ignoring protrusion settings for this character.
+)
+\tf@toc=\write5
+\openout5 = `article_4.toc'.
+
  [1
 
 
 {c:/texlive/2023/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{c:/texlive/2023/
 texmf-dist/fonts/enc/dvips/iwona/ec-iwona.enc}{c:/texlive/2023/texmf-dist/fonts
 /enc/dvips/iwona/ec-iwona-sc.enc}{c:/texlive/2023/texmf-dist/fonts/enc/dvips/ba
-se/8r.enc}])
-\tf@toc=\write5
-\openout5 = `article_4.toc'.
-
+se/8r.enc}]
 Package tocbasic Info: character protrusion at lof deactivated on input line 79
 .
  (./article_4.lof
 LaTeX Font Info:    Font shape `T1/fvm/m/n' will be
-(Font)              scaled to size 8.50006pt on input line 9.
+(Font)              scaled to size 8.50006pt on input line 5.
 )
 \tf@lof=\write6
 \openout6 = `article_4.lof'.
@@ -1357,76 +1358,45 @@ te /
 LaTeX Font Info:    Font shape `T1/fvm/m/n' will be
 (Font)              scaled to size 7.65005pt on input line 197.
  [5]
-<Figures/ndPathChoice.png, id=192, 433.62pt x 257.96375pt>
+<Figures/ndPathChoice.png, id=136, 433.62pt x 257.96375pt>
 File: Figures/ndPathChoice.png Graphic file (type png)
 <use Figures/ndPathChoice.png>
-Package pdftex.def Info: Figures/ndPathChoice.png  used on input line 217.
+Package pdftex.def Info: Figures/ndPathChoice.png  used on input line 218.
 (pdftex.def)             Requested size: 314.40001pt x 187.04843pt.
-LaTeX Font Info:    Font shape `T1/fvm/b/n' will be
-(Font)              scaled to size 8.50006pt on input line 258.
- [6 <./Figures/ndPathChoice.png>] [7]
-<Figures/EnemyTemplate.png, id=209, 742.775pt x 268.50313pt>
-File: Figures/EnemyTemplate.png Graphic file (type png)
-<use Figures/EnemyTemplate.png>
-Package pdftex.def Info: Figures/EnemyTemplate.png  used on input line 288.
-(pdftex.def)             Requested size: 483.69687pt x 174.8527pt.
-<Figures/TurretTemplate.png, id=210, 308.65312pt x 108.90688pt>
-File: Figures/TurretTemplate.png Graphic file (type png)
-<use Figures/TurretTemplate.png>
-Package pdftex.def Info: Figures/TurretTemplate.png  used on input line 308.
-(pdftex.def)             Requested size: 241.84843pt x 85.33751pt.
- [8 <./Figures/EnemyTemplate.png>]
-Overfull \hbox (5.9148pt too wide) in paragraph at lines 319--320
-\T1/pplj/m/n/10 This, per-haps not in-tu-itive way of scan-ning en-e-mies guar-
-an-tees and asymp-totic com-plex-ity $\U/zeur/m/n/10 ^^B\U/zeus/m/n/10 ¨\U/zeur
-/m/n/10 MAX[]NEMIES\U/zeus/m/n/10 ©$\T1/pplj/m/n/10 ,
- []
-
-<Figures/stochasticEnemy.png, id=216, 497.35812pt x 286.57062pt>
-File: Figures/stochasticEnemy.png Graphic file (type png)
-<use Figures/stochasticEnemy.png>
-Package pdftex.def Info: Figures/stochasticEnemy.png  used on input line 331.
-(pdftex.def)             Requested size: 261.19719pt x 150.49992pt.
-<Figures/stochasticTurret.png, id=217, 301.62688pt x 107.40125pt>
-File: Figures/stochasticTurret.png Graphic file (type png)
-<use Figures/stochasticTurret.png>
-Package pdftex.def Info: Figures/stochasticTurret.png  used on input line 336.
-(pdftex.def)             Requested size: 174.12701pt x 62.00104pt.
-[9 <./Figures/TurretTemplate.png> <./Figures/stochasticEnemy.png> <./Figures/st
-ochasticTurret.png>] [10] [11]
-<Figures/MT_Template.png, id=240, 431.11063pt x 138.5175pt>
+ [6 <./Figures/ndPathChoice.png>] [7] [8] [9]
+<Figures/MT_Template.png, id=160, 431.11063pt x 138.5175pt>
 File: Figures/MT_Template.png Graphic file (type png)
 <use Figures/MT_Template.png>
-Package pdftex.def Info: Figures/MT_Template.png  used on input line 412.
+Package pdftex.def Info: Figures/MT_Template.png  used on input line 367.
 (pdftex.def)             Requested size: 241.84843pt x 77.70665pt.
-<Figures/ENEMIES_PATHS.png, id=241, 564.60938pt x 268.00125pt>
+<Figures/ENEMIES_PATHS.png, id=161, 564.60938pt x 268.00125pt>
 File: Figures/ENEMIES_PATHS.png Graphic file (type png)
 <use Figures/ENEMIES_PATHS.png>
-Package pdftex.def Info: Figures/ENEMIES_PATHS.png  used on input line 420.
+Package pdftex.def Info: Figures/ENEMIES_PATHS.png  used on input line 375.
 (pdftex.def)             Requested size: 314.40001pt x 149.23726pt.
-<Figures/enemyLock.png, id=242, 371.88937pt x 137.51375pt>
+<Figures/enemyLock.png, id=162, 371.88937pt x 137.51375pt>
 File: Figures/enemyLock.png Graphic file (type png)
 <use Figures/enemyLock.png>
-Package pdftex.def Info: Figures/enemyLock.png  used on input line 431.
+Package pdftex.def Info: Figures/enemyLock.png  used on input line 386.
 (pdftex.def)             Requested size: 217.66211pt x 80.48613pt.
-<Figures/controller.png, id=243, 250.43562pt x 101.37875pt>
+<Figures/controller.png, id=163, 250.43562pt x 101.37875pt>
 File: Figures/controller.png Graphic file (type png)
 <use Figures/controller.png>
-Package pdftex.def Info: Figures/controller.png  used on input line 436.
+Package pdftex.def Info: Figures/controller.png  used on input line 391.
 (pdftex.def)             Requested size: 174.12701pt x 70.49127pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[12 <./Figures/MT_Template.png> <./Figures/ENEMIES_PATHS.png>]
-<Figures/lifetimeCounter.png, id=250, 382.42876pt x 241.40187pt>
+[10 <./Figures/MT_Template.png> <./Figures/ENEMIES_PATHS.png>]
+<Figures/lifetimeCounter.png, id=170, 382.42876pt x 241.40187pt>
 File: Figures/lifetimeCounter.png Graphic file (type png)
 <use Figures/lifetimeCounter.png>
-Package pdftex.def Info: Figures/lifetimeCounter.png  used on input line 458.
+Package pdftex.def Info: Figures/lifetimeCounter.png  used on input line 413.
 (pdftex.def)             Requested size: 241.84843pt x 152.66228pt.
- [13 <./Figures/enemyLock.png> <./Figures/controller.png> <./Figures/lifetimeCo
+ [11 <./Figures/enemyLock.png> <./Figures/controller.png> <./Figures/lifetimeCo
 unter.png>]
-[14] (./article_4.aux)
+[12] (./article_4.aux)
  ***********
 LaTeX2e <2023-06-01> patch level 1
 L3 programming layer <2020/03/25>
@@ -1438,32 +1408,30 @@ Package logreq Info: Writing requests to 'article_4.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 28982 strings out of 474934
- 547564 string characters out of 5763815
- 1948801 words of memory out of 5000000
- 49997 multiletter control sequences out of 15000+600000
- 667850 words of font info for 153 fonts, out of 8000000 for 9000
+ 28877 strings out of 474934
+ 545654 string characters out of 5763815
+ 1946801 words of memory out of 5000000
+ 49930 multiletter control sequences out of 15000+600000
+ 667230 words of font info for 151 fonts, out of 8000000 for 9000
  1143 hyphenation exceptions out of 8191
- 108i,22n,112p,10955b,1560s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 108i,23n,112p,10955b,1560s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/tex
 live/2023/texmf-dist/fonts/type1/public/amsfonts/euler/eufm10.pfb><c:/texlive/2
 023/texmf-dist/fonts/type1/public/amsfonts/euler/eurm10.pfb><c:/texlive/2023/te
 xmf-dist/fonts/type1/public/amsfonts/euler/eurm7.pfb><c:/texlive/2023/texmf-dis
 t/fonts/type1/public/amsfonts/euler/eusm10.pfb><c:/texlive/2023/texmf-dist/font
 s/type1/public/fpl/fplbj8a.pfb><c:/texlive/2023/texmf-dist/fonts/type1/public/f
-pl/fplrc8a.pfb><c:/texlive/2023/texmf-dist/fonts/type1/public/bera/fvmb8a.pfb><
-c:/texlive/2023/texmf-dist/fonts/type1/public/bera/fvmr8a.pfb><c:/texlive/2023/
-texmf-dist/fonts/type1/nowacki/iwona/iwonab.pfb><c:/texlive/2023/texmf-dist/fon
-ts/type1/nowacki/iwona/iwonabi.pfb><c:/texlive/2023/texmf-dist/fonts/type1/nowa
-cki/iwona/iwonar.pfb><c:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/sy
-mbols/msam10.pfb><c:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/symbol
-s/msam7.pfb><c:/texlive/2023/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb><c:
-/texlive/2023/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb><c:/texlive/2023/t
-exmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on article_4.pdf (14 pages, 650902 bytes).
+pl/fplrc8a.pfb><c:/texlive/2023/texmf-dist/fonts/type1/public/bera/fvmr8a.pfb><
+c:/texlive/2023/texmf-dist/fonts/type1/nowacki/iwona/iwonab.pfb><c:/texlive/202
+3/texmf-dist/fonts/type1/nowacki/iwona/iwonabi.pfb><c:/texlive/2023/texmf-dist/
+fonts/type1/nowacki/iwona/iwonar.pfb><c:/texlive/2023/texmf-dist/fonts/type1/pu
+blic/amsfonts/symbols/msam7.pfb><c:/texlive/2023/texmf-dist/fonts/type1/urw/pal
+atino/uplb8a.pfb><c:/texlive/2023/texmf-dist/fonts/type1/urw/palatino/uplr8a.pf
+b><c:/texlive/2023/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
+Output written on article_4.pdf (12 pages, 462872 bytes).
 PDF statistics:
- 565 PDF objects out of 1000 (max. 8388607)
- 487 compressed objects within 5 object streams
- 110 named destinations out of 1000 (max. 500000)
- 25083 words of extra memory for PDF output out of 29859 (max. 10000000)
+ 390 PDF objects out of 1000 (max. 8388607)
+ 327 compressed objects within 4 object streams
+ 74 named destinations out of 1000 (max. 500000)
+ 24343 words of extra memory for PDF output out of 24883 (max. 10000000)
 

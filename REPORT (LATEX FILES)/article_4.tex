@@ -112,7 +112,7 @@ pdfcreator={pdflatex}]{hyperref}
 					\ytl{june 15th}{First stochastic version}
 					\ytl{june 24th}{Started delivery procedures}
 					\ytl{june 26th}{Started report writing}
-					\ytl{july 9th}{Finished report writing}
+					\ytl{july 10th}{Finished report writing}
 					\bigskip
 					\rule{\linewidth}{1pt}%
 				\end{minipage}
@@ -237,167 +237,122 @@ pdfcreator={pdflatex}]{hyperref}
 			\subsubsection{Turret}
 				The high-level behavior of a turret (for the design of the communications see the following section) is pretty simple:
 				\begin{enumerate}
-					\item 
+					\item the turret (in the initial location) is ready to shoot to an enemy as soon as one of them gets into its shooting range (purpose of function \texttt{canShoot}). It check other enemies positions by looking into \texttt{shoot\_table};
+					\item once \texttt{canShoot} returns true the transition to shoot to an enemy is enabled. If it is performed, the function \texttt{target} selects the nearest enemy in the shooting range (in case of ties it follows the requirements rules), and with \texttt{shoot} the enemy is shot by putting in the global variable \texttt{target\_record} the id of the target and the related damage;
+					\item once the shot is performed the turret waits the delay and then returns in the initial location.
 				\end{enumerate}
+				\texttt{canShoot} and \texttt{target} are optimized to avoid useless scans of the \texttt{shoot\_table}, in particular:
+				\begin{itemize}
+					\item \texttt{canShoot} :
+						\begin{itemize}
+							\item does not selects the enemy to target but simply checks that there is at least one enemy in the shooting range (\texttt{target} has this purpose), which is average less complex;
+							\item while scanning the \texttt{shoot\_table} it keeps counting how many targetable enemies are found (i.e. enemies that are alive on the map), so it can stop to scan it as soon as it recognizes that no targetable enemy can be found in the following records;
+						\end{itemize}
+					\item \texttt{target} :
+						\begin{itemize}
+							\item first \texttt{shoot\_table} is scanned to find the first targetable enemy in the shooting range. Then it is considered as the candidate enemy for the shot and the following positions are scanned to find a possibly "better" enemy to shoot;
+							\item the scan is always stopped as soon as no targetable enemies can be found in the following records of \texttt{shoot\_table}.
+						\end{itemize}
+				\end{itemize}
+				Note that the complexity of both \texttt{canShoot} and \texttt{target} is linear in the size \texttt{shoot\_table} length but it is totally independent from the size of the shooting range.
+				
+				Another improved that could be argued is to let \texttt{canShoot} pass the first enemy in the shooting range found to \texttt{target}, in this way it has already a candidate enemy. However, since \texttt{canShoot} is inside of a guard, it must be side-effects free, therefore it can't change a value outside of its scope.
 		\subsection{Communication modeling description (for Vanilla version)}
 			\subsubsection{How turrets shoot to enemies}
+				Each enemy has a record in the \texttt{shoot\_table} structure that it keeps updated. This record contains all the information turrets need to identify which enemy shoot (position, time in which the enemy spawned, kind) and of course a flag to know if that enemy is present on the map.
+				
+				Once an enemy is targeted, the turret places on the global variable \texttt{target\_record} the id of the target and the related damage. In the meantime a message to all (targetable) enemies is sent over the broadcast channel \texttt{SHOOT\_TO\_ENEMY}, then each one checks if their id corresponds to the one of the target and if it is, they decrement their life accordingly to the damage and in case their health is now zero or below they leave the map.
+				
+				An important design choice is that \texttt{SHOOT\_TO\_ENEMY} is an urgent channel. In our vision of the game, when a turret can shoot, time can't elapse. This does not avoid situations where the delay of an enemy is fully elapsed but the move was not performed and the move is performed while the "urgent" transition is enabled by a turret (because in this case the delay has already fully elapsed, so this update does not concern time) but avoids situations where a turret is ready to shoot and it is completely ignored progress of time. In other words, a shot to an enemy must be performed in the same time unit where it is "calculated". We remark that this design choice is not a definition of priority, since the shot to an enemy is not preferred to the other transitions.
 			\subsubsection{How enemies shoot to the MT}
+				Since there is no template for the MT, there is apparently no need to use define a channel to "synchronize" the shot since it is nothing more than a decrement of a global variable. However, we still designed an urgent broadcast channel to guarantee the once an enemy can shoot to the MT time can't elapse (the same reason why \texttt{SHOOT\_TO\_ENEMY} is urgent). If we want to make the shot "urgent" is necessary to define the channel as broadcast otherwise, since there is no entity that "receives" that message, a deadlock would happen if an enemy wants to shoot (the enemy is blocked because no entity can receive the message and since it is urgent it blocks the time all other available enemies).
 		\subsection{Enrichment of Vanilla model with stochastic features}
+			To model the stochastic features there are no big change from the Vanilla model but crucial:
+			\begin{itemize}
+				\item enemy move/after shot delay : it is no more modeled as with a clock but with a simple self-transition (which guard of course does not involve clocks) and \texttt{OnTrip} has \texttt{rate of exponential} set to \texttt{speed:10}. In this way the probability of leaving from the state with the self-transition determines the delay before an enemy's move. The same design is applied to the "after shot" delay);
+				\item turret after shot delay : it is modified with the same principle of the enemy move/after shoot delay (clock is no more used and the rate of exponential is set);
+				\item self-loop in \texttt{Dismissed} : [SPIEGARE COME MAI DAVVERO E' STATO RIMOSSO, DATO CHE NON CREDO NON SIA CONCESSO AVERE NESSUNO STATO SENZA INVARIANTI E SENZA RATE OF EXPONENTIAL].
+			\end{itemize}
+			The only delay that is still implemented as a "non-probabilistic" delay is the one related to the spawning time.
+			
+			Note that there was no change in communication channels since all of them were broadcast also in the Vanilla version (stochastic model can only use broadcast channels) and the motivations behind making them \texttt{urgent} are independent from the stochastic nature of the model.
 	\section{Verification results}
 		\subsection{Vanilla model verification}
 			\subsubsection{Verification without turrets}
+				To verify the requested query we wrote the following Uppaal queries:
+				\begin{table}[h!]
+					\centering
+					\begin{tabularx}{\textwidth}{||c|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X||}
+						\hline
+						 & Verified properties & Result [T/F] & Verification time on Machine 1 [s] & Verification time on Machine 2 [s] & Average maximum past-waiting list load \\
+						\hline
+						Q1 & I & T& & & \\ \hline
+						Q2 & II & T& & & \\ \hline
+						Q3 & III, IV & T& & & \\ \hline
+						Q4 & V & T& & & \\
+						\hline
+					\end{tabularx}
+					\caption{Queries without turrets overview}
+				\end{table}
+				Q1 must verify that the system never reaches a deadlock state, our query is then simply:
+				\begin{center}
+					[METTERE QUERY IN TCTL]
+				\end{center}
+				Originally, this query aimed only to verify deadlock avoidance only when the match is not ended. In fact, our model can still verify this query if we remove the self-loop on \texttt{Dismissed}. Informally, we can also argue that no deadlocks can happen even in this way: all enemies will eventually become \texttt{Dismissed} all together. Since once all enemies are \texttt{Dismissed} they start the to indefinitely take the self-loop:
+				\begin{center}
+					[MAGARI METTERE ANCHE QUESTA QUERY IN TCTL]
+				\end{center}
+				
+				Q2 aims to verify that all enemies can reach the MT spot:
+				\begin{center}
+					contenuto...
+				\end{center}
+				We interpreted "can reach" in the sense that in any possible path all enemies will reach the MT, this is the reason way this query is not stated with "E...".
+				
+				Another important motivation behind this formulation is that this query in reality verifies that exists state in any possible path where all enemy have their position in the MT spot all together. This condition is easy to guarantee in our model since the dismissal of an enemy keeps \texttt{pos} to the last value it had right before the dismissal. It is like we are "freezing" in the \texttt{pos} the fact that the enemy reached the MT spot, but at the end the model will permit to any enemy to reach the MT spot.
+				
+				Q3 verifies both that each circle and each square satisfy the time constraint:
+				\begin{center}
+					[METTERE QUERY IN TCTL]
+				\end{center}
+				Simply once an enemy is \texttt{OnTrip} and reaches the MT spot, it must have satisfied the time constraint for its kind. \texttt{trip\_time} is a classic clock that counts the time units passed from the initialization (i.e. the time unit when the enemy spawned).
+				
+				Note that this query would not be satisfied in this form if \texttt{SHOOT\_TO\_MT} was not \texttt{urgent}, since this property imposes that time (and so also \texttt{trip\_time}) can't progress as long as the MT spot in reached in \texttt{OnTrip}.
+				
+				Q4 is probably the most intuitive query:
+				\begin{center}
+					[METTERE QUERY IN TCTL]
+				\end{center}
+				In any state of any possible path, if an enemy is targetable it must be on a red spot.
+				
+				Note that since \texttt{pos} is by default \texttt{{0,0}} before spawning and it is kept to the MT spot once it is reached, even if an enemy is not targetable anymore it will anyway be in a red spot. We put this restriction to the "query scope" because there is no need to check \texttt{pos} if an enemy is not present on the map. 
 			\subsubsection{Verification with turrets}
+				To verify the requested query we wrote the following Uppaal queries:
+				\begin{table}[h!]
+					\centering
+					\begin{tabularx}{\textwidth}{||c|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X||}
+						\hline
+						& Verified properties & Result [T/F] & Verification time on Machine 1 [s] & Verification time on Machine 2 [s] & Average maximum past-waiting list load \\
+						\hline
+						Q1 & VII & T & & & \\ \hline
+						Q5 & VI & T & & &  \\
+						\hline
+					\end{tabularx}
+					\caption{Queries with turrets overview}
+				\end{table}
+				
+				Q1 is used also for verifying VII since the total absence of deadlocks, in symbolic simulation, can be stated by means of the keyword \texttt{deadlock}.
+				
+				Since we defined a "winning" configuration as a configuration that can never let the MT to be defeated by a wave of six (three circles and three squares) enemies, a query that is true if and only if a configuration is winning is:
+				\begin{center}
+					mettere query in TCTL
+				\end{center}
+				If the MT is defeated in at least one state of one path, the query will not be satisfied (with the configuration chosen).
 		\subsection{Stochastic model verification}
 	\section{Analysis of selected configurations}
 		\subsection{Chosen configurations for Vanilla version}
 		\subsection{Chosen configurations for Stochastic version}
 		\subsection{Stochastic version behaviors analysis}
-		
-	\subsection{Vanilla version's model}
-	\subsubsection{How game's state is modeled}
-	We refer as \emph{game's state} to the global state of match. It is represented by the two \texttt{\textbf{int}}:
-	\begin{itemize}
-		\item \texttt{left\_enemies} : in each instant, it represents the number of enemies that have not died yet;
-		\item \texttt{targetable\_enemies} : in each instant, it represents the number of enemies that are currently active on the map (already spawned and alive).
-	\end{itemize}
-	The match is considered \emph{ended} if (and only if) \texttt{left\_enemies} is 0. In fact, \texttt{targetable\_enemies} is designed only to facilitate the process turrets use to identify enemies to shoot.
-	
-	\subsubsection{How communication between automatons is modeled}
-	We can identify from the game's description two kind of "possible messages" sent between automatons:
-	\begin{enumerate}
-		\item an enemy shoots to the MT;
-		\item a turret shoots to an enemy.
-	\end{enumerate}
-	We decided to model only "2" with a real message sent over a channel. In particular, since the MT is modeled simply as an \texttt{\textbf{int}} variable (see the \emph{Modeling of MT} section for more details), in order to shoot to it, an enemy simply decrements the variable of an amount equal to its damage.[NON SPIEGATO IL CONCETTO DELLA MUTUA ESCLUSIONE]
-	
-	Since there is no way in Uppaal to send a message to a precise entity in a deterministic way, a pretty easy solution we found was:
-	\begin{enumerate}
-		\item a turret places into the \texttt{target\_record} variable the id of the targeted enemy with the relative damage and sends a message over the broadcast channel \texttt{SHOOT\_TO\_ENEMY};
-		\item each enemy that receives the message checks that the id of the target corresponds to its id and only in this case decreases its life.
-	\end{enumerate}
-	[SPIEGARE PROSSIMAMENTE LA QUESTIONE DELL'URGENT]
-	
-	\subsubsection{Modeling of MT}
-	As mentioned in the previous section, MT is simply modeled as an \texttt{\textbf{int}} variable that represents MT's life. It is initially set to value defined in the requirements. For the reasons why the MT is not modeled with a template, please see the dedicated section in \emph{Discarded Choices}.
-	
-	\subsubsection{Modeling of Enemy}
-	Enemy's template is without a doubt the most complex one:
-	
-	\begin{figure}[h!]
-		\centering
-		\includegraphics[width=1\textwidth]{EnemyTemplate.png}
-		\caption{Enemy template}
-	\end{figure}
-	
-	Instead of describing each state, we would rather describe how each required feature of an enemy is implemented:
-	\begin{itemize}
-		\item concept of \emph{spawn} : requirements state that circles should spawn at regular time intervals each other, and analogue for squares. We decided to define \texttt{spawningTime} as a parameter for an enemy, which determines the spawning timer for the enemy. So, in order to satisfy the requirements, the enemy $i$-th enemy for each kind should have this parameter set at $i*S$ (where $S$ is the spawning time defined in the requirements for that kind of enemy);
-		\item how enemies move on the map : once an alive enemy is ready to move and it has not arrived at the MT spot, it calls the function \texttt{next()} which simply sets its variable \texttt{pos} to the number of the next cell from the one where it was;
-		\item how non-deterministic path choice is implemented : since in a symbolic simulation, \texttt{next} can only have a deterministic execution, the non-determinism in the next cell choice in proximity of a junction is implemented simply by non-deterministically choose a number from $0$ to $2$ as soon the enemy spawns (i.e. the parameter passed to \texttt{initialize}). Then, if the enemy is in a junction, \texttt{next} chooses the next cell accordingly to this number (please see the dedicated section \emph{Discarded choices} for more details on why this design choice was preferred);
-		\item how speed delay is implemented : simply, a clock $x$ is used to model the speed delay timer;
-		\item how an enemy responses to a shoot : on shoot, the enemy simply decreases its life (provided that it was the target) and its life goes to zero (or beyond), \texttt{takeDamage} calls \texttt{dismiss} to set its unavailability in the shoot table and decrease the global counters. Note that the fact that \texttt{takeDamage} decrements the life counter and in case calls \texttt{dismiss} is more appropriate than always splitting the calling of \texttt{takeDamage} to the calling of \texttt{dismiss}, since it may lead having one or more time instants where a dead enemy is dead but still considered available because \texttt{takeDamage} did not update the global information;
-		\item providing all information for the shoot table : the update of the shoot table from an enemy is quite trivial, apart for the field \texttt{lifeTime}, which has to be updated at each time instant (\texttt{z} clock is needed for triggering an update of it at every time instant);
-		\item shoot to the MT : once an enemy reached the MT spot it simply decrements the MT life of its damage and after a delay of \texttt{speed} (where it can still be shot) is dismissed.
-	\end{itemize}
-	
-	\subsubsection{Modeling of Turret}
-	A turret has a pretty intuitive behavior:
-	
-	\begin{figure}[h!]
-		\centering
-		\includegraphics[width=0.5\textwidth]{TurretTemplate.png}
-		\caption{Turret template}
-	\end{figure}
-	
-	Once it is ready, it looks for targetable enemies (available enemies inside its shooting are) by scanning \texttt{SHOOT\_TABLE} with \texttt{shootable()}. If there is at least one, it uses \texttt{target()} to select and shoot the best one according to the requirements criteria:
-	\begin{enumerate}
-		\item \texttt{SHOOT\_TABLE} is scanned until an available enemy inside the shooting area is found and there are still available enemies in the next positions of \texttt{SHOOT\_TABLE} (\texttt{targetable\_enemies} tracks the number of currently available enemies);
-		\item the found enemy is considered as the best target;
-		\item the scan of the remaining elements of \texttt{SHOOT\_TABLE} is performed until the number of available enemies found is equal to \texttt{targetable\_enemies};
-		\item at the end of the scan, if an enemy to target is found, the procedure \texttt{shoot} is called, which simply sets into \texttt{target\_record} the id of the targeted enemy and the relative damage (and also resets the clock \texttt{y} for the delay count). 
-	\end{enumerate}
-	This, perhaps not intuitive way of scanning enemies guarantees and asymptotic complexity $\Theta(MAX_ENEMIES)$, which fits our application.
-	
-	If the shoot succeeded, the turret stays in \texttt{Wait} until the delay expires and it can target and shoot again. Note that if all enemies are died, turrets will be in deadlock once they come back in \texttt{ReadyToShoot}.
-	
-	\subsection{Stochastic version's model}
-	\subsubsection{Modifications from Vanilla model}
-	Stochastic model is not drastically different from the Vanilla one:
-	
-	\begin{figure}[h!]
-		\centering
-		\begin{minipage}{.6\textwidth}
-			\centering
-			\includegraphics[width=.9\linewidth]{stochasticEnemy.png}
-			\caption{Enemy stochastic template}
-		\end{minipage}%
-		\begin{minipage}{.4\textwidth}
-			\centering
-			\includegraphics[width=.9\linewidth]{stochasticTurret.png}
-			\caption{Turret stochastic template}
-		\end{minipage}
-	\end{figure}
-	
-	For what strictly concerns the templates:
-	\begin{itemize}
-		\item enemy template:
-			\begin{itemize}
-				\item speed delay so no more modeled as a delay but as a exponential rate that determines the probability of coming out from the state. Since while enemy is approaching the MT the only available transition (provided that the enemy is alive) is the one that calls \texttt{next}, the probability of moving to the next cell is determined by the exponential rate \texttt{speed:10}. This is analogue also in \texttt{AfterShoot};
-				\item even if MT is still modeled as a variable and not as a template, an enemy that wants to shoot sends a message over the channel \texttt{SHOOT\_TO\_MT}, which simply is a \texttt{urgent broadcast} channel useful to force enemies to "not wait" before shoot when they can, otherwise also the probability of shooting to the MT at an instant would have been modeled, but requirements never ask for it, so it is better to model any outgoing transition that may change the game dynamics as \texttt{urgent} if no probabilistic delay should affect it (transition to \texttt{Dimissed} if \texttt{health$\leq$0} does not really affects game dynamics since the enemy has already died);
-				\item instead of keep counting time instants to increment their \texttt{lifeTime}, enemies have their lifeTime information already determined by the instant when they spawned of the map. This simplification could also have been used in the Vanilla version but there are queries that specifically argue on how many time instants have already passed by the time an enemy arrives at the MT spot;
-			\end{itemize}
-		\item turret template :
-			\begin{itemize}
-				\item turrets firing speed is no more modeled as a delay but as an exponential rate of \texttt{1:speed} (same reasoning of the enemy's speed delay modeling);
-				\item since the concept of lifetime was replaced with the entering (time instant when an enemy spawns), also turrets have to decide which enemy to shoot by using the concept of entering. Saying that younger enemies should be prioritized is equal to saying that enemies spawned later are prioritized, therefore, without loss of generality, we can use the entering information instead of lifetime.
-			\end{itemize}
-	\end{itemize}
-	
-	\section{Game configuration}
-	\subsection{Vanilla version}
-	\subsubsection{Configuration 1 : The unlucky side}
-	\subsubsection{Configuration 2 : Sniper's inefficiency}
-	\subsubsection{Configuration 3 : }
-	\subsection{Stochastic version}
-	\subsubsection{Configuration 1 :}
-	\subsubsection{Configuration 2 :}
-	\subsubsection{Configuration 3 :}
-	
-	\section{Verification results}
-	\subsection{Queries for Vanilla version}
-	\subsubsection{Queries without turrets}
-	Since these query must be verified without turrets, we can assume that no enemy will die in any time instant.
-	
-	We interpreted the queries given as (in romans numbers, the corresponded requirements queries):
-		\begin{enumerate}[label=\Roman*.]
-			\item~[Q11] game is in deadlock state if and only if the match is ended;
-			\item~[Q12] all enemies can reach the MT;
-			\item[III, IV.]~[Q13] enemies reach the MT in no more than \texttt{MAX\_PATH\_LENGTH}$\times s$ time units (where $s$ is speed's enemy);
-			\item[V.]~[Q14] an enemy must always be in a valid cell.
-		\end{enumerate}
-	
-	Let's now analyze how we translated these natural-languages statements in Uppaal queries:
-	\begin{itemize}
-		\item~[Q11] game is in deadlock state if and only if the match is ended:
-		
-			\texttt{A[]((deadlock imply matchEnded()) and (matchEnded() imply deadlock))}
-			
-			
-		\item~[Q12] all enemies can reach the MT:
-		\item~[Q13] enemies reach the MT in no more than \texttt{MAX\_PATH\_LENGTH}$\times s$ time units (where $s$ is speed's enemy):
-		\item~[Q14] an enemy must always be in a valid cell:
-	\end{itemize}
-	
-		
-	
-	\subsubsection{Queries with turrets}
-	\subsection{Queries for Stochastic version}
-	\subsection{Consideration on efficiency}
-	\subsubsection{Starting spawning instant}
-	\subsubsection{Why urgent channels}
-	\subsubsection{Templates parameters}
-	
-	
 	\section{Conclusions}
 
 	\newpage

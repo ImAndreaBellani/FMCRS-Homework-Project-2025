@@ -11,48 +11,22 @@
 \contentsline {subsubsection}{\numberline {2.1.4}{Turret}}{7}{subsubsection.2.1.4}%
 \contentsline {subsection}{\numberline {2.2}{Communication modeling description (for Vanilla version)}}{7}{subsection.2.2}%
 \contentsline {subsubsection}{\numberline {2.2.1}{How turrets shoot to enemies}}{7}{subsubsection.2.2.1}%
-\contentsline {subsubsection}{\numberline {2.2.2}{How enemies shoot to the MT}}{7}{subsubsection.2.2.2}%
-\contentsline {subsection}{\numberline {2.3}{Enrichment of Vanilla model with stochastic features}}{7}{subsection.2.3}%
-\contentsline {section}{\numberline {3}{Verification results}}{7}{section.3}%
-\contentsline {subsection}{\numberline {3.1}{Vanilla model verification}}{7}{subsection.3.1}%
-\contentsline {subsubsection}{\numberline {3.1.1}{Verification without turrets}}{7}{subsubsection.3.1.1}%
-\contentsline {subsubsection}{\numberline {3.1.2}{Verification with turrets}}{7}{subsubsection.3.1.2}%
-\contentsline {subsection}{\numberline {3.2}{Stochastic model verification}}{7}{subsection.3.2}%
-\contentsline {section}{\numberline {4}{Analysis of selected configurations}}{7}{section.4}%
-\contentsline {subsection}{\numberline {4.1}{Chosen configurations for Vanilla version}}{7}{subsection.4.1}%
-\contentsline {subsection}{\numberline {4.2}{Chosen configurations for Stochastic version}}{7}{subsection.4.2}%
-\contentsline {subsection}{\numberline {4.3}{Stochastic version behaviors analysis}}{7}{subsection.4.3}%
-\contentsline {subsection}{\numberline {4.4}{Vanilla version's model}}{7}{subsection.4.4}%
-\contentsline {subsubsection}{\numberline {4.4.1}{How game's state is modeled}}{7}{subsubsection.4.4.1}%
-\contentsline {subsubsection}{\numberline {4.4.2}{How communication between automatons is modeled}}{7}{subsubsection.4.4.2}%
-\contentsline {subsubsection}{\numberline {4.4.3}{Modeling of MT}}{8}{subsubsection.4.4.3}%
-\contentsline {subsubsection}{\numberline {4.4.4}{Modeling of Enemy}}{8}{subsubsection.4.4.4}%
-\contentsline {subsubsection}{\numberline {4.4.5}{Modeling of Turret}}{9}{subsubsection.4.4.5}%
-\contentsline {subsection}{\numberline {4.5}{Stochastic version's model}}{9}{subsection.4.5}%
-\contentsline {subsubsection}{\numberline {4.5.1}{Modifications from Vanilla model}}{9}{subsubsection.4.5.1}%
-\contentsline {section}{\numberline {5}{Game configuration}}{10}{section.5}%
-\contentsline {subsection}{\numberline {5.1}{Vanilla version}}{10}{subsection.5.1}%
-\contentsline {subsubsection}{\numberline {5.1.1}{Configuration 1 : The unlucky side}}{10}{subsubsection.5.1.1}%
-\contentsline {subsubsection}{\numberline {5.1.2}{Configuration 2 : Sniper's inefficiency}}{10}{subsubsection.5.1.2}%
-\contentsline {subsubsection}{\numberline {5.1.3}{Configuration 3 : }}{10}{subsubsection.5.1.3}%
-\contentsline {subsection}{\numberline {5.2}{Stochastic version}}{10}{subsection.5.2}%
-\contentsline {subsubsection}{\numberline {5.2.1}{Configuration 1 :}}{10}{subsubsection.5.2.1}%
-\contentsline {subsubsection}{\numberline {5.2.2}{Configuration 2 :}}{10}{subsubsection.5.2.2}%
-\contentsline {subsubsection}{\numberline {5.2.3}{Configuration 3 :}}{10}{subsubsection.5.2.3}%
-\contentsline {section}{\numberline {6}{Verification results}}{10}{section.6}%
-\contentsline {subsection}{\numberline {6.1}{Queries for Vanilla version}}{10}{subsection.6.1}%
-\contentsline {subsubsection}{\numberline {6.1.1}{Queries without turrets}}{10}{subsubsection.6.1.1}%
-\contentsline {subsubsection}{\numberline {6.1.2}{Queries with turrets}}{11}{subsubsection.6.1.2}%
-\contentsline {subsection}{\numberline {6.2}{Queries for Stochastic version}}{11}{subsection.6.2}%
-\contentsline {subsection}{\numberline {6.3}{Consideration on efficiency}}{11}{subsection.6.3}%
-\contentsline {subsubsection}{\numberline {6.3.1}{Starting spawning instant}}{11}{subsubsection.6.3.1}%
-\contentsline {subsubsection}{\numberline {6.3.2}{Why urgent channels}}{11}{subsubsection.6.3.2}%
-\contentsline {subsubsection}{\numberline {6.3.3}{Templates parameters}}{11}{subsubsection.6.3.3}%
-\contentsline {section}{\numberline {7}{Conclusions}}{11}{section.7}%
-\contentsline {section}{\numberline {A}{Discarded choices}}{12}{appendix.A}%
-\contentsline {subsection}{\numberline {A.1}{MT template}}{12}{subsection.A.1}%
-\contentsline {subsection}{\numberline {A.2}{Hard-coded enemies paths}}{12}{subsection.A.2}%
-\contentsline {subsection}{\numberline {A.3}{Quadratic enemies scanning strategy}}{12}{subsection.A.3}%
-\contentsline {subsection}{\numberline {A.4}{Locks}}{12}{subsection.A.4}%
-\contentsline {subsection}{\numberline {A.5}{Lifetime counter}}{13}{subsection.A.5}%
+\contentsline {subsubsection}{\numberline {2.2.2}{How enemies shoot to the MT}}{8}{subsubsection.2.2.2}%
+\contentsline {subsection}{\numberline {2.3}{Enrichment of Vanilla model with stochastic features}}{8}{subsection.2.3}%
+\contentsline {section}{\numberline {3}{Verification results}}{8}{section.3}%
+\contentsline {subsection}{\numberline {3.1}{Vanilla model verification}}{8}{subsection.3.1}%
+\contentsline {subsubsection}{\numberline {3.1.1}{Verification without turrets}}{8}{subsubsection.3.1.1}%
+\contentsline {subsubsection}{\numberline {3.1.2}{Verification with turrets}}{9}{subsubsection.3.1.2}%
+\contentsline {subsection}{\numberline {3.2}{Stochastic model verification}}{9}{subsection.3.2}%
+\contentsline {section}{\numberline {4}{Analysis of selected configurations}}{9}{section.4}%
+\contentsline {subsection}{\numberline {4.1}{Chosen configurations for Vanilla version}}{9}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}{Chosen configurations for Stochastic version}}{9}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}{Stochastic version behaviors analysis}}{9}{subsection.4.3}%
+\contentsline {section}{\numberline {5}{Conclusions}}{9}{section.5}%
+\contentsline {section}{\numberline {A}{Discarded choices}}{10}{appendix.A}%
+\contentsline {subsection}{\numberline {A.1}{MT template}}{10}{subsection.A.1}%
+\contentsline {subsection}{\numberline {A.2}{Hard-coded enemies paths}}{10}{subsection.A.2}%
+\contentsline {subsection}{\numberline {A.3}{Quadratic enemies scanning strategy}}{10}{subsection.A.3}%
+\contentsline {subsection}{\numberline {A.4}{Locks}}{10}{subsection.A.4}%
+\contentsline {subsection}{\numberline {A.5}{Lifetime counter}}{11}{subsection.A.5}%
 \providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 
