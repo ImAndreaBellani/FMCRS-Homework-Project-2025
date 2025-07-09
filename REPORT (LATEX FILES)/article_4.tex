@@ -90,6 +90,7 @@ pdfcreator={pdflatex}]{hyperref}
 				\item \textbf{dismissed} enemy : the enemy is dead or it shot the MT and the following delay has expired;
 				\item \textbf{configuration} : wave's composition and turrets configuration chosen (generalized definition from requirements one);
 				\item \textbf{ending} of a wave : a wave is considered \emph{ended} when each enemy is dismissed (i.e. it can't move or shoot anymore because it has already shoot or it was killed by turrets);
+				\item \textbf{winning} configuration : in Vanilla version, a configuration is winning if, by setting it, a wave of 3 circles and 3 square can never defeat the MT;
 				\item \textbf{location} : a location of an Uppaal template;
 				\item \textbf{state} : the entire game's state in a certain time instant (i.e. each automaton's position and each variable's or clock's value);
 				\item \emph{Chebyshev distance} : given two generic $n$-dimensional points $x=(x_1 \dots x_n)$ and $y=(y_1 \dots y_n)$, their Chebyshev distance can be computed as $\max\limits_{1\leq i\leq n}\{|x_i - y_i|\}$.
@@ -111,7 +112,7 @@ pdfcreator={pdflatex}]{hyperref}
 					\ytl{june 15th}{First stochastic version}
 					\ytl{june 24th}{Started delivery procedures}
 					\ytl{june 26th}{Started report writing}
-					\ytl{july 7th}{Finished report writing}
+					\ytl{july 9th}{Finished report writing}
 					\bigskip
 					\rule{\linewidth}{1pt}%
 				\end{minipage}
@@ -164,12 +165,80 @@ pdfcreator={pdflatex}]{hyperref}
 			This document was written over the template Arsclassica Article (\url{https://www.latextemplates.com/template/arsclassica-article}) with few adjustments by us.
 	\newpage
 	\section{Model description}
-		We modeled both the Vanilla and the Stochastic version of the game. In particular, we firstly modeled the Vanilla version and then proceeded to modify it to model the stochastic requirements. In this section we provide a detailed explanation of both versions and how the Stochastic one was obtained from the Vanilla. We clarify that our main purpose in this section is to clarify and support our design choices rather then explain the technical aspect underlying the Uppaal code, which can be read from the templates comments.
+		We modeled both the Vanilla and the Stochastic version of the game. In particular, we firstly modeled the Vanilla version and then proceeded to modify it to model the stochastic requirements. In this section we provide a detailed explanation of both versions and how the Stochastic one was obtained from the Vanilla one. We clarify that our main purpose in this section is to clarify and support our design choices rather then explain the technical aspect underlying the Uppaal code, which can be read from the templates comments.
 		\subsection{Entities modeling (for Vanilla version)}
 			\subsubsection{Map}
+				There is no template that models the Map. Each enemy and each turret has a \texttt{Cell} constant/variable that represents its actual position on the map (\texttt{Cell} is simply a \texttt{struct} with two bounded integers):
+				\begin{itemize}
+					\item an enemy keeps its position updated while moving with the function \texttt{next}. If an enemy is outside of the map (because it has not spawned yet or it was killed) its position still has a "feasible" value but a flag prevents turrets to read it (see the following sections for more details);
+					\item a turret can't change its position, it simply uses it to calculate its distance from enemies.  
+				\end{itemize}
+				To be clear, red paths structures are "embedded" into the function \texttt{next}. Another possibility (implemented in some of the previous versions) would have been to define a \texttt{Cell} matrix (or vectors) instead of define the entire structure as a less-readable the sequence of if-else implemented by \texttt{next}. We preferred this solution since \texttt{next} is constant in time and space however, with a more complex map, this approach could result in difficult to maintain \texttt{next} functions.
 			\subsubsection{Main Tower (MT)}
+				There is no template to model the Main Tower, it is simply modeled as a variable that enemies decrement in the shot. Originally, an MT template was designed (see the appendix for more details), it was removed in an attempt of optimizing the model, since we understood (after reasoning more on other more crucial design choices) that a so simple and "passive" entity like the MT does not really need to be implemented with a dedicated template.
+				
+				Decoupling enemy and turret in two templates is necessary to model in a proper and clear way the interleaving between these entities but MT neither needs to trigger other components nor has any non-deterministic behavior. The only one centralized aspect that a dedicated template could have implemented was controlling that MT's life is not $0$ before decreasing it, but this can be easily moved in enemy's template (before an enemy shoots, it checks that MT's life is not $0$) without loss of readability.
 			\subsubsection{Enemy}
+				Let's explain the design choices beyond each enemy's behavior.
+				
+				\begin{flushleft}
+					\textbf{Spawn of an enemy}
+					
+					To model the fact that circles spawn "every x time units" and squares spawn "every y time units" we simply added a parameter \texttt{spawningTime} to enemy template. This parameter is simply a delay that must first elapse before an enemy can spawn on the map. By setting it (when we instantiate enemy processes) to \texttt{id$\times$s} (where \texttt{s} is the spawning time defined for that kind of enemy in the requirements), the enemy with id $0$ will spawn in the first time unit, the one with id $i$ with a slack of \texttt{s} time units and so on.
+					Note that, as we explain in the communication section, enemy ids must not overlap each other, therefore, if $N$ enemies are present in the wave, and $M$ of them are circles:
+					\begin{table}[h!]
+						\centering
+						\begin{tabular}{rcccccc}
+							% Prima riga senza bordi
+							& circle(0) & \dots & circle(M-1) & square(M) & \dots & square(N-1) \\
+							id: & 0 & \dots & M-1 & M & \dots & N-1\\
+							\texttt{spawningTime}: & 0 & \dots & 2$\times$(M-1) & 0 & \dots & 3$\times$(N-1-M) \\
+						\end{tabular}
+						\caption{\texttt{spawningTime} assignment (using requirements spawning times)}
+					\end{table}
+				\end{flushleft}
+				\begin{flushleft}
+					\textbf{Initialization of an enemy} (this paragraph is only to group all the aspects relative to the enemy that will be further explained)
+					
+					Once an enemy is spawned, it has to:
+					\begin{itemize}
+						\item initialize its record in the \texttt{shoot\_table} and update the counter of targetable enemies;
+						\item reset the \texttt{trip\_time} clock;
+						\item set \texttt{chosenPath}.
+					\end{itemize}
+				\end{flushleft}
+				\begin{flushleft}
+					\textbf{Move of an enemy}
+					
+					After the speed delay has expired, an enemy has to make a move. In fact, a move is simply an update of the enemy's position with the function \texttt{next} and a consequent update of the \texttt{shoot\_table} record (see the communication section).
+					
+					The very interesting design choice behind the move of an enemy is how a (deterministic, since Uppaal \texttt{random} is not available in symbolic simulation) function like \texttt{next} can model the non-deterministic next cell choice an enemy takes in a red paths junction. Simply, the choices an enemy will take in the junctions is non-deterministically determined "a priori" when an enemy spawns ()by calling \texttt{initialize} with different parameters):
+					\begin{figure}[h!]
+						\centering
+						\includegraphics[width=0.65\textwidth]{ndPathChoice.png}
+						\caption{Close-up of how "a priori" non-deterministic path choice is implemented in the enemy template}
+					\end{figure}
+					We realized that since during the game there is no event that may change the probability that an enemy takes a certain choice in a junction rather than another one, without loss of generality, these non-deterministic choices can be determined all at once by the time the enemy spawns.
+					
+					This simple intuition really improved the readability of the enemy template (in the project development timeline we called this new version \emph{compact enemy}) however, it can be convenient only if there are few possible choices.
+					
+					Note that even if there exist three possible paths, it would be incorrect to model only one transition per-path. These transitions must model the same probability of taking any "sequence of choices". In other words, the probability of taking the choice "under" in the junction (7,4) has a $0.5$ of probability to be taken, the other $0.5$ is the probability of choosing "up" and then there is a $0.5$ probability for each choice in the junction (10,7). If we want to determine these choices "a priori", it is not correct to model any possible path with a single transition, because it would lead the probability of taking any path to $\frac{1}{N}$ (where $N$ is the number of possible paths to the MT).
+				\end{flushleft}
+				\begin{flushleft}
+					\textbf{Dismissal of an enemy}
+					Once an enemy has to leave the map, it simply updates properly the \texttt{shoot\_table} record, the counter of the targetable enemies and the counter of the left enemies.
+					
+					A match is considered ended if the counter of left enemies is zero (i.e. all enemies spawned and leaved the map). Once the enemy is dismissed, it goes in a location where it waits that the match ends and then goes in an endless self-loop, this choice is in fact more crucial than it might seem:
+					\begin{itemize}
+						\item it prevents the system deadlock once the match is ended;
+						\item putting a self-loop with no guard would of course prevent deadlock but it would possibly lead the starvation of other enemies (an enemy may arrive in the location and then self-looping indefinitely so other enemies could not move/shoot anymore). With the guard, this situation may happen only once all enemies are dismissed (and so they can't "starve" anymore).
+					\end{itemize}
+				\end{flushleft}
 			\subsubsection{Turret}
+				The high-level behavior of a turret (for the design of the communications see the following section) is pretty simple:
+				\begin{enumerate}
+					\item 
+				\end{enumerate}
 		\subsection{Communication modeling description (for Vanilla version)}
 			\subsubsection{How turrets shoot to enemies}
 			\subsubsection{How enemies shoot to the MT}
@@ -330,42 +399,27 @@ pdfcreator={pdflatex}]{hyperref}
 	
 	
 	\section{Conclusions}
-	%----------------------------------------------------------------------------------------
-	%	BIBLIOGRAPHY
-	%----------------------------------------------------------------------------------------
 
-	
-	
-	%----------------------------------------------------------------------------------------
 	\newpage
 	\appendix
 	\section{Discarded choices}
 		We wanted to write this additional section mainly to better clarify the reasons behind our final design choices. Nonetheless, we would like to clarify that our design choices are what we believed to be more efficient and adequate for our interpretation of the game, so some of the discarded can possibly be the best ones in other contexts or with different requirements and also for this reason we wanted to state them in the report.
 		\subsection{MT template}
-			Originally, a template for MT was designed. It was, for its simplicity, the very first one to be designed. We removed it in an attempt of optimizing the model, since we understood (after reasoning more on other more crucial design choices) that a so simple and "passive" entity like the MT does not really need to be implemented with a dedicated template (\texttt{decDamage} decreases MT's life by the value set in a global variable from the firing enemy):
+			Originally, a template for MT was designed. It was, for its simplicity, the very first one to be designed (\texttt{decDamage} decreases MT's life by the value set in a global variable from the firing enemy):
 			
 			\begin{figure}[h!]
 				\centering
 				\includegraphics[width=0.5\textwidth]{MT_Template.png}
 				\caption{Original MT's template}
 			\end{figure}
-			
-			Decoupling enemy and turret in two templates is necessary to model in a proper and clear way the interleaving between these entities but MT neither needs to trigger other components nor has any non-deterministic behavior. The only one centralized aspect that a dedicated template could have implemented was controlling that MT's life is not $0$ before decreasing it, but this can be easily moved in enemy's template (before an enemy shoots, it checks that MT's life is not $0$) without loss of readability.
 		\subsection{Hard-coded enemies paths}
-			The very first enemy version used the concept of \texttt{next()} but there was no idea on how to model the non-deterministic moves (unless using \texttt{random()}, which is not available in symbolic simulations). The only idea was to hard-code vectors of cells representing each straight red path on the map and enemies template would have chosen between them non-deterministically with transitions (once an enemy arrives in the last cell of a path, then it will start to follow non-deterministically one of the "next paths"):
+			The very first enemy version used the concept of \texttt{next} but there was no idea on how to model the non-deterministic moves (unless using function \texttt{random}, which is not available in symbolic simulation). The only idea was to hard-code vectors of cells representing each straight red path on the map and enemies template would have chosen between them non-deterministically with transitions (once an enemy arrives in the last cell of a path, then it will start to follow non-deterministically one of the "next paths"):
 			
 			\begin{figure}[h!]
 				\centering
 				\includegraphics[width=0.65\textwidth]{ENEMIES_PATHS.png}
 				\caption{Original non-deterministic path choices example}
 			\end{figure}
-			We realized that since during the game there is no event that may change the probability that an enemy takes a certain choice in a junction rather than another one, without loss of generality, these non-deterministic choices can be determined all at once by the time the enemy spawns (by calling \texttt{initialize()} with different parameters):
-			\begin{figure}[h!]
-				\centering
-				\includegraphics[width=0.65\textwidth]{COMPACT_ENEMIES_PATHS.png}
-				\caption{Close-up of the non-deterministic paths choice at spawning time}
-			\end{figure}
-			This simple intuition really improved the readability of the enemy template (in the project development timeline we called this new version \emph{compact enemy}).
 		\subsection{Quadratic enemies scanning strategy}
 			The very first turret version used to look for enemies to shoot in this way: for each $k$ from $1$ to the \texttt{range}, scan \texttt{SHOOT\_TABLE} to find all the available enemies at exactly $k$ cells of distance; then, choose the best iso-distant available enemy based on the requirements criteria. The worst-case asymptotic complexity of this procedure was $\Theta(k\times MAX\_ENEMIES)$ which was significantly worse than the one of the final version which is $\Theta(MAX\_ENEMIES)$ especially in the average case where there is no enemy inside the shooting range.
 		\subsection{Locks}
@@ -396,6 +450,17 @@ pdfcreator={pdflatex}]{hyperref}
 				\item not starvation-free: since it is not guaranteed that any enemy that requests a lock will eventually obtain it.
 			\end{itemize}
 			We removed this concept since we understood that a single transition that both changes the global variable and performs the shoot would have produced the same behavior, since, provided that this transition is not synchronized with other enemies, only one of them can perform it in a time instant, therefore there is no possibility that an enemy places the damage for the MT into the shared variable and before sending the shooting message another enemy changes the variable and (or not) shoots to the MT (which would clearly create an undesired behavior).
+		\subsection{Lifetime counter}
+			As we have seen, turrets understand that an enemy is present on the map for a shorter amount of time by looking to its spawning. This idea lets enemies to not keep a counter updated to tell the turrets that they are present on the map for tot. time units. However, this idea is relatively new in the history of the model, since at the beginning, the lifetime of an enemy used to be update in each time unit by the enemy:
+			
+			\begin{figure}[h!]
+				\centering
+				\includegraphics[width=0.5\textwidth]{lifetimeCounter.png}
+				\caption{Close-up of of the lifetime counter of an enemy}
+			\end{figure}
+			With clock \texttt{z} at each time unit the lifetime counter would have been updated.
+			
+			Note that this solution was also used to verify that enemies would have reached the MT spot in no more than $\texttt{MAX\_PATH\_LENGTH}\times speed$ time units.
 	\nocite{1,2,3,4,5,6,7}
 	\printbibliography
 \end{document}

@@ -56,13 +56,12 @@ const MTConfiguration MT := {10};
 
 const int[-1,-1] SPECIAL_ID := -1;
 typedef int[SPECIAL_ID,MAX_ENEMIES-1] EnemyID_t; //"SPECIAL_ID" id is reserved
-typedef int Life_t;
 
 typedef struct {
     Cell pos; //actual position of the enemy
-    Life_t lifeTime; //actual lifetime of an enemy
+    int entering; //instant in which the enemy spawned
     bool kind; //"true" for SQUARE, "false" for CIRCLE
-    bool targettable; //indicates if the enemy is targettable at the moment
+    bool targetable; //indicates if the enemy is targettable at the moment
 } EnemyRecord;
 
 typedef struct {
@@ -76,11 +75,12 @@ TargetRecord target_record := {SPECIAL_ID,0}; //an enemy takes "damage" off its 
 int mt_life := MT.health; //MT can be simply modeled as a variable to decrement after a successful enemy shoot
 
 int[0,MAX_ENEMIES] left_enemies := MAX_ENEMIES; //how many enemies are currently alive or about to spawn
-int[0,MAX_ENEMIES] targettable_enemies := 0; //how many enemies are currently targettable (it can be also computed by counting the "targettable"
+int[0,MAX_ENEMIES] targetable_enemies := 0; //how many enemies are currently targettable (it can be also computed by counting the "targettable"
                                              //flags in "shoot_table", it's defined only for efficiency purposes (no need from turrets to scan
                                              //"shoot_table" to verify the presence of targettable enemies)
 
 urgent broadcast chan SHOOT_TO_ENEMY; //sender: turret; receiver: enemy
+urgent broadcast chan SHOOT_TO_MT; //sender: enemy, receiver: -- (only to make the shot to the MT "urgent")
 
 //useful procedures:
 
@@ -88,7 +88,7 @@ bool isRed (Cell c)
 /**
     Given a cell, checks if a cell is a feasible enemy spot
 
-    @input  c cell to check
+    @input  c the cell to check
     @return   "true" if "c" is a red cell ("false" otherwise)
 */
     {
@@ -147,8 +147,7 @@ bool matchEnded()
 		<parameter>const EnemyID_t id, const int speed, int health, const int damage, const int spawningTime, const bool kind</parameter>
 		<declaration>clock x; //clock to ensure that "shoot_table[id].lifeTime" is updated in one and only one time
          //for each instant after the enemy has spawned until it is dismissed
-
-clock z; //clock to count the speed delay
+clock trip_time;
 Cell pos; //enemy's current position on the map
 int[0,2] chosenPath := 0; //which one of the three paths was non-deterministically chosen at spawning time
 
@@ -159,23 +158,23 @@ void initialize(const int[0,2] i)
     @input i the "index" of the chosen path
 */
     {
-        pos = START_POS;
+        pos = START_POS; //(redoundant)
         chosenPath = i;
 
         //shoot_table record update:
             shoot_table[id].kind = kind;
-            shoot_table[id].targettable = true;
+            shoot_table[id].entering = spawningTime;
+            shoot_table[id].targetable = true;
             shoot_table[id].pos = pos;
-            shoot_table[id].lifeTime = 0;
 
-        targettable_enemies++;
+        targetable_enemies++;
         
         x = 0;
-        z = 0;
+        trip_time = 0;
     }
 void shoot()
 /**
-    implements the shoot to the MT
+    implements the shot to the MT
 */
     {
         if (mt_life &gt; 0)
@@ -187,8 +186,8 @@ void dismiss ()
 */
     {
        left_enemies--;
-       shoot_table[id].targettable = false; 
-       targettable_enemies--; 
+       shoot_table[id].targetable = false;
+       targetable_enemies--;
     }
 void takeDamage ()
 /**
@@ -220,7 +219,6 @@ void next()
                 else
                     if (pos.y == 4)
                         pos.x = 1;
-                
                 return;
             }
         if (pos.x &gt;=1 &amp;&amp; pos.x &lt;= 6)
@@ -247,7 +245,7 @@ void next()
                         else
                             if (pos.y == 7 || pos.y == 1)
                                 pos.x = pos.x + 1;
-                return;
+                return;  
             }
         if (pos.x &gt;= 8 &amp;&amp; pos.x &lt;= 9)
             {
@@ -288,41 +286,29 @@ void next()
                 return;
             }
     }
-bool canMove()
+void move()
 /**
-    checks if the enemy can move (i.e. it is alive and it has not already reached the MT)
-
-    @return "true" if the enemy is able to move ("false" otherwise)
+    it implements all the actions an enemy has to perform to move (change of pos and update of shoot_table record)
 */
     {
-        return (pos!=MAIN_POS &amp;&amp; health&gt;0);
-    }
-bool readyToShoot()
-/**
-    check if the enemy is ready to shoot (i.e. it is alive and it reached the MT)
-    
-    @return "true" if the enemy is ready to shoot to the MT ("false" otherwise)
-*/
-    {
-        return (pos==MAIN_POS &amp;&amp; health&gt;0);
+        next();
+        shoot_table[id].pos=pos;
+        x=0;
     }</declaration>
-		<location id="id0" x="357" y="425" color="#00ff00">
-			<name x="374" y="408">OnTrip</name>
-			<label kind="invariant" x="289" y="391">z&lt;=1 &amp;&amp; x&lt;=speed</label>
-			<label kind="comments" x="-170" y="926">OnTrip:
+		<location id="id0" x="408" y="442" color="#0000ff">
+			<name x="383" y="391">OnTrip</name>
+			<label kind="invariant" x="383" y="408">x&lt;=speed</label>
+			<label kind="comments" x="-119" y="901">OnTrip:
 
-An enemy stays in this state (in the sense that only takes self-transitions) as long as the MT
-was not reached and health&gt;0:
--&gt; in every time instant it has to update "shoot_table[id].lifeTime" (purpose of clock "z");
--&gt; every "speed" time instants it has to move of one cell with the method "next" (and also
-   updates "shoot_table[id].lifeTime" since the time instat has passed anyways);
+An enemy stays in this state (in the sense that only takes self-transitions) as long as MT is not reached and health&gt;0:
+-&gt; every "speed" time instants it has to move of one cell and update the shoot_table record;
 -&gt; if a message is received on "SHOOT_TO_ENEMY" (provided that it is alive) it executes "takeDamage"
    to process the possibly received shoot ("takeDamage" is also responsible of calling "dismiss").</label>
 		</location>
-		<location id="id1" x="-110" y="425" color="#00ffff">
-			<name x="-161" y="434">BeforeSpawn</name>
-			<label kind="invariant" x="-178" y="391">x&lt;=spawningTime</label>
-			<label kind="comments" x="-170" y="637">BeforeSpawn:
+		<location id="id1" x="-51" y="204" color="#00ffff">
+			<name x="-102" y="170">BeforeSpawn</name>
+			<label kind="invariant" x="-110" y="221">x&lt;=spawningTime</label>
+			<label kind="comments" x="-119" y="561">BeforeSpawn:
 
 An enemy starts its execution from this state, where it stays for an amount of time exactly equal to "spawningTime" before leaving.
 
@@ -337,119 +323,116 @@ the value assigned to the variable "chosenPath":
 In other words, the path to the MT an enemy will non-deterministically take is calculated right after the spawn and not
 upon arriving at a junction.</label>
 		</location>
-		<location id="id2" x="705" y="425" color="#ffa500">
-			<name x="612" y="433">AfterShoot</name>
-			<label kind="invariant" x="612" y="383">z&lt;=1 &amp;&amp; x&lt;=speed</label>
-			<label kind="comments" x="-128" y="1113">AfterShoot:
+		<location id="id2" x="858" y="442" color="#ffa500">
+			<name x="806" y="391">AfterShoot</name>
+			<label kind="invariant" x="815" y="408">x&lt;=speed</label>
+			<label kind="comments" x="-119" y="1028">AfterShoot:
 
-If the MT has been reached and the enemy is alive, it tries to shoot to it (even if the MT has been already
-killed) and goes in AfterShoot. Here "shoot_table[id].lifeTime" is still continuosly updated since the enemy is still alive.</label>
+Once the enemy shot, it stays in this state until the delay expires and then it will leave the map (if not killed beforehands).</label>
 		</location>
-		<location id="id3" x="527" y="195" color="#ff0000">
-			<name x="433" y="187">Dismissed</name>
-			<label kind="comments" x="-162" y="1172">Dismissed:
+		<location id="id3" x="578" y="212" color="#ff0000">
+			<name x="484" y="220">Dismissed</name>
+			<label kind="comments" x="-119" y="1155">Dismissed:
 
-It is only a well-state where the enemy arrives when there is no transition possible.</label>
+It is only a well-state where the enemy arrives when it "leaves the map". The self-loop is kept to prevent deadlocks.</label>
 		</location>
 		<init ref="id1"/>
 		<transition id="id4">
-			<source ref="id3"/>
-			<target ref="id3"/>
-			<nail x="501" y="152"/>
-			<nail x="552" y="152"/>
+			<source ref="id1"/>
+			<target ref="id0"/>
+			<label kind="guard" x="25" y="374">x&gt;=spawningTime</label>
+			<label kind="assignment" x="161" y="374">initialize(2)</label>
+			<nail x="-51" y="399"/>
+			<nail x="357" y="399"/>
+			<nail x="357" y="442"/>
 		</transition>
 		<transition id="id5">
-			<source ref="id2"/>
-			<target ref="id2"/>
-			<label kind="guard" x="756" y="391">z&gt;=1 &amp;&amp; x&lt;speed &amp;&amp; health&gt;0</label>
-			<label kind="assignment" x="765" y="408">shoot_table[id].lifeTime++,z=0</label>
-			<nail x="739" y="391"/>
-			<nail x="747" y="425"/>
+			<source ref="id3"/>
+			<target ref="id3"/>
+			<label kind="guard" x="526" y="144">matchEnded()</label>
+			<nail x="603" y="169"/>
+			<nail x="552" y="169"/>
 		</transition>
 		<transition id="id6">
 			<source ref="id2"/>
 			<target ref="id3"/>
-			<label kind="guard" x="569" y="306">health&lt;=0</label>
+			<label kind="guard" x="697" y="280">health&lt;=0</label>
+			<nail x="858" y="306"/>
+			<nail x="578" y="306"/>
 		</transition>
 		<transition id="id7">
 			<source ref="id2"/>
 			<target ref="id2"/>
-			<label kind="guard" x="731" y="485">health&gt;0</label>
-			<label kind="synchronisation" x="722" y="468">SHOOT_TO_ENEMY?</label>
-			<label kind="assignment" x="722" y="502">takeDamage()</label>
-			<nail x="756" y="451"/>
-			<nail x="722" y="468"/>
+			<label kind="guard" x="908" y="433">health&gt;0</label>
+			<label kind="synchronisation" x="908" y="416">SHOOT_TO_ENEMY?</label>
+			<label kind="assignment" x="908" y="450">takeDamage()</label>
+			<nail x="900" y="425"/>
+			<nail x="900" y="467"/>
 		</transition>
 		<transition id="id8">
-			<source ref="id0"/>
-			<target ref="id0"/>
-			<label kind="guard" x="400" y="459">z&gt;=1 &amp;&amp; x&lt;speed &amp;&amp; canMove()</label>
-			<label kind="assignment" x="400" y="476">shoot_table[id].lifeTime++,
-z=0</label>
-			<nail x="408" y="451"/>
-			<nail x="383" y="476"/>
-		</transition>
-		<transition id="id9">
 			<source ref="id2"/>
 			<target ref="id3"/>
-			<label kind="guard" x="680" y="263">x&gt;=speed &amp;&amp; health&gt;0</label>
-			<label kind="assignment" x="688" y="280">dismiss()</label>
-			<nail x="671" y="280"/>
+			<label kind="guard" x="646" y="187">x&gt;=speed &amp;&amp; health&gt;0</label>
+			<label kind="assignment" x="697" y="212">dismiss()</label>
+			<nail x="858" y="212"/>
+		</transition>
+		<transition id="id9">
+			<source ref="id0"/>
+			<target ref="id3"/>
+			<label kind="guard" x="416" y="289">health&lt;=0</label>
+			<nail x="408" y="212"/>
 		</transition>
 		<transition id="id10">
 			<source ref="id0"/>
-			<target ref="id3"/>
-			<label kind="guard" x="391" y="306">health&lt;=0</label>
+			<target ref="id0"/>
+			<label kind="guard" x="433" y="493">health&gt;0</label>
+			<label kind="synchronisation" x="433" y="476">SHOOT_TO_ENEMY?</label>
+			<label kind="assignment" x="433" y="510">takeDamage()</label>
+			<nail x="416" y="484"/>
+			<nail x="442" y="467"/>
 		</transition>
 		<transition id="id11">
 			<source ref="id0"/>
 			<target ref="id0"/>
-			<label kind="guard" x="255" y="340">health&gt;0</label>
-			<label kind="synchronisation" x="204" y="323">SHOOT_TO_ENEMY?</label>
-			<label kind="assignment" x="230" y="357">takeDamage()</label>
-			<nail x="349" y="374"/>
-			<nail x="315" y="391"/>
+			<label kind="guard" x="51" y="467">x&gt;=speed &amp;&amp; pos!=MAIN_POS &amp;&amp; health&gt;0</label>
+			<label kind="assignment" x="323" y="484">move()</label>
+			<nail x="374" y="467"/>
+			<nail x="399" y="484"/>
 		</transition>
 		<transition id="id12">
-			<source ref="id0"/>
+			<source ref="id1"/>
 			<target ref="id0"/>
-			<label kind="guard" x="272" y="476">z&gt;=1 &amp;&amp;
-x&gt;=speed
-&amp;&amp; canMove()</label>
-			<label kind="assignment" x="238" y="536">next(),
-shoot_table[id].pos=pos,
-shoot_table[id].lifeTime++,
-x=0,z=0</label>
-			<nail x="315" y="468"/>
-			<nail x="349" y="476"/>
+			<label kind="guard" x="25" y="331">x&gt;=spawningTime</label>
+			<label kind="assignment" x="161" y="331">initialize(2)</label>
+			<nail x="-51" y="357"/>
+			<nail x="357" y="357"/>
+			<nail x="357" y="391"/>
+			<nail x="357" y="442"/>
 		</transition>
 		<transition id="id13">
 			<source ref="id1"/>
 			<target ref="id0"/>
-			<label kind="guard" x="43" y="459">x&gt;=spawningTime</label>
-			<label kind="assignment" x="51" y="476">initialize(2)</label>
-			<nail x="-51" y="459"/>
-			<nail x="264" y="459"/>
+			<label kind="guard" x="26" y="289">x&gt;=spawningTime</label>
+			<label kind="assignment" x="162" y="289">initialize(0)</label>
+			<nail x="-51" y="315"/>
+			<nail x="357" y="315"/>
+			<nail x="357" y="442"/>
 		</transition>
 		<transition id="id14">
 			<source ref="id1"/>
 			<target ref="id0"/>
-			<label kind="guard" x="34" y="349">x&gt;=spawningTime</label>
-			<label kind="assignment" x="51" y="366">initialize(0)</label>
-			<nail x="-51" y="391"/>
-			<nail x="264" y="391"/>
+			<label kind="guard" x="25" y="250">x&gt;=spawningTime</label>
+			<label kind="assignment" x="161" y="250">initialize(1)</label>
+			<nail x="-52" y="275"/>
+			<nail x="356" y="275"/>
+			<nail x="357" y="442"/>
 		</transition>
 		<transition id="id15">
-			<source ref="id1"/>
-			<target ref="id0"/>
-			<label kind="guard" x="34" y="400">x&gt;=spawningTime</label>
-			<label kind="assignment" x="51" y="425">initialize(1)</label>
-		</transition>
-		<transition id="id16">
 			<source ref="id0"/>
 			<target ref="id2"/>
-			<label kind="guard" x="467" y="399">readyToShoot()</label>
-			<label kind="assignment" x="459" y="425">shoot(),x=0,z=0</label>
+			<label kind="guard" x="527" y="416">health&gt;0 &amp;&amp; pos==MAIN_POS</label>
+			<label kind="synchronisation" x="586" y="399">SHOOT_TO_MT!</label>
+			<label kind="assignment" x="586" y="442">shoot(),x=0</label>
 		</transition>
 	</template>
 	<template>
@@ -483,9 +466,9 @@ bool shootable()
         int[0,MAX_ENEMIES] i, cont;
         
         cont=0;
-        for (i = 0 ; i&lt;MAX_ENEMIES &amp;&amp; cont&lt;targettable_enemies; i++)
+        for (i = 0 ; i&lt;MAX_ENEMIES &amp;&amp; cont&lt;targetable_enemies; i++)
             {
-                if (shoot_table[i].targettable)
+                if (shoot_table[i].targetable)
                     {
                         cont++;
                         if (dist(shoot_table[i].pos, turrets_board[id])&lt;=range)
@@ -515,15 +498,15 @@ void target()
         int[0,MAX_ENEMIES] i, cont=0;
         EnemyID_t target_id;
         int[MIN_CELL_X,MAX_CELL_X] target_dist, d;
-        Life_t target_lifeTime;
+        int target_entering;
 
-        if (targettable_enemies &gt; 0)
+        if (targetable_enemies &gt; 0)
             {
                 i = 0;
                 found = false;
                 while (i &lt; MAX_ENEMIES &amp;&amp; !found)
                     {
-                        if (shoot_table[i].targettable &amp;&amp; dist(shoot_table[i].pos, turrets_board[id])&lt;=range)
+                        if (shoot_table[i].targetable &amp;&amp; dist(shoot_table[i].pos, turrets_board[id])&lt;=range)
                             {
                                 found = true;
                             }
@@ -533,11 +516,11 @@ void target()
                     {
                         target_id = i-1;
                         target_dist = dist(shoot_table[i-1].pos, turrets_board[id]);
-                        target_lifeTime = shoot_table[i-1].lifeTime;
+                        target_entering = shoot_table[i-1].entering;
                         cont++;
-                        for (i = i ; i&lt;MAX_ENEMIES &amp;&amp; cont &lt; targettable_enemies; i++)
+                        for (i = i ; i&lt;MAX_ENEMIES &amp;&amp; cont &lt; targetable_enemies; i++)
                             {
-                                if (shoot_table[i].targettable)
+                                if (shoot_table[i].targetable)
                                     {
                                         cont++;
                                         d = dist(shoot_table[i].pos, turrets_board[id]);
@@ -545,20 +528,20 @@ void target()
                                             {
                                                 target_id = i;
                                                 target_dist = d;
-                                                target_lifeTime = shoot_table[i].lifeTime;
+                                                target_entering = shoot_table[i].entering;
                                             }
                                         else
                                             {        
                                                 if (d == target_dist)
                                                     {
-                                                        if (shoot_table[i].lifeTime &lt; target_lifeTime)
+                                                        if (shoot_table[i].entering &gt; target_entering)
                                                             {
                                                                 target_id = i;
-                                                                target_lifeTime = shoot_table[i].lifeTime;
+                                                                target_entering = shoot_table[i].entering;
                                                             }
                                                         else
                                                             {
-                                                                if (target_lifeTime == shoot_table[i].lifeTime)
+                                                                if (target_entering == shoot_table[i].entering)
                                                                     {
                                                                         if (shoot_table[i].kind)
                                                                             {
@@ -575,14 +558,14 @@ void target()
                     }
             }   
     }</declaration>
-		<location id="id17" x="-459" y="-306" color="#00ff00">
+		<location id="id16" x="-459" y="-306" color="#00ff00">
 			<name x="-484" y="-340">ReadyToShoot</name>
 			<label kind="comments" x="-1028" y="-178">ReadyToShoot:
 
 The turret stays in this state as long as there are no enemies to shoot. Otherwise, the most preffered of them
 is shot with "target".</label>
 		</location>
-		<location id="id18" x="-697" y="-306" color="#ffa500">
+		<location id="id17" x="-697" y="-306" color="#ffa500">
 			<name x="-722" y="-340">Wait</name>
 			<label kind="invariant" x="-782" y="-314">y&lt;=speed</label>
 			<label kind="comments" x="-1028" y="-85">Wait:
@@ -590,17 +573,17 @@ is shot with "target".</label>
 The turret stays in this state as long as the speed delay has not expired. Once it is, it goes to ReadyToShoot and
 looks for enemies to shoot.</label>
 		</location>
-		<init ref="id17"/>
-		<transition id="id19">
-			<source ref="id18"/>
-			<target ref="id17"/>
+		<init ref="id16"/>
+		<transition id="id18">
+			<source ref="id17"/>
+			<target ref="id16"/>
 			<label kind="guard" x="-603" y="-221">y&gt;=speed</label>
 			<nail x="-697" y="-221"/>
 			<nail x="-459" y="-221"/>
 		</transition>
-		<transition id="id20">
-			<source ref="id17"/>
-			<target ref="id18"/>
+		<transition id="id19">
+			<source ref="id16"/>
+			<target ref="id17"/>
 			<label kind="guard" x="-629" y="-348">shootable()</label>
 			<label kind="synchronisation" x="-637" y="-331">SHOOT_TO_ENEMY!</label>
 			<label kind="assignment" x="-612" y="-306">target()</label>
@@ -609,14 +592,27 @@ looks for enemies to shoot.</label>
 	</template>
 	<system>const int N_CIRCLES = 3;
 
-circle(const int[0,N_CIRCLES-1] id) = compactEnemy(id, CIRCLE.speed, CIRCLE.health, CIRCLE.damage, (id+1)*CIRCLE.spawningTime, CIRCLE.kind);
-square(const int[N_CIRCLES,MAX_ENEMIES-1] id) = compactEnemy(id, SQUARE.speed, SQUARE.health, SQUARE.damage, (id-(N_CIRCLES-1))*SQUARE.spawningTime, SQUARE.kind);
+/*
+    To change wave parameters:
+    -&gt; set MAX_ENEMIES (in "Declarations") to the number of enemies of the wave;
+    -&gt; set N_CIRCLES to the number of circles of the wave.
+    
+    To change a configuration:
+    -&gt; instantiate a turret (of the type you want) and pass the index value that corresponds to the position you want for that
+       turret in "turrets_board" (e.g. to place a "sniper" in position "{8,2}", use "turret(5,SNIPER)", since "turrets_board[5]={8,2}").
+
+    To switch between configurations:
+    -&gt; use comments below to comment/de-comment "system" and "ti" instructions.    
+*/
+
+circle(const int[0,N_CIRCLES-1] id) = compactEnemy(id, CIRCLE.speed, CIRCLE.health, CIRCLE.damage, id*CIRCLE.spawningTime, CIRCLE.kind);
+square(const int[N_CIRCLES,MAX_ENEMIES-1] id) = compactEnemy(id, SQUARE.speed, SQUARE.health, SQUARE.damage, (id-N_CIRCLES)*SQUARE.spawningTime, SQUARE.kind);
 
 //NO TURRETS CONFIG
 /*
 system circle, square;
 */
-//WITH TURRETS "DEFAULT" CONFIG
+//WITH TURRETS "VI" CONFIG
 
 basic(const int id)  = turret(id, BASIC);
 cannon(const int id) = turret(id, CANNON);
@@ -625,10 +621,10 @@ sniper(const int id) = turret(id, SNIPER);
 t0 = cannon(0);
 t1 = cannon(1);
 t2 = basic(2);
-t3 = sniper(3);
+t3 = sniper(4);
 t4 = sniper(4);
-t5 = cannon(5);
-t6 = cannon(6);
+t5 = cannon(4);
+t6 = cannon(4);
 
 system circle,square,t0,t1,t2,t3,t4,t5,t6;
 
@@ -660,49 +656,88 @@ t4 = turret(4,SNIPER.range, SNIPER.speed, SNIPER.damage);
 t5 = turret(5,CANNON.range, CANNON.speed, CANNON.damage);
 t6 = turret(6,CANNON.range, CANNON.speed, CANNON.damage);
 */
+//system circle,square;
+/*
+t0 = cannon(0);
+t1 = cannon(1);
+t2 = basic(2);
+t3 = cannon(3);
+t4 = cannon(4);
+t5 = cannon(5);
+t6 = cannon(6);
+*/
 //system circle,square;</system>
 	<queries>
 		<query>
 			<formula>A[](not deadlock)</formula>
-			<comment>In any state model must not be in deadlock (this query will still work with turrets)</comment>
-			<result outcome="success" type="quality" timestamp="2025-07-07 21:50:04 +0200">
+			<comment>[THIS QUERY VERIFIES PROPERTIES "I" AND "VII"]
+
+In any state, the model must not be in deadlock.
+This query will still work with turrets.</comment>
+			<option key="--exploration" value="0"/>
+			<result outcome="success" type="quality" timestamp="2025-07-09 08:04:17 +0200">
+				<option key="--exploration" value="0"/>
 			</result>
 		</query>
 		<query>
 			<formula>A&lt;&gt;(
-	forall(i:int[0,N_CIRCLES-1])(circle(i).pos == MAIN_POS) &amp;&amp;
-	forall(i:int[N_CIRCLES,MAX_ENEMIES-1])(square(i).pos == MAIN_POS)
+	(forall(i:int[0,N_CIRCLES-1])          (circle(i).pos == MAIN_POS)) &amp;&amp;
+	(forall(i:int[N_CIRCLES,MAX_ENEMIES-1])(square(i).pos == MAIN_POS))
 )</formula>
-			<comment>Soon or later any enemy will reach the MT spot (this query will NOT work with turrets since dead enemies will not reach the MT spot)</comment>
+			<comment>[THIS QUERY VERIFIES PROPERTY "II"]
+
+Soon or later all enemies will always reach the MT.
+Note that "E&lt;&gt;" could also be used since the case where "E&lt;&gt;" is satisfied and "A&lt;&gt;" not is the case where there is at least one path that does not lead all enemy to reach
+the MT spot, and if we only want to verify that all enemies "can reach the MT", it does not mean that any enemy will eventually reach it in any possible path.
+To be more precise, the query verifies that for any path there exists a state where all enemy are at MAIN_POS in the same time, which would be false in models where an enemy changes
+its "pos" (for example, to "{-1,-1}") once it leaves the map (this is also the reason why we did not state this query with "OnTrip &amp;&amp; pos==MAIN_POS", since it is not true, neither with "E&lt;&gt;", that
+exists a state in which all enemies arrive at MAIN_POS simultaneously).
+This query MAY NOT work with turrets since some enemies may be killed before reaching the MT spot.</comment>
+			<option key="--exploration" value="0"/>
+			<result outcome="success" type="quality" timestamp="2025-07-09 08:00:26 +0200">
+				<option key="--exploration" value="0"/>
+			</result>
 		</query>
 		<query>
 			<formula>A[](
-	forall(i:int[0,N_CIRCLES-1])((shoot_table[i].pos == MAIN_POS &amp;&amp; circle(i).OnTrip) imply shoot_table[i].lifeTime&lt;=(MAX_PATH_LENGTH*CIRCLE.speed)) &amp;&amp;
-	forall(i:int[N_CIRCLES,MAX_ENEMIES-1])((shoot_table[i].pos == MAIN_POS &amp;&amp; square(i).OnTrip) imply shoot_table[i].lifeTime&lt;=(MAX_PATH_LENGTH*SQUARE.speed))
+	(forall(i:int[0,N_CIRCLES-1])          ((circle(i).OnTrip &amp;&amp; circle(i).pos == MAIN_POS) imply (circle(i).trip_time&lt;=(MAX_PATH_LENGTH*CIRCLE.speed)))) &amp;&amp;
+	(forall(i:int[N_CIRCLES,MAX_ENEMIES-1])((square(i).OnTrip &amp;&amp; square(i).pos == MAIN_POS) imply (square(i).trip_time&lt;=(MAX_PATH_LENGTH*SQUARE.speed))))
 )</formula>
-			<comment/>
+			<comment>[THIS QUERY VERIFIES PROPERTIES "III" AND "IV"]
+
+In any state of any path, if any enemy reaches the MT, its trip time must be less or equal than the product between the maximum path length and its speed.
+This query will still work with turrets (turrets do not change the time limit to reach the MT).</comment>
+			<option key="--exploration" value="0"/>
 		</query>
 		<query>
 			<formula>A[](
-	forall(i:int[0,N_CIRCLES-1])(shoot_table[i].targettable imply isRed(circle(i).pos)) &amp;&amp;
-	forall(i:int[N_CIRCLES,MAX_ENEMIES-1])(shoot_table[i].targettable imply isRed(square(i).pos))
+	(forall(i:int[0,N_CIRCLES-1])          (shoot_table[i].targettable imply isRed(circle(i).pos))) &amp;&amp;
+	(forall(i:int[N_CIRCLES,MAX_ENEMIES-1])(shoot_table[i].targettable imply isRed(square(i).pos)))
 )</formula>
-			<comment>In any state of any possible path, if an any is present of the map (i.e. it is targettable) it must be on a red spot (this query will still work with turrets since the fact the enemies
-can be shot does not implies that they leave red spots).
+			<comment>[THIS QUERY VERIFIES PROPERTY "V"]
+
+In any state of any possible path, if an enemy is present of the map (i.e. it is targettable) it must be on a red spot.
 
 Note that since:
 -&gt; enemies that are about to spawn have "pos = {0,0}";
 -&gt; enemies that are dead have "pos" equal to the one they were when they were killed;
 the query can be satisfied also if we remove "shoot_table[i].targettable". We wanted to state it anyways because formally is interesting to check enemies positions only when they
-are present on the map (we model the "leaving from the map" as "shoot_table[i].targettable == false")</comment>
-			<result outcome="success" type="quality" timestamp="2025-07-07 23:20:40 +0200">
+are present on the map (we model the "leaving from the map" only as "shoot_table[i].targettable == false").
+
+This query will still work with turrets (since the fact that enemies can be shot does not implies that they leave red spots and in case they are killed they are not targettable
+anymore).</comment>
+			<option key="--exploration" value="0"/>
+			<result outcome="success" type="quality" timestamp="2025-07-09 08:00:53 +0200">
+				<option key="--exploration" value="0"/>
 			</result>
 		</query>
 		<query>
-			<formula>A[](mt_life &gt; 0)</formula>
-			<comment>This query is satisfied if and only if the MT is alive in any state of any possible path, therefore it is satisfied if and only if the configuration is winning.</comment>
-			<result outcome="success" type="quality" timestamp="2025-07-07 21:45:06 +0200">
-			</result>
+			<formula>A[](mt_life&gt;0)</formula>
+			<comment>[THIS QUERY VERIFIES PROPERTY "VI"]
+
+This query is satisfied if and only if the MT is alive in any state of any possible path, therefore it is satisfied if and only if the configuration is "winning"
+(a configuration is "winning" there is no possibility that the MT is defeated).</comment>
+			<option key="--exploration" value="0"/>
 		</query>
 	</queries>
 </nta>
