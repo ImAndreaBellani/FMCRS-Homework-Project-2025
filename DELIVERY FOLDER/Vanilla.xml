@@ -752,19 +752,19 @@ This query is satisfied if and only if the MT is alive in any state of any possi
 		</query>
 		<query>
 			<formula>E[](mt_life&gt;0)</formula>
-			<comment/>
+			<comment>This query aims to verify that a configuration is at least weakly-winning (at least one path must lead to a winning execution).</comment>
 			<result outcome="success" type="quality" timestamp="2025-07-10 17:14:13 +0200">
 			</result>
 		</query>
 		<query>
 			<formula>A[](mt_life==MT.health)</formula>
-			<comment/>
+			<comment>This query aims to verify that a configuration is strongly-winning (MT must be never shot in any game execution).</comment>
 			<result outcome="success" type="quality" timestamp="2025-07-10 17:18:36 +0200">
 			</result>
 		</query>
 		<query>
 			<formula>E[](mt_life==MT.health)</formula>
-			<comment/>
+			<comment>This query aims to verify that a configuration is weakly-strongly-winning (MT must be never shot in at least one game execution).</comment>
 			<result outcome="success" type="quality" timestamp="2025-07-10 17:16:03 +0200">
 			</result>
 		</query>
@@ -772,7 +772,7 @@ This query is satisfied if and only if the MT is alive in any state of any possi
 			<formula>inf: (
 	(((sum(i : int[0,N_CIRCLES-1]) (dist(circle(i).pos,MAIN_POS)))) +
 	((sum(i : int[N_CIRCLES,MAX_ENEMIES-1]) (dist(square(i).pos,MAIN_POS)))))/MAX_ENEMIES)</formula>
-			<comment/>
+			<comment>This query calculates the ADMT ("Averange Distance from MT") index of the configuration.</comment>
 			<result outcome="success" type="quantity" value="0" timestamp="2025-07-10 19:27:00 +0200">
 				<details>0</details>
 			</result>
@@ -780,7 +780,7 @@ This query is satisfied if and only if the MT is alive in any state of any possi
 		<query>
 			<formula>sup{matchEnded()}:((sum(i : int[0,N_CIRCLES-1]) (circle(i).Dismissed &amp;&amp; circle(i).health&gt;0)) + (sum(i : int[N_CIRCLES,MAX_ENEMIES-1]) (square(i).Dismissed &amp;&amp; square(i).health&gt;0)))
 	</formula>
-			<comment/>
+			<comment>This query calculates the SE ("Survived Enemies") index of the configuration.</comment>
 			<result outcome="success" type="quantity" value="6" timestamp="2025-07-10 19:25:52 +0200">
 				<details>6</details>
 			</result>
@@ -788,14 +788,16 @@ This query is satisfied if and only if the MT is alive in any state of any possi
 		<query>
 			<formula>sup:(((sum(i : int[0,N_CIRCLES-1]) ((dist(circle(i).pos,MAIN_POS)==0)*(circle(i).chosenPath!=2)))+(sum(i : int[N_CIRCLES,MAX_ENEMIES-1]) ((dist(square(i).pos,MAIN_POS)==0)*(square(i).chosenPath!=2)))))
 	</formula>
-			<comment/>
+			<comment>This query calculates the CUPE ("Completed Upper Paths Enemies") of the configuration (it used the "dist" calculation instead of directly comparing "pos" with "MAIN_POS"
+since it raised an error in Uppaal 5.0.0).</comment>
 			<result outcome="success" type="quantity" value="0" timestamp="2025-07-10 20:14:55 +0200">
 				<details>0</details>
 			</result>
 		</query>
 		<query>
 			<formula>sup:(((sum(i : int[0,N_CIRCLES-1]) ((dist(circle(i).pos,MAIN_POS)==0)*(circle(i).chosenPath==2)))+(sum(i : int[N_CIRCLES,MAX_ENEMIES-1]) ((dist(square(i).pos,MAIN_POS)==0)*(square(i).chosenPath==2)))))</formula>
-			<comment/>
+			<comment>This query calculates the CLPE ("Completed Lower Paths Enemies") of the configuration (it used the "dist" calculation instead of directly comparing "pos" with "MAIN_POS"
+since it raised an error in Uppaal 5.0.0).</comment>
 		</query>
 		<query>
 			<formula>A[]((matchEnded() &amp;&amp; (mt_life==MT.health)) imply ((forall(i:int[0,N_CIRCLES-1]) circle(i).health&lt;=0) &amp;&amp; (forall(i:int[N_CIRCLES,MAX_ENEMIES-1]) square(i).health &lt;=0)))</formula>

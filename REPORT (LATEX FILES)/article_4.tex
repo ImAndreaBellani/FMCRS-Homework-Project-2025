@@ -281,6 +281,7 @@ pdfcreator={pdflatex}]{hyperref}
 			The only delay that is still implemented as a "non-probabilistic" delay is the one related to the spawning time.
 			
 			Note that there was no change in communication channels since all of them were broadcast also in the Vanilla version (stochastic model can only use broadcast channels) and the motivations behind making them \texttt{urgent} are independent from the stochastic nature of the model.
+	\newpage
 	\section{Verification results}
 		\subsection{Vanilla model verification}
 			\subsubsection{Verification without turrets}
@@ -353,7 +354,10 @@ pdfcreator={pdflatex}]{hyperref}
 					mettere query in TCTL
 				\end{center}
 				If the MT is defeated in at least one state of one path, the query will not be satisfied (with the configuration chosen).
+				
+				Note that in the configurations section we also analyze the other kinds of "winning" of them. For brevity, we do not report those queries but they are really similar to Q1 (e.g. to verify the weakly-winning property, it is sufficient to verify the query [METTERE QUERY IN TCTL]).
 		\subsection{Stochastic model verification}
+	\newpage
 	\section{Analysis of selected configurations}
 		\subsection{Vanilla version}
 			We further analyzed the default configuration with turrets and four more configurations:
