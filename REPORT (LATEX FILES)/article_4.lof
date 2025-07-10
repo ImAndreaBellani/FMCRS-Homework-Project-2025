@@ -1,8 +1,13 @@
 \deactivateaddvspace 
 \contentsline {figure}{\numberline {1}{\ignorespaces Close-up of how "a priori" non-deterministic path choice is implemented in the enemy template}}{6}{figure.caption.5}%
-\contentsline {figure}{\numberline {2}{\ignorespaces Original MT's template}}{10}{figure.caption.8}%
-\contentsline {figure}{\numberline {3}{\ignorespaces Original non-deterministic path choices example}}{10}{figure.caption.9}%
-\contentsline {figure}{\numberline {4}{\ignorespaces Close-up of the enemy locking \texttt {STMT} channel}}{11}{figure.caption.10}%
-\contentsline {figure}{\numberline {5}{\ignorespaces \texttt {STMTCONTROLLER} template}}{11}{figure.caption.10}%
-\contentsline {figure}{\numberline {6}{\ignorespaces Close-up of of the lifetime counter of an enemy}}{11}{figure.caption.11}%
+\contentsline {figure}{\numberline {2}{\ignorespaces \emph {DownFromCannons} configuration}}{9}{figure.caption.8}%
+\contentsline {figure}{\numberline {3}{\ignorespaces \emph {DownFromSnipers} configuration}}{9}{figure.caption.8}%
+\contentsline {figure}{\numberline {4}{\ignorespaces \emph {Cannonphobia} configuration}}{10}{figure.caption.9}%
+\contentsline {figure}{\numberline {5}{\ignorespaces \emph {Sniperphobia} configuration}}{10}{figure.caption.9}%
+\contentsline {figure}{\numberline {6}{\ignorespaces Default configuration}}{10}{figure.caption.10}%
+\contentsline {figure}{\numberline {7}{\ignorespaces Original MT's template}}{12}{figure.caption.13}%
+\contentsline {figure}{\numberline {8}{\ignorespaces Original non-deterministic path choices example}}{12}{figure.caption.14}%
+\contentsline {figure}{\numberline {9}{\ignorespaces Close-up of the enemy locking \texttt {STMT} channel}}{13}{figure.caption.15}%
+\contentsline {figure}{\numberline {10}{\ignorespaces \texttt {STMTCONTROLLER} template}}{13}{figure.caption.15}%
+\contentsline {figure}{\numberline {11}{\ignorespaces Close-up of of the lifetime counter of an enemy}}{13}{figure.caption.16}%
 \providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 

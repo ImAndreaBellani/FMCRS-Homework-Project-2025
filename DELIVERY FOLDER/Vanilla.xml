@@ -615,10 +615,9 @@ sniper(const int id) = turret(id, SNIPER);
 //NO TURRETS CONFIG
     /*
         system circle,square;
-    */    
-
-//WITH TURRETS "VI" CONFIG
-    /*
+    */
+//WITH TURRETS "Default" CONFIG
+    
         t0 = cannon(0);
         t1 = cannon(1);
         t2 = basic(2);
@@ -628,18 +627,8 @@ sniper(const int id) = turret(id, SNIPER);
         t6 = cannon(6);
 
         system circle,square,t0,t1,t2,t3,t4,t5,t6;
-    */
-//WITH TURRETS "THIRD" CONFIG
-    /*
-        t0 = cannon(0);
-        t1 = cannon(1);
-        t2 = sniper(2);
-        t3 = basic(3);
-        t4 = sniper(4);
-        
-        system circle,square,t0,t1,t2,t3,t4;
-    */
-//WITH TURRETS "FOURTH" CONFIG
+    
+//WITH TURRETS "DownFromCannons" CONFIG
     /*
         t0 = cannon(0);
         t1 = cannon(1);
@@ -649,7 +638,17 @@ sniper(const int id) = turret(id, SNIPER);
         
         system circle,square,t0,t1,t2,t3,t4;
     */
-//WITH TURRETS "ALL CANNONS" CONFIG
+//WITH TURRETS "DownFromSnipers" CONFIG
+    /*
+        t0 = cannon(0);
+        t1 = cannon(1);
+        t2 = sniper(2);
+        t3 = basic(3);
+        t4 = sniper(4);
+        
+        system circle,square,t0,t1,t2,t3,t4;
+    */
+//WITH TURRETS "Cannonphobia" CONFIG
     /*
         t0 = cannon(0);
         t1 = cannon(1);
@@ -660,9 +659,9 @@ sniper(const int id) = turret(id, SNIPER);
         t6 = cannon(6);
         
         system circle,square,t0,t1,t2,t3,t4,t5,t6;
-    */
-//WITH TURRETS "ALL SNIPERS" CONFIG
-    
+   */
+//WITH TURRETS "Sniperphobia" CONFIG
+    /*
         t0 = sniper(0);
         t1 = sniper(1);
         t2 = sniper(2);
@@ -672,8 +671,7 @@ sniper(const int id) = turret(id, SNIPER);
         t6 = sniper(6);
         
         system circle,square,t0,t1,t2,t3,t4,t5,t6;
-    
-</system>
+    */</system>
 	<queries>
 		<query>
 			<formula>A[](not deadlock)</formula>
@@ -748,61 +746,56 @@ anymore).</comment>
 This query is satisfied if and only if the MT is alive in any state of any possible path, therefore it is satisfied if and only if the configuration is "winning"
 (a configuration is "winning" there is no possibility that the MT is defeated).</comment>
 			<option key="--exploration" value="0"/>
-			<result outcome="success" type="quality" timestamp="2025-07-10 09:35:05 +0200">
+			<result outcome="success" type="quality" timestamp="2025-07-10 17:17:46 +0200">
 				<option key="--exploration" value="0"/>
 			</result>
 		</query>
 		<query>
 			<formula>E[](mt_life&gt;0)</formula>
 			<comment/>
-			<result outcome="success" type="quality" timestamp="2025-07-10 09:35:09 +0200">
+			<result outcome="success" type="quality" timestamp="2025-07-10 17:14:13 +0200">
 			</result>
 		</query>
 		<query>
 			<formula>A[](mt_life==MT.health)</formula>
 			<comment/>
-			<result outcome="success" type="quality" timestamp="2025-07-10 11:00:24 +0200">
+			<result outcome="success" type="quality" timestamp="2025-07-10 17:18:36 +0200">
 			</result>
 		</query>
 		<query>
 			<formula>E[](mt_life==MT.health)</formula>
 			<comment/>
-			<result outcome="success" type="quality" timestamp="2025-07-10 09:36:02 +0200">
+			<result outcome="success" type="quality" timestamp="2025-07-10 17:16:03 +0200">
 			</result>
 		</query>
 		<query>
-			<formula>A[](mt_life&gt;=MT.health/2)</formula>
+			<formula>inf: (
+	(((sum(i : int[0,N_CIRCLES-1]) (dist(circle(i).pos,MAIN_POS)))) +
+	((sum(i : int[N_CIRCLES,MAX_ENEMIES-1]) (dist(square(i).pos,MAIN_POS)))))/MAX_ENEMIES)</formula>
 			<comment/>
-			<result outcome="failure" type="quality" timestamp="2025-07-10 10:02:39 +0200">
+			<result outcome="success" type="quantity" value="0" timestamp="2025-07-10 19:27:00 +0200">
+				<details>0</details>
 			</result>
-		</query>
-		<query>
-			<formula>inf:
-	dist(circle(0).pos, MAIN_POS),
-	dist(circle(1).pos, MAIN_POS),
-	dist(circle(2).pos, MAIN_POS),
-	dist(square(3).pos, MAIN_POS),
-	dist(square(4).pos, MAIN_POS),
-	dist(square(5).pos, MAIN_POS)
-	</formula>
-			<comment/>
-			<result outcome="success" type="quantity" value="8, 0, 0, 1, 3, 7" timestamp="2025-07-10 10:17:36 +0200">
-				<details>8, 0, 0, 1, 3, 7</details>
-			</result>
-		</query>
-		<query>
-			<formula>inf{circle(0).chosenPath==2}:dist(circle(0).pos, MAIN_POS)
-	</formula>
-			<comment/>
 		</query>
 		<query>
 			<formula>sup{matchEnded()}:((sum(i : int[0,N_CIRCLES-1]) (circle(i).Dismissed &amp;&amp; circle(i).health&gt;0)) + (sum(i : int[N_CIRCLES,MAX_ENEMIES-1]) (square(i).Dismissed &amp;&amp; square(i).health&gt;0)))
-
 	</formula>
 			<comment/>
-			<result outcome="success" type="quantity" value="0" timestamp="2025-07-10 11:50:49 +0200">
+			<result outcome="success" type="quantity" value="6" timestamp="2025-07-10 19:25:52 +0200">
+				<details>6</details>
+			</result>
+		</query>
+		<query>
+			<formula>sup:(((sum(i : int[0,N_CIRCLES-1]) ((dist(circle(i).pos,MAIN_POS)==0)*(circle(i).chosenPath!=2)))+(sum(i : int[N_CIRCLES,MAX_ENEMIES-1]) ((dist(square(i).pos,MAIN_POS)==0)*(square(i).chosenPath!=2)))))
+	</formula>
+			<comment/>
+			<result outcome="success" type="quantity" value="0" timestamp="2025-07-10 20:14:55 +0200">
 				<details>0</details>
 			</result>
+		</query>
+		<query>
+			<formula>sup:(((sum(i : int[0,N_CIRCLES-1]) ((dist(circle(i).pos,MAIN_POS)==0)*(circle(i).chosenPath==2)))+(sum(i : int[N_CIRCLES,MAX_ENEMIES-1]) ((dist(square(i).pos,MAIN_POS)==0)*(square(i).chosenPath==2)))))</formula>
+			<comment/>
 		</query>
 		<query>
 			<formula>A[]((matchEnded() &amp;&amp; (mt_life==MT.health)) imply ((forall(i:int[0,N_CIRCLES-1]) circle(i).health&lt;=0) &amp;&amp; (forall(i:int[N_CIRCLES,MAX_ENEMIES-1]) square(i).health &lt;=0)))</formula>

@@ -90,7 +90,12 @@ pdfcreator={pdflatex}]{hyperref}
 				\item \textbf{dismissed} enemy : the enemy is dead or it shot the MT and the following delay has expired;
 				\item \textbf{configuration} : wave's composition and turrets configuration chosen (generalized definition from requirements one);
 				\item \textbf{ending} of a wave : a wave is considered \emph{ended} when each enemy is dismissed (i.e. it can't move or shoot anymore because it has already shoot or it was killed by turrets);
-				\item \textbf{winning} configuration : in Vanilla version, a configuration is winning if, by setting it, a wave of 3 circles and 3 square can never defeat the MT;
+				\item \textbf{winning} configuration : in Vanilla version, a configuration is winning if, by setting it, a wave of 3 circles and 3 square can never defeat the MT. In addition, we define also this terminologies (also for Vanilla version with 3 circles and 3 squares):
+					\begin{itemize}
+						\item \textbf{weakly-winning} configuration : a configuration that does not let MT to be defeat in at least one game execution;
+						\item \textbf{strongly-winning} configuration : a configuration that does not let MT to be damaged in any game execution;
+						\item \textbf{weakly-strongly-winning} configuration : a configuration that does not let MT to be damaged in at least one game execution;
+					\end{itemize}
 				\item \textbf{location} : a location of an Uppaal template;
 				\item \textbf{state} : the entire game's state in a certain time instant (i.e. each automaton's position and each variable's or clock's value);
 				\item \emph{Chebyshev distance} : given two generic $n$-dimensional points $x=(x_1 \dots x_n)$ and $y=(y_1 \dots y_n)$, their Chebyshev distance can be computed as $\max\limits_{1\leq i\leq n}\{|x_i - y_i|\}$.
@@ -350,9 +355,99 @@ pdfcreator={pdflatex}]{hyperref}
 				If the MT is defeated in at least one state of one path, the query will not be satisfied (with the configuration chosen).
 		\subsection{Stochastic model verification}
 	\section{Analysis of selected configurations}
-		\subsection{Chosen configurations for Vanilla version}
-		\subsection{Chosen configurations for Stochastic version}
-		\subsection{Stochastic version behaviors analysis}
+		\subsection{Vanilla version}
+			We further analyzed the default configuration with turrets and four more configurations:
+			\begin{figure}[h!]
+				\centering
+				\begin{minipage}{.4\textwidth}
+					\centering
+					\includegraphics[width=\linewidth]{configs/vanilla/DownFromCannons.png}
+					\caption{\emph{DownFromCannons} configuration}
+				\end{minipage}
+				\begin{minipage}{.5\textwidth}
+					\centering
+					\includegraphics[width=\linewidth]{configs/vanilla/DownFromSnipers.png}
+					\caption{\emph{DownFromSnipers} configuration}
+				\end{minipage}
+			\end{figure}
+			\begin{figure}[h!]
+				\centering
+				\begin{minipage}{.4\textwidth}
+					\centering
+					\includegraphics[width=\linewidth]{configs/vanilla/Cannonphobia.png}
+					\caption{\emph{Cannonphobia} configuration}
+				\end{minipage}
+				\begin{minipage}{.5\textwidth}
+					\centering
+					\includegraphics[width=\linewidth]{configs/vanilla/Sniperphobia.png}
+					\caption{\emph{Sniperphobia} configuration}
+				\end{minipage}
+			\end{figure}
+			\begin{figure}[h!]
+				\centering
+				\centering
+				\includegraphics[width=.6\linewidth]{configs/vanilla/Default.png}
+				\caption{Default configuration}
+			\end{figure}
+			First we analyzed if they are winning and of which kind:
+			\begin{table}[h!]
+				\centering
+				\begin{tabularx}{\textwidth}{||X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X||}
+					\hline
+					& Winning [T/F] & Weakly-winning [T/F] & Strongly-winning [T/F] & Weakly-strongly-winning [T/F] \\
+					\hline
+					Default 		& T & T & F & T \\ \hline
+					DownFromCannons & F & T & F & T \\ \hline
+					DownFromSnipers & F & T & F & T \\ \hline
+					Cannonphobia 	& T & T & F & T \\ \hline
+					Sniperphobia 	& T & T & T & T \\ \hline
+				\end{tabularx}
+				\caption{Vanilla chosen configurations winning overview}
+			\end{table}
+			
+			Then (mainly to strain more the model and to explore the Uppaal query syntax), we also wanted to define these metrics to evaluate the "strength" of a configuration (we assume that, like in Uppaal, a boolean predicate is evaluated as $1$ if it is \emph{true}, $0$ otherwise):
+			\begin{itemize}
+				\item \emph{ADMT} (\emph{Average Distance from MT}) : it is the minimum average distance that enemies can have to the MT:
+				\begin{center}
+					$ADMT:=\min\{\frac{\sum_{e:Enemy} dist(e.pos,MAIN\_POS)}{MAX\_ENEMIES}\}$
+				\end{center}
+				\item \emph{SE} (\emph{Survived Enemies}) : it is the maximum number of enemies that still were never be killed throughout the whole match:
+				\begin{center}
+					$SE:=\max\limits_{matchEnded}\{\sum_{e:Enemy} (e.health>0)\}$
+				\end{center}
+				\item \emph{CUPE} (\emph{Completed Upper Paths Enemies}) : it is the maximum number of enemies that reached the MT by choosing "up" in the junction \{7,4\}:
+				\begin{center}
+					$CUPE:=\max\{\sum_{e:Enemy} ((e.pos == MAIN\_POS)*(e.chosenPath\neq 2))\}$
+				\end{center}
+				\item \emph{CLPE} (\emph{Completed Lower Paths Enemies}) : it is the maximum number of enemies that reached the MT by choosing "down" in the junction \{7,4\}:
+				\begin{center}
+					$CLPE:=\max\{\sum_{e:Enemy} ((e.pos == MAIN\_POS)*(e.chosenPath=2))\}$
+				\end{center}
+			\end{itemize}
+			
+			\begin{table}[h!]
+				\centering
+				\begin{tabular}{||l|c|c|c|c||}
+					\hline
+					& ADMT & SE & CUPE & CLPE \\
+					\hline
+					Default 		& 4 & 2 & 2 & 1 \\ \hline
+					DownFromCannons & 1 & 5 & 2 & 5 \\ \hline
+					DownFromSnipers & 0 & 6 & 2 & 6 \\ \hline
+					Cannonphobia 	& 4 & 2 & 2 & 2 \\ \hline
+					Sniperphobia 	& 7 & 0 & 0 & 0 \\ \hline
+				\end{tabular}
+				\caption{Vanilla chosen configurations performances}
+			\end{table}
+			Note that:
+			\begin{itemize}
+				\item strongly-winning configurations have a SE of 0 (if an enemy has survived it means that it shot the MT, and so the configuration can't be strongly-winning);
+				\item weakly-winning configurations are likely to have lower ADMT since at least of the execution where the MT is defeat, an amount of enemies must arrive at in the MT spot and for the same reason, they are more likely to have higher SE;
+				\item is quite unlikely to have a configuration where $CUPE>SE$ or $CLPE>SE$, because enemies that reached the MT are really likely to survive (and they will survive of course in configurations like Cannonphobia where the MT spot is outside of any shooting range).
+			\end{itemize}
+			At the end, to judge a configuration we may look for the one with an higher ADMT and a lower SE. CUPE and CLPE and are not better than SE to compare configurations, we defined them to demonstrate that configurations that do not cover parts of the map are more like to see (from the MT spot point of view) enemies coming from those parts. Indeed, DownFromCannons and DownFromSnipers have $CUPE\leq CLPE$ since they cover more the higher paths of the map, while more "uniform" configurations tend to have $CUPE=CLPE=SE$ (that holds also from a probabilistic point of view; see the section dedicated to the spawn strategy).
+		\subsection{Stochastic version}
+
 	\section{Conclusions}
 
 	\newpage
