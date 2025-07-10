@@ -310,7 +310,7 @@ void move()
         next();
         shoot_table[id].pos=pos;
     }</declaration>
-		<location id="id0" x="408" y="442" color="#0000ff">
+		<location id="id0" x="408" y="442" color="#00ff00">
 			<name x="383" y="391">OnTrip</name>
 			<label kind="exponentialrate" x="382" y="408">speed:10</label>
 			<label kind="comments" x="-119" y="850">OnTrip:

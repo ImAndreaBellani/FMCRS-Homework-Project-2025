@@ -295,7 +295,7 @@ void move()
         shoot_table[id].pos=pos;
         x=0;
     }</declaration>
-		<location id="id0" x="408" y="442" color="#0000ff">
+		<location id="id0" x="408" y="442" color="#00ff00">
 			<name x="383" y="391">OnTrip</name>
 			<label kind="invariant" x="383" y="408">x&lt;=speed</label>
 			<label kind="comments" x="-119" y="901">OnTrip:
@@ -608,65 +608,72 @@ looks for enemies to shoot.</label>
 circle(const int[0,N_CIRCLES-1] id) = compactEnemy(id, CIRCLE.speed, CIRCLE.health, CIRCLE.damage, id*CIRCLE.spawningTime, CIRCLE.kind);
 square(const int[N_CIRCLES,MAX_ENEMIES-1] id) = compactEnemy(id, SQUARE.speed, SQUARE.health, SQUARE.damage, (id-N_CIRCLES)*SQUARE.spawningTime, SQUARE.kind);
 
-//NO TURRETS CONFIG
-/*
-system circle, square;
-*/
-//WITH TURRETS "VI" CONFIG
-
 basic(const int id)  = turret(id, BASIC);
 cannon(const int id) = turret(id, CANNON);
 sniper(const int id) = turret(id, SNIPER);
 
-t0 = cannon(0);
-t1 = cannon(1);
-t2 = basic(2);
-t3 = sniper(4);
-t4 = sniper(4);
-t5 = cannon(4);
-t6 = cannon(4);
+//NO TURRETS CONFIG
+    /*
+        system circle,square;
+    */    
 
-system circle,square,t0,t1,t2,t3,t4,t5,t6;
+//WITH TURRETS "VI" CONFIG
+    /*
+        t0 = cannon(0);
+        t1 = cannon(1);
+        t2 = basic(2);
+        t3 = sniper(3);
+        t4 = sniper(4);
+        t5 = cannon(5);
+        t6 = cannon(6);
 
-//WITH TURRETS "DEFAULT" CONFIG
-/*
-t0 = turret(0,CANNON.range, CANNON.speed, CANNON.damage);
-t1 = turret(1,CANNON.range, CANNON.speed, CANNON.damage);
-t2 = turret(2, BASIC.range,  BASIC.speed,  BASIC.damage);
-t3 = turret(3,SNIPER.range, SNIPER.speed, SNIPER.damage);
-t4 = turret(4,SNIPER.range, SNIPER.speed, SNIPER.damage);
-
-system circle,square,t0,t1,t2,t3,t4;
-*/
-//
-/*
-t0 = turret(0,CANNON.range, CANNON.speed, CANNON.damage);
-t1 = turret(1,CANNON.range, CANNON.speed, CANNON.damage);
-t3 = turret(3,SNIPER.range, SNIPER.speed, SNIPER.damage);
-t5 = turret(5,CANNON.range, CANNON.speed, CANNON.damage);
-t6 = turret(6,CANNON.range, CANNON.speed, CANNON.damage);
-
-system circle,square,t0,t1,t3,t5,t6;
-*/
-/*
-t0 = turret(0,CANNON.range, CANNON.speed, CANNON.damage);
-t1 = turret(1,CANNON.range, CANNON.speed, CANNON.damage);
-t3 = turret(3,SNIPER.range, SNIPER.speed, SNIPER.damage);
-t4 = turret(4,SNIPER.range, SNIPER.speed, SNIPER.damage);
-t5 = turret(5,CANNON.range, CANNON.speed, CANNON.damage);
-t6 = turret(6,CANNON.range, CANNON.speed, CANNON.damage);
-*/
-//system circle,square;
-/*
-t0 = cannon(0);
-t1 = cannon(1);
-t2 = basic(2);
-t3 = cannon(3);
-t4 = cannon(4);
-t5 = cannon(5);
-t6 = cannon(6);
-*/
-//system circle,square;</system>
+        system circle,square,t0,t1,t2,t3,t4,t5,t6;
+    */
+//WITH TURRETS "THIRD" CONFIG
+    /*
+        t0 = cannon(0);
+        t1 = cannon(1);
+        t2 = sniper(2);
+        t3 = basic(3);
+        t4 = sniper(4);
+        
+        system circle,square,t0,t1,t2,t3,t4;
+    */
+//WITH TURRETS "FOURTH" CONFIG
+    /*
+        t0 = cannon(0);
+        t1 = cannon(1);
+        t2 = cannon(2);
+        t3 = basic(3);
+        t4 = cannon(4);
+        
+        system circle,square,t0,t1,t2,t3,t4;
+    */
+//WITH TURRETS "ALL CANNONS" CONFIG
+    /*
+        t0 = cannon(0);
+        t1 = cannon(1);
+        t2 = cannon(2);
+        t3 = cannon(3);
+        t4 = cannon(4);
+        t5 = cannon(5);
+        t6 = cannon(6);
+        
+        system circle,square,t0,t1,t2,t3,t4,t5,t6;
+    */
+//WITH TURRETS "ALL SNIPERS" CONFIG
+    
+        t0 = sniper(0);
+        t1 = sniper(1);
+        t2 = sniper(2);
+        t3 = sniper(3);
+        t4 = sniper(4);
+        t5 = sniper(5);
+        t6 = sniper(6);
+        
+        system circle,square,t0,t1,t2,t3,t4,t5,t6;
+    
+</system>
 	<queries>
 		<query>
 			<formula>A[](not deadlock)</formula>
@@ -741,8 +748,72 @@ anymore).</comment>
 This query is satisfied if and only if the MT is alive in any state of any possible path, therefore it is satisfied if and only if the configuration is "winning"
 (a configuration is "winning" there is no possibility that the MT is defeated).</comment>
 			<option key="--exploration" value="0"/>
-			<result outcome="success" type="quality" timestamp="2025-07-09 22:36:35 +0200">
+			<result outcome="success" type="quality" timestamp="2025-07-10 09:35:05 +0200">
 				<option key="--exploration" value="0"/>
+			</result>
+		</query>
+		<query>
+			<formula>E[](mt_life&gt;0)</formula>
+			<comment/>
+			<result outcome="success" type="quality" timestamp="2025-07-10 09:35:09 +0200">
+			</result>
+		</query>
+		<query>
+			<formula>A[](mt_life==MT.health)</formula>
+			<comment/>
+			<result outcome="success" type="quality" timestamp="2025-07-10 11:00:24 +0200">
+			</result>
+		</query>
+		<query>
+			<formula>E[](mt_life==MT.health)</formula>
+			<comment/>
+			<result outcome="success" type="quality" timestamp="2025-07-10 09:36:02 +0200">
+			</result>
+		</query>
+		<query>
+			<formula>A[](mt_life&gt;=MT.health/2)</formula>
+			<comment/>
+			<result outcome="failure" type="quality" timestamp="2025-07-10 10:02:39 +0200">
+			</result>
+		</query>
+		<query>
+			<formula>inf:
+	dist(circle(0).pos, MAIN_POS),
+	dist(circle(1).pos, MAIN_POS),
+	dist(circle(2).pos, MAIN_POS),
+	dist(square(3).pos, MAIN_POS),
+	dist(square(4).pos, MAIN_POS),
+	dist(square(5).pos, MAIN_POS)
+	</formula>
+			<comment/>
+			<result outcome="success" type="quantity" value="8, 0, 0, 1, 3, 7" timestamp="2025-07-10 10:17:36 +0200">
+				<details>8, 0, 0, 1, 3, 7</details>
+			</result>
+		</query>
+		<query>
+			<formula>inf{circle(0).chosenPath==2}:dist(circle(0).pos, MAIN_POS)
+	</formula>
+			<comment/>
+		</query>
+		<query>
+			<formula>sup{matchEnded()}:((sum(i : int[0,N_CIRCLES-1]) (circle(i).Dismissed &amp;&amp; circle(i).health&gt;0)) + (sum(i : int[N_CIRCLES,MAX_ENEMIES-1]) (square(i).Dismissed &amp;&amp; square(i).health&gt;0)))
+
+	</formula>
+			<comment/>
+			<result outcome="success" type="quantity" value="0" timestamp="2025-07-10 11:50:49 +0200">
+				<details>0</details>
+			</result>
+		</query>
+		<query>
+			<formula>A[]((matchEnded() &amp;&amp; (mt_life==MT.health)) imply ((forall(i:int[0,N_CIRCLES-1]) circle(i).health&lt;=0) &amp;&amp; (forall(i:int[N_CIRCLES,MAX_ENEMIES-1]) square(i).health &lt;=0)))</formula>
+			<comment>THIS QUERY WAS ONLY WRITTEN FOR DEBUGGING PURPOSES (TESTS THAT A CONFIGURATION THAT ALWAYS DOES NOT LET ENEMIES TO SHOOT THE MT, THEY ARE ALL DEAD ONCE THE MATCH IS ENDED)</comment>
+			<result outcome="success" type="quality" timestamp="2025-07-10 11:49:16 +0200">
+			</result>
+		</query>
+		<query>
+			<formula>A[](left_enemies&gt;=0)</formula>
+			<comment>THIS QUERY WAS ONLY WRITTEN FOR DEBUGGING PURPOSES (USED TO TEST IF LEFT_ENEMIES HAS ALWAYS A VALID VALUE)</comment>
+			<result outcome="success" type="quality" timestamp="2025-07-10 11:30:45 +0200">
 			</result>
 		</query>
 	</queries>
