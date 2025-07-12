@@ -21,11 +21,11 @@
 \contentsline {section}{\numberline {4}{Analysis of selected configurations}}{11}{section.4}%
 \contentsline {subsection}{\numberline {4.1}{Vanilla version}}{11}{subsection.4.1}%
 \contentsline {subsection}{\numberline {4.2}{Stochastic version}}{12}{subsection.4.2}%
-\contentsline {section}{\numberline {5}{Conclusions}}{12}{section.5}%
-\contentsline {section}{\numberline {A}{Discarded choices}}{13}{appendix.A}%
-\contentsline {subsection}{\numberline {A.1}{MT template}}{13}{subsection.A.1}%
-\contentsline {subsection}{\numberline {A.2}{Hard-coded enemies paths}}{13}{subsection.A.2}%
-\contentsline {subsection}{\numberline {A.3}{Quadratic enemies scanning strategy}}{13}{subsection.A.3}%
-\contentsline {subsection}{\numberline {A.4}{Locks}}{13}{subsection.A.4}%
-\contentsline {subsection}{\numberline {A.5}{Lifetime counter}}{14}{subsection.A.5}%
+\contentsline {section}{\numberline {5}{Conclusions}}{14}{section.5}%
+\contentsline {section}{\numberline {A}{Discarded choices}}{15}{appendix.A}%
+\contentsline {subsection}{\numberline {A.1}{MT template}}{15}{subsection.A.1}%
+\contentsline {subsection}{\numberline {A.2}{Hard-coded enemies paths}}{15}{subsection.A.2}%
+\contentsline {subsection}{\numberline {A.3}{Quadratic enemies scanning strategy}}{15}{subsection.A.3}%
+\contentsline {subsection}{\numberline {A.4}{Locks}}{15}{subsection.A.4}%
+\contentsline {subsection}{\numberline {A.5}{Lifetime counter}}{16}{subsection.A.5}%
 \providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 

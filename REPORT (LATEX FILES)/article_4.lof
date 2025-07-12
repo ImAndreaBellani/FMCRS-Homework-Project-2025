@@ -5,9 +5,15 @@
 \contentsline {figure}{\numberline {4}{\ignorespaces \emph {Cannonphobia} configuration}}{11}{figure.caption.9}%
 \contentsline {figure}{\numberline {5}{\ignorespaces \emph {Sniperphobia} configuration}}{11}{figure.caption.9}%
 \contentsline {figure}{\numberline {6}{\ignorespaces Default configuration}}{11}{figure.caption.10}%
-\contentsline {figure}{\numberline {7}{\ignorespaces Original MT's template}}{13}{figure.caption.13}%
-\contentsline {figure}{\numberline {8}{\ignorespaces Original non-deterministic path choices example}}{13}{figure.caption.14}%
-\contentsline {figure}{\numberline {9}{\ignorespaces Close-up of the enemy locking \texttt {STMT} channel}}{14}{figure.caption.15}%
-\contentsline {figure}{\numberline {10}{\ignorespaces \texttt {STMTCONTROLLER} template}}{14}{figure.caption.15}%
-\contentsline {figure}{\numberline {11}{\ignorespaces Close-up of of the lifetime counter of an enemy}}{14}{figure.caption.16}%
+\contentsline {figure}{\numberline {7}{\ignorespaces Sniperphobia SE simulation with 10 runs}}{13}{figure.caption.13}%
+\contentsline {figure}{\numberline {8}{\ignorespaces Cannonphobia SE simulation with 10 runs}}{13}{figure.caption.14}%
+\contentsline {figure}{\numberline {9}{\ignorespaces DownFromSnipers SE simulation with 10 runs}}{13}{figure.caption.14}%
+\contentsline {figure}{\numberline {10}{\ignorespaces Sniperphobia SE probability distribution in the first 100 time units with 1000 runs}}{13}{figure.caption.15}%
+\contentsline {figure}{\numberline {11}{\ignorespaces DownFromSnipers SE probability distribution in the first 100 time units with 1000 runs}}{13}{figure.caption.15}%
+\contentsline {figure}{\numberline {12}{\ignorespaces Sniperphobia SE simulation with 10 runs (snipers delay set to 10)}}{14}{figure.caption.16}%
+\contentsline {figure}{\numberline {13}{\ignorespaces Original MT's template}}{15}{figure.caption.17}%
+\contentsline {figure}{\numberline {14}{\ignorespaces Original non-deterministic path choices example}}{15}{figure.caption.18}%
+\contentsline {figure}{\numberline {15}{\ignorespaces Close-up of the enemy locking \texttt {STMT} channel}}{16}{figure.caption.19}%
+\contentsline {figure}{\numberline {16}{\ignorespaces \texttt {STMTCONTROLLER} template}}{16}{figure.caption.19}%
+\contentsline {figure}{\numberline {17}{\ignorespaces Close-up of of the lifetime counter of an enemy}}{16}{figure.caption.20}%
 \providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 

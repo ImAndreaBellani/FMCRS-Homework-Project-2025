@@ -145,9 +145,9 @@ bool matchEnded()
 	<template>
 		<name>compactEnemy</name>
 		<parameter>const EnemyID_t id, const int speed, int health, const int damage, const int spawningTime, const bool kind</parameter>
-		<declaration>clock x; //clock to ensure that "shoot_table[id].lifeTime" is updated in one and only one time
-         //for each instant after the enemy has spawned until it is dismissed
-clock trip_time;
+		<declaration>clock x; //clock to count the spawning delay and the speed delay
+
+clock trip_time; //clock to count how many time units are needed (after the spawn) to reach the MT
 Cell pos; //enemy's current position on the map
 int[0,2] chosenPath := 0; //which one of the three paths was non-deterministically chosen at spawning time
 

@@ -451,9 +451,53 @@ pdfcreator={pdflatex}]{hyperref}
 			\end{itemize}
 			At the end, to judge a configuration we may look for the one with an higher ADMT and a lower SE. CUPE and CLPE and are not better than SE to compare configurations, we defined them to demonstrate that configurations that do not cover parts of the map are more like to see (from the MT spot point of view) enemies coming from those parts. Indeed, DownFromCannons and DownFromSnipers have $CUPE\leq CLPE$ since they cover more the higher paths of the map, while more "uniform" configurations tend to have $CUPE=CLPE=SE$ (that holds also from a probabilistic point of view; see the section dedicated to the spawn strategy).
 		\subsection{Stochastic version}
-
+			In this section we aim to revise the performance indexes defined in the previous section by simulating the game in the stochastic version.
+			
+			First, we simulate (with 10 runs) the trend of SE in three of the four configurations we defined:
+			\begin{figure}[h!]
+				\centering
+				\includegraphics[width=.5\textwidth]{plots/SniperphobiaSEdevelopment.png}
+				\caption{Sniperphobia SE simulation with 10 runs}
+			\end{figure}
+			\begin{figure}[h!]
+				\centering
+				\begin{minipage}{.4\textwidth}
+					\centering
+					\includegraphics[width=\linewidth]{plots/CannonphobiaSEdevelopment.png}
+					\caption{Cannonphobia SE simulation with 10 runs}
+				\end{minipage}
+				\begin{minipage}{.5\textwidth}
+					\centering
+					\includegraphics[width=\linewidth]{plots/DownFromSnipersSEdevelopment.png}
+					\caption{DownFromSnipers SE simulation with 10 runs}
+				\end{minipage}
+			\end{figure}
+			Surprisingly, Sniperphobia, which was (the only) strongly-winning configuration in the Vanilla version tends to have a worse SE than the others. We see that Cannonphobia tends to have an $SE\in[620;651]$ (even worse than the one of DownFromSnipers which was a weakly-winning configuration) while Sniperphobia tends to have an $SE\in[490;520]$.
+			However, if we analyze the probability distribution of the SE in first $100$ of time units we see better performances with winning and strongly-winning configurations:
+			\begin{figure}[h!]
+				\centering
+				\begin{minipage}{.4\textwidth}
+					\centering
+					\includegraphics[width=\linewidth]{plots/PD SA S.png}
+					\caption{Sniperphobia SE probability distribution in the first 100 time units with 1000 runs}
+				\end{minipage}
+				\begin{minipage}{.5\textwidth}
+					\centering
+					\includegraphics[width=\linewidth]{plots/PD SA DFS.png}
+					\caption{DownFromSnipers SE probability distribution in the first 100 time units with 1000 runs}
+				\end{minipage}
+			\end{figure}
+			With a large amount of enemies, turrets with higher delays generally tend to have the worse performances. In fact, if we take the delay of snipers down of 10:
+			\begin{figure}[h!]
+				\centering
+				\includegraphics[width=.7\textwidth]{plots/BETTER S.png}
+				\caption{Sniperphobia SE simulation with 10 runs (snipers delay set to 10)}
+			\end{figure}
+			We wanted to analyze this kind of unexpected behaviors (i.e. strongly-winning configurations may have a worse SE with large waves) not only to show the trivial evidence that the lower turret delay, the better performances, but to show that a stochastic model checking can reveal behaviors that with exhaustive model checking would have been too heavily computationally complex to verify. With stochastic model checking we were able to show that in larger waves, a turret kind with a lower damage but a lower firing speed tends to provide better performances.
+			
+			
 	\section{Conclusions}
-
+		Conclusions.
 	\newpage
 	\appendix
 	\section{Discarded choices}
