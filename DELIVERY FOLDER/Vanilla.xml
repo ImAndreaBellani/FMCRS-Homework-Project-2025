@@ -679,9 +679,7 @@ sniper(const int id) = turret(id, SNIPER);
 
 In any state, the model must not be in deadlock.
 This query will still work with turrets.</comment>
-			<option key="--exploration" value="0"/>
-			<result outcome="success" type="quality" timestamp="2025-07-09 21:11:03 +0200">
-				<option key="--exploration" value="0"/>
+			<result outcome="success" type="quality" timestamp="2025-07-14 07:53:17 +0200">
 			</result>
 		</query>
 		<query>
@@ -698,9 +696,7 @@ To be more precise, the query verifies that for any path there exists a state wh
 its "pos" (for example, to "{-1,-1}") once it leaves the map (this is also the reason why we did not state this query with "OnTrip &amp;&amp; pos==MAIN_POS", since it is not true, neither with "E&lt;&gt;", that
 exists a state in which all enemies arrive at MAIN_POS simultaneously).
 This query MAY NOT work with turrets since some enemies may be killed before reaching the MT spot.</comment>
-			<option key="--exploration" value="0"/>
-			<result outcome="success" type="quality" timestamp="2025-07-09 22:00:04 +0200">
-				<option key="--exploration" value="0"/>
+			<result outcome="success" type="quality" timestamp="2025-07-14 07:43:47 +0200">
 			</result>
 		</query>
 		<query>
@@ -712,9 +708,7 @@ This query MAY NOT work with turrets since some enemies may be killed before rea
 
 In any state of any path, if any enemy reaches the MT, its trip time must be less or equal than the product between the maximum path length and its speed.
 This query will still work with turrets (turrets do not change the time limit to reach the MT).</comment>
-			<option key="--exploration" value="0"/>
-			<result outcome="success" type="quality" timestamp="2025-07-09 22:09:53 +0200">
-				<option key="--exploration" value="0"/>
+			<result outcome="success" type="quality" timestamp="2025-07-14 07:44:37 +0200">
 			</result>
 		</query>
 		<query>
@@ -734,9 +728,7 @@ are present on the map (we model the "leaving from the map" only as "shoot_table
 
 This query will still work with turrets (since the fact that enemies can be shot does not implies that they leave red spots and in case they are killed they are not targettable
 anymore).</comment>
-			<option key="--exploration" value="0"/>
-			<result outcome="success" type="quality" timestamp="2025-07-09 22:17:18 +0200">
-				<option key="--exploration" value="0"/>
+			<result outcome="success" type="quality" timestamp="2025-07-14 07:45:23 +0200">
 			</result>
 		</query>
 		<query>
@@ -745,9 +737,7 @@ anymore).</comment>
 
 This query is satisfied if and only if the MT is alive in any state of any possible path, therefore it is satisfied if and only if the configuration is "winning"
 (a configuration is "winning" there is no possibility that the MT is defeated).</comment>
-			<option key="--exploration" value="0"/>
-			<result outcome="success" type="quality" timestamp="2025-07-10 17:17:46 +0200">
-				<option key="--exploration" value="0"/>
+			<result outcome="success" type="quality" timestamp="2025-07-14 07:47:50 +0200">
 			</result>
 		</query>
 		<query>

@@ -30,7 +30,7 @@ BCOR5mm, % Binding correction
 \usepackage{enumitem}% http://ctan.org/pkg/enumitem
 
 \newcommand\ytl[2]{
-	\parbox[b]{8em}{\hfill{\color{cyan}\bfseries\sffamily #1}~$\cdots\cdots$~}\makebox[0pt][c]{$\bullet$}\vrule\quad \parbox[c]{7cm}{\vspace{7pt}\color{red!40!black!80}\raggedright\sffamily #2.\\[7pt]}\\[-3pt]}
+	\parbox[b]{8em}{\hfill{\color{cyan}\bfseries\sffamily #1}~$\cdots\cdots$~}\makebox[0pt][c]{$\bullet$}\vrule\quad \parbox[c]{10cm}{\vspace{7pt}\color{red!40!black!80}\raggedright\sffamily #2.\\[7pt]}\\[-3pt]}
 \usepackage{tabularx}
 
 
@@ -70,7 +70,7 @@ pdfcreator={pdflatex}]{hyperref}
 	\maketitle % Print the title/author/date block
 	
 	\paragraph*{Abstract}
-		Uppaal is a tool for modeling, simulating and verifying real-time system as networks of timed automatons. In this report, we present our modeling and verification of the game UppaalTD (both vanilla and stochastic versions) in Uppaal. In Addition, we also present the most interesting modeling choices we discarded or adjusted in the final version of the model.
+		Uppaal is a tool for modeling, simulating and verifying real-time system as networks of timed automatons. In this report, we present our modeling and verification of the game UppaalTD (both vanilla and stochastic versions) in Uppaal. In Addition, we also analyze the model behavior with selected configurations and define metrics to compare them.
 		
 	\setcounter{tocdepth}{3} % Set the depth of the table of contents to show sections and subsections only
 	
@@ -88,13 +88,12 @@ pdfcreator={pdflatex}]{hyperref}
 				\item \textbf{requirements} : the official specifications of UppaalTD's parameters and rules;
 				\item \textbf{alive}, \textbf{targettable} or \textbf{shootable} enemy : the enemy has an health strictly greater than zero and is present on the map;
 				\item \textbf{dismissed} enemy : the enemy is dead or it shot the MT and the following delay has expired;
-				\item \textbf{configuration} : wave's composition and turrets configuration chosen (generalized definition from requirements one);
 				\item \textbf{ending} of a wave : a wave is considered \emph{ended} when each enemy is dismissed (i.e. it can't move or shoot anymore because it has already shoot or it was killed by turrets);
-				\item \textbf{winning} configuration : in Vanilla version, a configuration is winning if, by setting it, a wave of 3 circles and 3 square can never defeat the MT. In addition, we define also this terminologies (also for Vanilla version with 3 circles and 3 squares):
+				\item \textbf{winning} configuration : in Vanilla version, a configuration is winning if, by setting it, a wave of 3 circles and 3 square can never defeat the MT. In addition, we define also this terminologies (for Vanilla version with 3 circles and 3 squares):
 					\begin{itemize}
-						\item \textbf{weakly-winning} configuration : a configuration that does not let MT to be defeat in at least one game execution;
-						\item \textbf{strongly-winning} configuration : a configuration that does not let MT to be damaged in any game execution;
-						\item \textbf{weakly-strongly-winning} configuration : a configuration that does not let MT to be damaged in at least one game execution;
+						\item \textbf{weakly-winning} configuration : a configuration that does not let the MT to be defeated in at least one game execution;
+						\item \textbf{strongly-winning} configuration : a configuration that does not let the MT to be damaged in any game execution;
+						\item \textbf{weakly-strongly-winning} configuration : a configuration that does not let the MT to be damaged in at least one game execution;
 					\end{itemize}
 				\item \textbf{location} : a location of an Uppaal template;
 				\item \textbf{state} : the entire game's state in a certain time instant (i.e. each automaton's position and each variable's or clock's value);
@@ -103,7 +102,7 @@ pdfcreator={pdflatex}]{hyperref}
 		\subsection{Project development timeline}
 			\begin{table}[h!]
 				\centering
-				\begin{minipage}[h!]{.65\linewidth}
+				\begin{minipage}[h!]{.8\linewidth}
 					\color{gray}
 					\rule{\linewidth}{1pt}
 					\ytl{april 8th}{First brief analysis of the requirements}
@@ -117,7 +116,7 @@ pdfcreator={pdflatex}]{hyperref}
 					\ytl{june 15th}{First stochastic version}
 					\ytl{june 24th}{Started delivery procedures}
 					\ytl{june 26th}{Started report writing}
-					\ytl{july 10th}{Finished report writing}
+					\ytl{july 14th}{Finished report writing}
 					\bigskip
 					\rule{\linewidth}{1pt}%
 				\end{minipage}
@@ -126,11 +125,11 @@ pdfcreator={pdflatex}]{hyperref}
 		\subsection{Document structure}
 			Main sections:
 			\begin{enumerate}
-				\item \textbf{Introduction} : sum up of our definitions for the terminologies used in the document and version history of our model;
-				\item \textbf{Model description} : description of the models and focus on the most critical modeling choices;
+				\item \textbf{Introduction} : sum up of our definitions for the terminologies used in the document and project development timeline;
+				\item \textbf{Model description} : description of the models with focus on the most critical modeling choices;
 				\item \textbf{Verification results} : detailed analysis of the queries verified;
 				\item \textbf{Analysis of selected configurations} : presentation and deeper analysis of the models behaviors for some interesting configurations;
-				\item \textbf{Conclusions} : resume of the conclusions obtained.
+				\item \textbf{Conclusions} : resume of the results obtained.
 			\end{enumerate}
 			Appendixes:
 			\begin{enumerate}
@@ -147,12 +146,14 @@ pdfcreator={pdflatex}]{hyperref}
 					\addlinespace
 					Report writing & TeXstudio & 4.6.3 \\
 					\addlinespace
-					Version  & Git & 2.40.0.windows.1  \\
+					Versioning  & Git & 2.40.0.windows.1  \\
+					\addlinespace
+					Configurations drawing & draw.io & v28.0.4  \\
 					\bottomrule
 				\end{tabular}
 				\caption{Software used}
 			\end{table}
-			Each query was verified used two different machines with different performances that here we briefly describe:
+			Each query was verified on two different machines with different hardware and performances:
 			\begin{table}[h!]
 				\centering
 				\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{2.5cm} >{\raggedright\arraybackslash}p{3.5cm} >{\raggedright\arraybackslash}p{3.5cm} >{\raggedright\arraybackslash}p{3cm} >{\raggedright\arraybackslash}p{2.5cm}}
@@ -164,33 +165,30 @@ pdfcreator={pdflatex}]{hyperref}
 					\textbf{Machine 2} & 11th Gen Intel(R) Core(TM) i5-1135G7 (2.4 GHz) & 24 GB (23,7 GB usable) & Windows 11 Pro & 2021\\
 					\bottomrule
 				\end{tabularx}
-				\caption{Machine specifications}
+				\caption{Machines specifications}
 			\end{table}
 			
 			This document was written over the template Arsclassica Article (\url{https://www.latextemplates.com/template/arsclassica-article}) with few adjustments by us.
 	\newpage
 	\section{Model description}
-		We modeled both the Vanilla and the Stochastic version of the game. In particular, we firstly modeled the Vanilla version and then proceeded to modify it to model the stochastic requirements. In this section we provide a detailed explanation of both versions and how the Stochastic one was obtained from the Vanilla one. We clarify that our main purpose in this section is to clarify and support our design choices rather then explain the technical aspect underlying the Uppaal code, which can be read from the templates comments.
+		We modeled both the Vanilla and the Stochastic version of the game. In particular, we firstly modeled the Vanilla version and then proceeded to modify it to model the stochastic requirements. In this section we provide a detailed explanation of both versions and how the Stochastic one was obtained from the Vanilla one..
 		\subsection{Entities modeling (for Vanilla version)}
 			\subsubsection{Map}
-				There is no template that models the Map. Each enemy and each turret has a \texttt{Cell} constant/variable that represents its actual position on the map (\texttt{Cell} is simply a \texttt{struct} with two bounded integers):
+				There is no template that models the Map. Each enemy and each turret has a \texttt{Cell} variable that represents its actual position on the map (\texttt{Cell} is simply a \texttt{struct} with two bounded integers):
 				\begin{itemize}
-					\item an enemy keeps its position updated while moving with the function \texttt{next}. If an enemy is outside of the map (because it has not spawned yet or it was killed) its position still has a "feasible" value but a flag prevents turrets to read it (see the following sections for more details);
+					\item an enemy keeps its position updated while moving with the function \texttt{next}. If an enemy is outside of the map (because it has not spawned yet or it was dimissed) its position still has a "feasible" value but a flag prevents turrets to read it (see the following sections for more details);
 					\item a turret can't change its position, it simply uses it to calculate its distance from enemies.  
 				\end{itemize}
-				To be clear, red paths structures are "embedded" into the function \texttt{next}. Another possibility (implemented in some of the previous versions) would have been to define a \texttt{Cell} matrix (or vectors) instead of define the entire structure as a less-readable the sequence of if-else implemented by \texttt{next}. We preferred this solution since \texttt{next} is constant in time and space however, with a more complex map, this approach could result in difficult to maintain \texttt{next} functions.
+				To be clear, red paths structures are "embedded" into the function \texttt{next}. Another possibility (implemented in some of the previous versions) would have been to define a \texttt{Cell} matrix (or vectors) instead of defining the entire structure as a sequence of if-else in \texttt{next}. We preferred the latter since \texttt{next} is constant in time and space however, with a more complex map, this approach could result in a too difficult to maintain solution.
 			\subsubsection{Main Tower (MT)}
-				There is no template to model the Main Tower, it is simply modeled as a variable that enemies decrement in the shot. Originally, an MT template was designed (see the appendix for more details), it was removed in an attempt of optimizing the model, since we understood (after reasoning more on other more crucial design choices) that a so simple and "passive" entity like the MT does not really need to be implemented with a dedicated template.
+				There is no template that models the Main Tower, it is simply modeled as a variable that enemies decrement in the shot. Originally, an MT template was designed (see the appendix for more details), it was removed in an attempt of optimizing the model, since we understood (after reasoning more on other more crucial design choices) that a so simple and "passive" entity like the MT does not really need to be implemented with a dedicated template.
 				
 				Decoupling enemy and turret in two templates is necessary to model in a proper and clear way the interleaving between these entities but MT neither needs to trigger other components nor has any non-deterministic behavior. The only one centralized aspect that a dedicated template could have implemented was controlling that MT's life is not $0$ before decreasing it, but this can be easily moved in enemy's template (before an enemy shoots, it checks that MT's life is not $0$) without loss of readability.
 			\subsubsection{Enemy}
-				Let's explain the design choices beyond each enemy's behavior.
-				
 				\begin{flushleft}
 					\textbf{Spawn of an enemy}
 					
-					To model the fact that circles spawn "every x time units" and squares spawn "every y time units" we simply added a parameter \texttt{spawningTime} to enemy template. This parameter is simply a delay that must first elapse before an enemy can spawn on the map. By setting it (when we instantiate enemy processes) to \texttt{id$\times$s} (where \texttt{s} is the spawning time defined for that kind of enemy in the requirements), the enemy with id $0$ will spawn in the first time unit, the one with id $i$ with a slack of \texttt{s} time units and so on.
-					Note that, as we explain in the communication section, enemy ids must not overlap each other, therefore, if $N$ enemies are present in the wave, and $M$ of them are circles:
+					To model the requirement that circles spawn "every x time units" and squares spawn "every y time units" we simply added a parameter \texttt{spawningTime} to the enemy template. This parameter is simply a delay that must first elapse before an enemy can spawn on the map. By setting it (when we instantiate enemy processes) to \texttt{id$\times$s} (where \texttt{s} is the spawning time defined for that kind of enemy in the requirements), the enemy with id $0$ will spawn in the first time unit, the one with id $i$ will spawn with a delay of \texttt{s} time units and so on:
 					\begin{table}[h!]
 						\centering
 						\begin{tabular}{rcccccc}
@@ -203,7 +201,7 @@ pdfcreator={pdflatex}]{hyperref}
 					\end{table}
 				\end{flushleft}
 				\begin{flushleft}
-					\textbf{Initialization of an enemy} (this paragraph is only to group all the aspects relative to the enemy that will be further explained)
+					\textbf{Initialization of an enemy} (this paragraph aims only to group all the aspects related to the enemy template that will be explained further)
 					
 					Once an enemy is spawned, it has to:
 					\begin{itemize}
@@ -217,13 +215,14 @@ pdfcreator={pdflatex}]{hyperref}
 					
 					After the speed delay has expired, an enemy has to make a move. In fact, a move is simply an update of the enemy's position with the function \texttt{next} and a consequent update of the \texttt{shoot\_table} record (see the communication section).
 					
-					The very interesting design choice behind the move of an enemy is how a (deterministic, since Uppaal \texttt{random} is not available in symbolic simulation) function like \texttt{next} can model the non-deterministic next cell choice an enemy takes in a red paths junction. Simply, the choices an enemy will take in the junctions is non-deterministically determined "a priori" when an enemy spawns ()by calling \texttt{initialize} with different parameters):
+					The very interesting design choice behind the move of an enemy is how a (deterministic, since Uppaal \texttt{random} is not available in symbolic simulation) function like \texttt{next} can model the non-deterministic next cell choice an enemy has to take in a red paths junction. Simply, the choices an enemy will take in junctions are non-deterministically determined "a priori" when an enemy spawns, by calling \texttt{initialize} with different parameters:
 					\begin{figure}[h!]
 						\centering
-						\includegraphics[width=0.65\textwidth]{ndPathChoice.png}
+						\includegraphics[width=0.55\textwidth]{ndPathChoice.png}
 						\caption{Close-up of how "a priori" non-deterministic path choice is implemented in the enemy template}
 					\end{figure}
-					We realized that since during the game there is no event that may change the probability that an enemy takes a certain choice in a junction rather than another one, without loss of generality, these non-deterministic choices can be determined all at once by the time the enemy spawns.
+					
+					We realized that since during the game there is no event that may change the probability that an enemy takes a certain choice in a junction rather than another, without loss of generality these non-deterministic choices can be determined all at once by the time the enemy spawns.
 					
 					This simple intuition really improved the readability of the enemy template (in the project development timeline we called this new version \emph{compact enemy}) however, it can be convenient only if there are few possible choices.
 					
@@ -231,57 +230,56 @@ pdfcreator={pdflatex}]{hyperref}
 				\end{flushleft}
 				\begin{flushleft}
 					\textbf{Dismissal of an enemy}
+					
 					Once an enemy has to leave the map, it simply updates properly the \texttt{shoot\_table} record, the counter of the targetable enemies and the counter of the left enemies.
 					
-					A match is considered ended if the counter of left enemies is zero (i.e. all enemies spawned and leaved the map). Once the enemy is dismissed, it goes in a location where it waits that the match ends and then goes in an endless self-loop, this choice is in fact more crucial than it might seem:
+					A match is considered ended if the counter of left enemies is zero (i.e. all enemies spawned and leaved the map for a certain reason). Once the enemy is dismissed, it goes in a location where it waits that the match ends and then goes (in the sense that a self-loop with is enabled) in an endless self-loop, this choice is in fact more crucial than it might seem:
 					\begin{itemize}
 						\item it prevents the system deadlock once the match is ended;
-						\item putting a self-loop with no guard would of course prevent deadlock but it would possibly lead the starvation of other enemies (an enemy may arrive in the location and then self-looping indefinitely so other enemies could not move/shoot anymore). With the guard, this situation may happen only once all enemies are dismissed (and so they can't "starve" anymore).
+						\item putting a self-loop with no guard would of course prevent deadlocks but it would possibly lead the starvation of other entities since an enemy may arrive in the Dismissed location and then self-looping indefinitely so other entities could not move/shoot anymore, and so preventing some queries to be verified (e.g. query Q2). With the guard, this situation may happen only once all enemies are dismissed (and so no entity can "starve" anymore).
 					\end{itemize}
 				\end{flushleft}
 			\subsubsection{Turret}
 				The high-level behavior of a turret (for the design of the communications see the following section) is pretty simple:
 				\begin{enumerate}
-					\item the turret (in the initial location) is ready to shoot to an enemy as soon as one of them gets into its shooting range (purpose of function \texttt{canShoot}). It check other enemies positions by looking into \texttt{shoot\_table};
+					\item the turret (in the initial location) is ready to shoot to an enemy as soon as one of them gets into its shooting range (purpose of the function \texttt{canShoot}). It checks other enemies positions by looking into \texttt{shoot\_table};
 					\item once \texttt{canShoot} returns true the transition to shoot to an enemy is enabled. If it is performed, the function \texttt{target} selects the nearest enemy in the shooting range (in case of ties it follows the requirements rules), and with \texttt{shoot} the enemy is shot by putting in the global variable \texttt{target\_record} the id of the target and the related damage;
-					\item once the shot is performed the turret waits the delay and then returns in the initial location.
+					\item once the shot is performed, the turret waits the delay and then comes back to the initial location.
 				\end{enumerate}
 				\texttt{canShoot} and \texttt{target} are optimized to avoid useless scans of the \texttt{shoot\_table}, in particular:
 				\begin{itemize}
 					\item \texttt{canShoot} :
 						\begin{itemize}
-							\item does not selects the enemy to target but simply checks that there is at least one enemy in the shooting range (\texttt{target} has this purpose), which is average less complex;
-							\item while scanning the \texttt{shoot\_table} it keeps counting how many targetable enemies are found (i.e. enemies that are alive on the map), so it can stop to scan it as soon as it recognizes that no targetable enemy can be found in the following records;
+							\item does not select the enemy to target but simply checks that there is at least one enemy in the shooting range (\texttt{target} has targeting purpose), which is average less complex (but not asymptotically);
+							\item while scanning the \texttt{shoot\_table} it keeps counting how many targetable enemies are found (i.e. enemies that are alive on the map), so it can stop as soon as it recognizes that no targetable enemies can be found in the following records;
 						\end{itemize}
 					\item \texttt{target} :
 						\begin{itemize}
-							\item first \texttt{shoot\_table} is scanned to find the first targetable enemy in the shooting range. Then it is considered as the candidate enemy for the shot and the following positions are scanned to find a possibly "better" enemy to shoot;
-							\item the scan is always stopped as soon as no targetable enemies can be found in the following records of \texttt{shoot\_table}.
+							\item scans \texttt{shoot\_table} to find the first targetable enemy in the shooting range. It is considered as the candidate enemy for the shot and the following records are scanned to find a possibly "better" enemy to shoot;
+							\item the scan is always stopped as soon as no targetable enemies can be found in the following records.
 						\end{itemize}
 				\end{itemize}
-				Note that the complexity of both \texttt{canShoot} and \texttt{target} is linear in the size \texttt{shoot\_table} length but it is totally independent from the size of the shooting range.
+				Note that the complexity of both \texttt{canShoot} and \texttt{target} is linear in the \texttt{shoot\_table} length but it is totally independent of the size of the shooting range.
 				
-				Another improved that could be argued is to let \texttt{canShoot} pass the first enemy in the shooting range found to \texttt{target}, in this way it has already a candidate enemy. However, since \texttt{canShoot} is inside of a guard, it must be side-effects free, therefore it can't change a value outside of its scope.
+				Another improvement that could be argued is to let \texttt{canShoot} pass the first enemy in the shooting range found to \texttt{target}, in this way the latter has already a candidate enemy. However, since \texttt{canShoot} is inside a guard, it must be side-effects free, therefore it can't change a value outside of its scope.
 		\subsection{Communication modeling description (for Vanilla version)}
 			\subsubsection{How turrets shoot to enemies}
-				Each enemy has a record in the \texttt{shoot\_table} structure that it keeps updated. This record contains all the information turrets need to identify which enemy shoot (position, time in which the enemy spawned, kind) and of course a flag to know if that enemy is present on the map.
+				Each enemy has a record in the \texttt{shoot\_table} structure that keeps updated. This record contains all the information turrets need to identify which enemy shoot (position, time in which the enemy spawned and enemy's kind) and a flag to know if that enemy is present on the map.
 				
 				Once an enemy is targeted, the turret places on the global variable \texttt{target\_record} the id of the target and the related damage. In the meantime a message to all (targetable) enemies is sent over the broadcast channel \texttt{SHOOT\_TO\_ENEMY}, then each one checks if their id corresponds to the one of the target and if it is, they decrement their life accordingly to the damage and in case their health is now zero or below they leave the map.
 				
-				An important design choice is that \texttt{SHOOT\_TO\_ENEMY} is an urgent channel. In our vision of the game, when a turret can shoot, time can't elapse. This does not avoid situations where the delay of an enemy is fully elapsed but the move was not performed and the move is performed while the "urgent" transition is enabled by a turret (because in this case the delay has already fully elapsed, so this update does not concern time) but avoids situations where a turret is ready to shoot and it is completely ignored progress of time. In other words, a shot to an enemy must be performed in the same time unit where it is "calculated". We remark that this design choice is not a definition of priority, since the shot to an enemy is not preferred to the other transitions.
+				An important design choice is that \texttt{SHOOT\_TO\_ENEMY} is an urgent channel. In our vision of the game, when a turret can shoot, time can't elapse. This does not avoid situations where the delay of an enemy is fully elapsed and the move is performed while the "urgent" transition is enabled by a turret (because in this case the delay has already fully elapsed, so this update does not concern time) but avoids situations where a turret is ready to shoot and it is completely ignored by the progress of time. In other words, a shot to an enemy must be performed in the same time unit where it is "calculated", any other action that "would make the time progress" is "postponed" as long as the turret can fire. It is a simple rule to extremely reduce the space of possible executions (since transitions related to a shot can never "interleave" the passage of time) and ensure a more predictable and reasonable behavior of the model. We can rephrase this choice by considering time as a resource that enemies need to move and turrets need to shoot. Once a turret is able to shoot, it is not fair (for our interpretation of the game) that time is "gained" by enemies which delay has not fully elapsed yet. Note that this choice can be also interpreted as the opponent case where a turret needs to wait and an enemy can move. In this situation, time can never pass since it is "blocked" by the combination of invariant and guard in the enemy template. Therefore, it would not be fair for turrets if a turret is ready to shoot but enemies (with a delay that still has to elapse) can "ignore" this situation. Note that (this is a more technical explanation) this "fairness" needs \texttt{SHOOT\_TO\_ENEMY} to be urgent since the transition fired once the turret delay has expired is not the one that performs the shoot (since \texttt{canMove} may not be true by the time the delay expires, this design choice may cause deadlocks), in that case we obtained the same effect with an urgent channel.
 			\subsubsection{How enemies shoot to the MT}
-				Since there is no template for the MT, there is apparently no need to use define a channel to "synchronize" the shot since it is nothing more than a decrement of a global variable. However, we still designed an urgent broadcast channel to guarantee the once an enemy can shoot to the MT time can't elapse (the same reason why \texttt{SHOOT\_TO\_ENEMY} is urgent). If we want to make the shot "urgent" is necessary to define the channel as broadcast otherwise, since there is no entity that "receives" that message, a deadlock would happen if an enemy wants to shoot (the enemy is blocked because no entity can receive the message and since it is urgent it blocks the time all other available enemies).
+				Since there is no template for the MT, there is apparently no need to use define a channel to "synchronize" the shot since it is nothing more than a decrement of a global variable. However, we still designed an urgent broadcast channel to guarantee that once an enemy can shoot to the MT, time can't elapse (for the same reason why \texttt{SHOOT\_TO\_ENEMY} is urgent). Note that it is necessary to define the channel as broadcast otherwise, since there is no entity that "receives" the message sent over it, a deadlock would happen if an enemy wants to send a message over a non-broadcast channel where no entity is listening on and the time is blocked since the channel is urgent.
 		\subsection{Enrichment of Vanilla model with stochastic features}
-			To model the stochastic features there are no big change from the Vanilla model but crucial:
+			To model the stochastic features, there are no big changes from the Vanilla model but they are crucial:
 			\begin{itemize}
-				\item enemy move/after shot delay : it is no more modeled as with a clock but with a simple self-transition (which guard of course does not involve clocks) and \texttt{OnTrip} has \texttt{rate of exponential} set to \texttt{speed:10}. In this way the probability of leaving from the state with the self-transition determines the delay before an enemy's move. The same design is applied to the "after shot" delay);
-				\item turret after shot delay : it is modified with the same principle of the enemy move/after shoot delay (clock is no more used and the rate of exponential is set);
+				\item enemies and turrets "speeds" delays : it is no more modeled with a clock but with a simple self-transition (which guard of course does not involve clocks) and a \texttt{rate of exponential} properly set to in the location. In this way, the probability of leaving from the state with the self-transition determines the delay before an enemy's move or a turret can shoot again;
 				\item self-loop in \texttt{Dismissed} : [SPIEGARE COME MAI DAVVERO E' STATO RIMOSSO, DATO CHE NON CREDO NON SIA CONCESSO AVERE NESSUNO STATO SENZA INVARIANTI E SENZA RATE OF EXPONENTIAL].
 			\end{itemize}
 			The only delay that is still implemented as a "non-probabilistic" delay is the one related to the spawning time.
 			
-			Note that there was no change in communication channels since all of them were broadcast also in the Vanilla version (stochastic model can only use broadcast channels) and the motivations behind making them \texttt{urgent} are independent from the stochastic nature of the model.
-	\newpage
+			Note that there was no change in communication channels since all of them were broadcast also in the Vanilla version (stochastic models can only use broadcast channels) and the motivations behind making them \texttt{urgent} are independent of the stochastic nature of the model.
 	\section{Verification results}
 		\subsection{Vanilla model verification}
 			\subsubsection{Verification without turrets}
@@ -292,10 +290,10 @@ pdfcreator={pdflatex}]{hyperref}
 						\hline
 						 & Verified properties & Result [T/F] & Verification time on Machine 1 [s] & Verification time on Machine 2 [s] & Average maximum past-waiting list load \\
 						\hline
-						Q1 & I & T& & & \\ \hline
-						Q2 & II & T& & & \\ \hline
-						Q3 & III, IV & T& & & \\ \hline
-						Q4 & V & T& & & \\
+						Q1 & I & T& $\approx$ 9.7 & & $\approx$ 13100\\ \hline
+						Q2 & II & T&  $\approx$ 10.5 & & $\approx$ 220\\ \hline
+						Q3 & III, IV & T&  $\approx$ 7.3& & $\approx$ 14000\\ \hline
+						Q4 & V & T&  $\approx$ 6.8& & $\approx$ 14000\\
 						\hline
 					\end{tabularx}
 					\caption{Queries without turrets overview}
@@ -340,8 +338,8 @@ pdfcreator={pdflatex}]{hyperref}
 						\hline
 						& Verified properties & Result [T/F] & Verification time on Machine 1 [s] & Verification time on Machine 2 [s] & Average maximum past-waiting list load \\
 						\hline
-						Q1 & VII & T & & & \\ \hline
-						Q5 & VI & T & & &  \\
+						Q1 & VII & T & $\approx$ 284.3 & & $\approx$ 50000\\ \hline
+						Q5 & VI & T &  $\approx$ 100.4 & & $\approx$ 49000  \\
 						\hline
 					\end{tabularx}
 					\caption{Queries with turrets overview}
@@ -387,12 +385,7 @@ pdfcreator={pdflatex}]{hyperref}
 					\caption{\emph{Sniperphobia} configuration}
 				\end{minipage}
 			\end{figure}
-			\begin{figure}[h!]
-				\centering
-				\centering
-				\includegraphics[width=.6\linewidth]{configs/vanilla/Default.png}
-				\caption{Default configuration}
-			\end{figure}
+
 			First we analyzed if they are winning and of which kind:
 			\begin{table}[h!]
 				\centering
@@ -451,51 +444,141 @@ pdfcreator={pdflatex}]{hyperref}
 			\end{itemize}
 			At the end, to judge a configuration we may look for the one with an higher ADMT and a lower SE. CUPE and CLPE and are not better than SE to compare configurations, we defined them to demonstrate that configurations that do not cover parts of the map are more like to see (from the MT spot point of view) enemies coming from those parts. Indeed, DownFromCannons and DownFromSnipers have $CUPE\leq CLPE$ since they cover more the higher paths of the map, while more "uniform" configurations tend to have $CUPE=CLPE=SE$ (that holds also from a probabilistic point of view; see the section dedicated to the spawn strategy).
 		\subsection{Stochastic version}
-			In this section we aim to revise the performance indexes defined in the previous section by simulating the game in the stochastic version.
+			In this section, we present the most interesting results we obtained by analyzing the following parameters in the stochastic version of the game:
+			\begin{itemize}
+				\item the number of enemies survived;
+				\item \emph{ADT} (Average Death Time) : the average time unit in which killed enemies were killed;
+				\item \emph{ADD} (Average Death Distance) : the average distance from MT that killed enemies had when they were killed;
+				\item MT life.
+			\end{itemize}
+			in four different configurations (Default, DownFromSnipers, Cannonphobia and Sniperphobia). We also analyzed how they change (if they change significantly) when turrets and enemies parameters are changed.
 			
-			First, we simulate (with 10 runs) the trend of SE in three of the four configurations we defined:
-			\begin{figure}[h!]
-				\centering
-				\includegraphics[width=.5\textwidth]{plots/SniperphobiaSEdevelopment.png}
-				\caption{Sniperphobia SE simulation with 10 runs}
-			\end{figure}
+			
+			The complete set of plots we generated can be downloaded in EPS (Encapsulated PostScript) and PNG (Portable Network Graphic) formats at \href{https://jmp.sh/0LxAWLjY}{this} shared folder on Jumpshare.
+			
+			The first interesting result we obtained from the analysis is how the number of survived enemies changes between the configurations:
 			\begin{figure}[h!]
 				\centering
 				\begin{minipage}{.4\textwidth}
 					\centering
-					\includegraphics[width=\linewidth]{plots/CannonphobiaSEdevelopment.png}
-					\caption{Cannonphobia SE simulation with 10 runs}
+					\includegraphics[width=\linewidth]{plots/SE/OVERVIEW WITH 10 RUNS/SNIPERPHOBIA.png}
+					\caption{Sniperphobia SE simulation with 10 runs}
 				\end{minipage}
-				\begin{minipage}{.5\textwidth}
+				\begin{minipage}{.4\textwidth}
 					\centering
-					\includegraphics[width=\linewidth]{plots/DownFromSnipersSEdevelopment.png}
+					\includegraphics[width=\linewidth]{plots/SE/OVERVIEW WITH 10 RUNS/DOWNFROMSNIPERS.png}
 					\caption{DownFromSnipers SE simulation with 10 runs}
 				\end{minipage}
 			\end{figure}
-			Surprisingly, Sniperphobia, which was (the only) strongly-winning configuration in the Vanilla version tends to have a worse SE than the others. We see that Cannonphobia tends to have an $SE\in[620;651]$ (even worse than the one of DownFromSnipers which was a weakly-winning configuration) while Sniperphobia tends to have an $SE\in[490;520]$.
-			However, if we analyze the probability distribution of the SE in first $100$ of time units we see better performances with winning and strongly-winning configurations:
 			\begin{figure}[h!]
 				\centering
 				\begin{minipage}{.4\textwidth}
 					\centering
-					\includegraphics[width=\linewidth]{plots/PD SA S.png}
+					\includegraphics[width=\linewidth]{plots/SE/OVERVIEW WITH 10 RUNS/CANNONPHOBIA.png}
+					\caption{Cannonphobia SE simulation with 10 runs}
+				\end{minipage}
+				\begin{minipage}{.4\textwidth}
+					\centering
+					\includegraphics[width=\linewidth]{plots/SE/OVERVIEW WITH 10 RUNS/DEFAULT.png}
+					\caption{Default SE simulation with 10 runs}
+				\end{minipage}
+			\end{figure}
+			
+			Sniperphobia, which was (the only) strongly-winning configuration in the Vanilla version tends to have a worse SE than the others (even worse than DownFromSnipers which was a weakly-winning configuration).
+			However, if we analyze the probability distribution of the SE in first $100$ time units we see better performances with winning and strongly-winning configurations:
+			\begin{figure}[h!]
+				\centering
+				\begin{minipage}{.4\textwidth}
+					\centering
+					\includegraphics[width=\linewidth]{plots/SE/CLOSE-UP WITH TINY WINDOW/SNIPERPHOBIA.png}
 					\caption{Sniperphobia SE probability distribution in the first 100 time units with 1000 runs}
 				\end{minipage}
-				\begin{minipage}{.5\textwidth}
+				\begin{minipage}{.4\textwidth}
 					\centering
-					\includegraphics[width=\linewidth]{plots/PD SA DFS.png}
+					\includegraphics[width=\linewidth]{plots/SE/CLOSE-UP WITH TINY WINDOW/DOWNFROMSNIPERS.png}
 					\caption{DownFromSnipers SE probability distribution in the first 100 time units with 1000 runs}
 				\end{minipage}
 			\end{figure}
-			With a large amount of enemies, turrets with higher delays generally tend to have the worse performances. In fact, if we take the delay of snipers down of 10:
 			\begin{figure}[h!]
 				\centering
-				\includegraphics[width=.7\textwidth]{plots/BETTER S.png}
-				\caption{Sniperphobia SE simulation with 10 runs (snipers delay set to 10)}
+				\begin{minipage}{.4\textwidth}
+					\centering
+					\includegraphics[width=\linewidth]{plots/SE/CLOSE-UP WITH TINY WINDOW/CANNONPHOBIA.png}
+					\caption{Cannonphobia SE probability distribution in the first 100 time units with 1000 runs}
+				\end{minipage}
+				\begin{minipage}{.4\textwidth}
+					\centering
+					\includegraphics[width=\linewidth]{plots/SE/CLOSE-UP WITH TINY WINDOW/DEFAULT.png}
+					\caption{Default SE probability distribution in the first 100 time units with 1000 runs}
+				\end{minipage}
 			\end{figure}
-			We wanted to analyze this kind of unexpected behaviors (i.e. strongly-winning configurations may have a worse SE with large waves) not only to show the trivial evidence that the lower turret delay, the better performances, but to show that a stochastic model checking can reveal behaviors that with exhaustive model checking would have been too heavily computationally complex to verify. With stochastic model checking we were able to show that in larger waves, a turret kind with a lower damage but a lower firing speed tends to provide better performances.
+			Here we see that Sniperphobia tends to have a slight better average value (for SE, the lower the better) than the other configurations and DownFromSnipers is by far the worst one.
 			
+			Our explanation is that with a large amount of enemies, turrets with higher delays (i.e. snipers compared with cannons) generally tend to have the worse performances. In fact, if we take the delay of snipers down of 7:
+			\begin{figure}[h!]
+				\centering
+				\includegraphics[width=.5\textwidth]{plots/SE/OVERVIEW WITH DELAY 7 SNIPERS/SNIPERPHOBIA.png}
+				\caption{Sniperphobia SE simulation with 10 runs (snipers delay set to 7)}
+			\end{figure}
+			Sniperphobia outclasses any other configuration.
 			
+			We wanted to present this kind of unexpected behaviors (i.e. strongly-winning configurations may have a worse SE with large waves) not only to show the trivial evidence that the lower turret delay, the better performances, but also to show that stochastic model checking can reveal behaviors that with exhaustive model checking would have been too heavily computationally complex to verify. With stochastic model checking we were able to show that in larger waves, a turret with a lower damage but a lower firing speed tends to provide better performances over turrets with higher damages and higher speeds.
+			
+			While analysis of ADT and MT life have not really shown surprising results respect to the ones shown with the analysis of the SE (mettere spiegazione), a curious result came from the analysis of the ADD, in particular:
+			\begin{figure}[h!]
+				\centering
+				\begin{minipage}{.4\textwidth}
+					\centering
+					\includegraphics[width=\linewidth]{plots/ADD/PD/SNIPERPHOBIA.png}
+					\caption{Cannonphobia ADD probability distribution in the first 100 time units with 500 runs}
+				\end{minipage}
+				\begin{minipage}{.4\textwidth}
+					\centering
+					\includegraphics[width=\linewidth]{plots/ADD/PD/DOWNFROMSNIPERS.png}
+					\caption{DownFromSnipers ADD probability distribution in the first 100 time units with 500 runs}
+				\end{minipage}
+			\end{figure}
+			\begin{figure}[h!]
+				\centering
+				\begin{minipage}{.4\textwidth}
+					\centering
+					\includegraphics[width=\linewidth]{plots/ADD/PD/CANNONPHOBIA.png}
+					\caption{Cannonphobia ADD probability distribution in the first 100 time units with 500 runs}
+				\end{minipage}
+				\begin{minipage}{.4\textwidth}
+					\centering
+					\includegraphics[width=\linewidth]{plots/ADD/PD/DEFAULT.png}
+					\caption{Default ADD probability distribution in the first 100 time units with 500 runs}
+				\end{minipage}
+			\end{figure}
+			Finally, we simulated the system in what we may call the \emph{Over Range mode}: any turret has a range of 15 (i.e. any turret may fire enemies in any point of the map). We may think that is parameter choice tends to uniform the performances or to let snipers to outclass cannons and basic however, no index changed significantly its trend also in comparison to the ones of other configurations. The only notable change we found is that ADD tends to have a more hyperbolic shape:
+			\begin{figure}[h!]
+				\centering
+				\begin{minipage}{.4\textwidth}
+					\centering
+					\includegraphics[width=\linewidth]{plots/ADD/OVERVIEW WITH 10 RUNS/CANNONPHOBIA.png}
+					\caption{Cannonphobia ADD simulation with 10 runs}
+				\end{minipage}
+				\begin{minipage}{.4\textwidth}
+					\centering
+					\includegraphics[width=\linewidth]{plots/ADD/OVERVIEW WITH OVER RANGE/CANNONPHOBIA.png}
+					\caption{Cannonphobia ADD simulation with 10 runs (in over range mode)}
+				\end{minipage}
+			\end{figure}
+			\begin{figure}[h!]
+				\centering
+				\begin{minipage}{.4\textwidth}
+					\centering
+					\includegraphics[width=\linewidth]{plots/ADD/OVERVIEW WITH 10 RUNS/DEFAULT.png}
+					\caption{Default ADD simulation with 10 runs}
+				\end{minipage}
+				\begin{minipage}{.4\textwidth}
+					\centering
+					\includegraphics[width=\linewidth]{plots/ADD/OVERVIEW WITH OVER RANGE/DEFAULT.png}
+					\caption{Default ADD simulation with 10 runs (in over range mode)}
+				\end{minipage}
+			\end{figure}
+			In other words, the product between the ADD and the time tends to be constant.
 	\section{Conclusions}
 		Conclusions.
 	\newpage
