@@ -33,9 +33,11 @@ BCOR5mm, % Binding correction
 	\parbox[b]{8em}{\hfill{\color{cyan}\bfseries\sffamily #1}~$\cdots\cdots$~}\makebox[0pt][c]{$\bullet$}\vrule\quad \parbox[c]{10cm}{\vspace{7pt}\color{red!40!black!80}\raggedright\sffamily #2.\\[7pt]}\\[-3pt]}
 \usepackage{tabularx}
 
-
-\usepackage[]{biblatex}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[backend=biber]{biblatex}
 \addbibresource{sample.bib}
+
 
 \usepackage[pdftex,
 pdfauthor={Andrea Bellani},
@@ -61,7 +63,6 @@ pdfcreator={pdflatex}]{hyperref}
 
 
 \begin{document}
-	
 	\renewcommand{\sectionmark}[1]{\markright{\spacedlowsmallcaps{#1}}}
 	\lehead{\mbox{\llap{\small\thepage\kern1em\color{halfgray} \vline}\color{halfgray}\hspace{0.5em}\rightmark\hfil}}
 	
@@ -354,9 +355,9 @@ pdfcreator={pdflatex}]{hyperref}
 				\end{center}
 				If the MT is defeated in at least one state of one path, the query will not be satisfied (with the configuration chosen).
 				
-				Note that in the configurations section we also analyzed the other kinds of "winning" for the chosen configurations. For brevity, we do not report these queries but they are really similar to Q5 (e.g. to verify the weakly-winning property: $E\square(mt\_life>0)$	).
+				Note that in the configurations section we also analyzed the other kinds of "winning" for the chosen configurations. For brevity, we do not report these queries but they are really similar to Q5 (e.g. to verify the weakly-winning property: $E\square(mt\_life>0)$).
 		\subsection{Stochastic model verification}
-	\newpage
+		\newpage
 	\section{Analysis of selected configurations}
 		\subsection{Vanilla version}
 			We further analyzed the default configuration with turrets and four more configurations:
@@ -405,7 +406,7 @@ pdfcreator={pdflatex}]{hyperref}
 			
 			Then (mainly to strain more the model and to explore the Uppaal query syntax), we also wanted to define these metrics to evaluate the "strength" of a configuration (we assume that, like in Uppaal, a boolean predicate is evaluated as $1$ if it is \emph{true}, $0$ otherwise):
 			\begin{itemize}
-				\item \emph{ADMT} (\emph{Average Distance from MT}) : it is the minimum average distance that enemies can have to the MT:
+				\item \emph{ADMT} (\emph{Average Distance from MT}) : it is the minimum average distance that enemies can have from the MT:
 				\begin{center}
 					$ADMT:=\min\{\frac{\sum_{e:Enemy} dist(e.pos,MAIN\_POS)}{MAX\_ENEMIES}\}$
 				\end{center}
@@ -440,8 +441,8 @@ pdfcreator={pdflatex}]{hyperref}
 			Note that:
 			\begin{itemize}
 				\item strongly-winning configurations have a SE of 0 (if an enemy has survived it means that it shot the MT, and so the configuration can't be strongly-winning);
-				\item weakly-winning configurations are likely to have lower ADMT since at least of the execution where the MT is defeat, an amount of enemies must arrive at in the MT spot and for the same reason, they are more likely to have higher SE;
-				\item is quite unlikely to have a configuration where $CUPE>SE$ or $CLPE>SE$, because enemies that reached the MT are really likely to survive (and they will survive of course in configurations like Cannonphobia where the MT spot is outside of any shooting range).
+				\item weakly-winning configurations likely a have lower ADMT since at least for the execution where the MT is defeated, an amount of enemies arrived at the MT spot and for the same reason, they are likely to have higher SE;
+				\item it is quite unlikely to have a configuration where $CUPE>SE$ or $CLPE>SE$, because enemies that reached the MT are really likely to survive (and they will survive of course in configurations like Cannonphobia where the MT spot is outside of any shooting range).
 			\end{itemize}
 			At the end, to judge a configuration we may look for the one with an higher ADMT and a lower SE. CUPE and CLPE and are not better than SE to compare configurations, we defined them to demonstrate that configurations that do not cover parts of the map are more like to see (from the MT spot point of view) enemies coming from those parts. Indeed, DownFromCannons and DownFromSnipers have $CUPE\leq CLPE$ since they cover more the higher paths of the map, while more "uniform" configurations tend to have $CUPE=CLPE=SE$ (that holds also from a probabilistic point of view; see the section dedicated to the spawn strategy).
 		\subsection{Stochastic version}
@@ -450,22 +451,21 @@ pdfcreator={pdflatex}]{hyperref}
 				\item the number of enemies survived;
 				\item \emph{ADT} (Average Death Time) : the average time unit in which killed enemies were killed;
 				\item \emph{ADD} (Average Death Distance) : the average distance from MT that killed enemies had when they were killed;
-				\item MT life.
+				\item the MT life;
 			\end{itemize}
-			in four different configurations (Default, DownFromSnipers, Cannonphobia and Sniperphobia). We also analyzed how they change (if they change significantly) when turrets and enemies parameters are changed.
-			
+			in four different configurations (Default, DownFromSnipers, Cannonphobia and Sniperphobia). We also analyzed how these parameters change (if they change significantly) when turrets and enemies parameters are changed.
 			
 			The complete set of plots we generated can be downloaded in EPS (Encapsulated PostScript) and PNG (Portable Network Graphic) formats at \href{https://jmp.sh/0LxAWLjY}{this} shared folder on Jumpshare.
 			
 			The first interesting result we obtained from the analysis is how the number of survived enemies changes between the configurations:
-			\begin{figure}[h!]
+			\begin{figure}[H]
 				\centering
-				\begin{minipage}{.4\textwidth}
+				\begin{minipage}{.45\textwidth}
 					\centering
 					\includegraphics[width=\linewidth]{plots/SE/OVERVIEW WITH 10 RUNS/SNIPERPHOBIA.png}
 					\caption{Sniperphobia SE simulation with 10 runs}
 				\end{minipage}
-				\begin{minipage}{.4\textwidth}
+				\begin{minipage}{.45\textwidth}
 					\centering
 					\includegraphics[width=\linewidth]{plots/SE/OVERVIEW WITH 10 RUNS/DOWNFROMSNIPERS.png}
 					\caption{DownFromSnipers SE simulation with 10 runs}
@@ -473,65 +473,64 @@ pdfcreator={pdflatex}]{hyperref}
 			\end{figure}
 			\begin{figure}[h!]
 				\centering
-				\begin{minipage}{.4\textwidth}
+				\begin{minipage}{.45\textwidth}
 					\centering
 					\includegraphics[width=\linewidth]{plots/SE/OVERVIEW WITH 10 RUNS/CANNONPHOBIA.png}
 					\caption{Cannonphobia SE simulation with 10 runs}
 				\end{minipage}
-				\begin{minipage}{.4\textwidth}
+				\begin{minipage}{.45\textwidth}
 					\centering
 					\includegraphics[width=\linewidth]{plots/SE/OVERVIEW WITH 10 RUNS/DEFAULT.png}
 					\caption{Default SE simulation with 10 runs}
 				\end{minipage}
 			\end{figure}
 			
-			Sniperphobia, which was (the only) strongly-winning configuration in the Vanilla version tends to have a worse SE than the others (even worse than DownFromSnipers which was a weakly-winning configuration).
-			However, if we analyze the probability distribution of the SE in first $100$ time units we see better performances with winning and strongly-winning configurations:
-			\begin{figure}[h!]
+			Sniperphobia, which was (the only) strongly-winning configuration in the Vanilla version, tends to have a worse SE than the others (even worse than DownFromSnipers which was a weakly-winning configuration).
+			However, if we analyze the probability distribution of the SE in first $100$ time units:
+			\begin{figure}[H]
 				\centering
-				\begin{minipage}{.4\textwidth}
+				\begin{minipage}{.35\textwidth}
 					\centering
 					\includegraphics[width=\linewidth]{plots/SE/CLOSE-UP WITH TINY WINDOW/SNIPERPHOBIA.png}
 					\caption{Sniperphobia SE probability distribution in the first 100 time units with 1000 runs}
 				\end{minipage}
-				\begin{minipage}{.4\textwidth}
+				\begin{minipage}{.35\textwidth}
 					\centering
 					\includegraphics[width=\linewidth]{plots/SE/CLOSE-UP WITH TINY WINDOW/DOWNFROMSNIPERS.png}
 					\caption{DownFromSnipers SE probability distribution in the first 100 time units with 1000 runs}
 				\end{minipage}
 			\end{figure}
-			\begin{figure}[h!]
+			\begin{figure}[H]
 				\centering
-				\begin{minipage}{.4\textwidth}
+				\begin{minipage}{.35\textwidth}
 					\centering
 					\includegraphics[width=\linewidth]{plots/SE/CLOSE-UP WITH TINY WINDOW/CANNONPHOBIA.png}
 					\caption{Cannonphobia SE probability distribution in the first 100 time units with 1000 runs}
 				\end{minipage}
-				\begin{minipage}{.4\textwidth}
+				\begin{minipage}{.35\textwidth}
 					\centering
 					\includegraphics[width=\linewidth]{plots/SE/CLOSE-UP WITH TINY WINDOW/DEFAULT.png}
 					\caption{Default SE probability distribution in the first 100 time units with 1000 runs}
 				\end{minipage}
 			\end{figure}
-			Here we see that Sniperphobia tends to have a slight better average value (for SE, the lower the better) than the other configurations and DownFromSnipers is by far the worst one.
+			Sniperphobia tends to have a slightly better average value (for SE, the lower the better) than the other configurations and DownFromSnipers is by far the worst one.
 			
-			Our explanation is that with a large amount of enemies, turrets with higher delays (i.e. snipers compared with cannons) generally tend to have the worse performances. In fact, if we take the delay of snipers down of 7:
-			\begin{figure}[h!]
+			Our explanation of this phenomena is that with a large amount of enemies, turrets with higher delays (i.e. snipers respect to cannons) generally tend to have the worse performances. In fact, if we take the delay of snipers down of 7, Sniperphobia outclasses any other configuration:
+			\begin{figure}[H]
 				\centering
 				\includegraphics[width=.5\textwidth]{plots/SE/OVERVIEW WITH DELAY 7 SNIPERS/SNIPERPHOBIA.png}
 				\caption{Sniperphobia SE simulation with 10 runs (snipers delay set to 7)}
 			\end{figure}
-			Sniperphobia outclasses any other configuration.
 			
-			We wanted to present this kind of unexpected behaviors (i.e. strongly-winning configurations may have a worse SE with large waves) not only to show the trivial evidence that the lower turret delay, the better performances, but also to show that stochastic model checking can reveal behaviors that with exhaustive model checking would have been too heavily computationally complex to verify. With stochastic model checking we were able to show that in larger waves, a turret with a lower damage but a lower firing speed tends to provide better performances over turrets with higher damages and higher speeds.
+			Here we see how stochastic model checking can reveal behaviors that with exhaustive model checking would have been too computationally complex to verify. With stochastic model checking, we were able to show that in larger waves, a turret with a lower damage but a lower firing speed tends to provide better performances over turrets with higher damages and higher speeds.
 			
-			While analysis of ADT and MT life have not really shown surprising results respect to the ones shown with the analysis of the SE (mettere spiegazione), a curious result came from the analysis of the ADD, in particular:
-			\begin{figure}[h!]
+			While analysis of ADT and MT life have not really shown surprising results respect to the ones shown with the analysis of the SE (MT life tends to get lower as SE increases since survived enemies have also shot the MT and it is quite predictable that configurations with higher firing speeds tends to have higher ADT), a curious result came from the analysis of the ADD, in particular:
+			\begin{figure}[H]
 				\centering
 				\begin{minipage}{.4\textwidth}
 					\centering
 					\includegraphics[width=\linewidth]{plots/ADD/PD/SNIPERPHOBIA.png}
-					\caption{Cannonphobia ADD probability distribution in the first 100 time units with 500 runs}
+					\caption{Sniperphobia ADD probability distribution in the first 100 time units with 500 runs}
 				\end{minipage}
 				\begin{minipage}{.4\textwidth}
 					\centering
@@ -539,7 +538,7 @@ pdfcreator={pdflatex}]{hyperref}
 					\caption{DownFromSnipers ADD probability distribution in the first 100 time units with 500 runs}
 				\end{minipage}
 			\end{figure}
-			\begin{figure}[h!]
+			\begin{figure}[H]
 				\centering
 				\begin{minipage}{.4\textwidth}
 					\centering
@@ -552,8 +551,10 @@ pdfcreator={pdflatex}]{hyperref}
 					\caption{Default ADD probability distribution in the first 100 time units with 500 runs}
 				\end{minipage}
 			\end{figure}
-			Finally, we simulated the system in what we may call the \emph{Over Range mode}: any turret has a range of 15 (i.e. any turret may fire enemies in any point of the map). We may think that is parameter choice tends to uniform the performances or to let snipers to outclass cannons and basic however, no index changed significantly its trend also in comparison to the ones of other configurations. The only notable change we found is that ADD tends to have a more hyperbolic shape:
-			\begin{figure}[h!]
+			Sniperphobia tends to kill enemies in a slightly greater distance from the MT spot and with more "uniform" probability distribution.
+			
+			Finally, we simulated the system in what we called the \emph{Over Range mode}: any turret has a range of 15 (i.e. any turret may fire enemies in any point of the map). We may think that this parameter choice tends to uniform the performances between configurations or tends to let snipers outclass cannons and basics however, no index changed significantly its trend also in comparison to the ones of other configurations. The only notable change we found is that the hyperbolic trend of ADD tends to have an higher product rather than just an higher asymptotic value:
+			\begin{figure}[H]
 				\centering
 				\begin{minipage}{.4\textwidth}
 					\centering
@@ -566,7 +567,7 @@ pdfcreator={pdflatex}]{hyperref}
 					\caption{Cannonphobia ADD simulation with 10 runs (in over range mode)}
 				\end{minipage}
 			\end{figure}
-			\begin{figure}[h!]
+			\begin{figure}[H]
 				\centering
 				\begin{minipage}{.4\textwidth}
 					\centering
@@ -579,13 +580,12 @@ pdfcreator={pdflatex}]{hyperref}
 					\caption{Default ADD simulation with 10 runs (in over range mode)}
 				\end{minipage}
 			\end{figure}
-			In other words, the product between the ADD and the time tends to be constant.
 	\section{Conclusions}
-		Conclusions.
+		We modeled UppaalTD in both Vanilla and Stochastic version and verified relevant properties on it. Moreover, we defined metrics to evaluate and compare different configurations in Vanilla version and demonstrated with a small amount of selected configurations that winning and strongly-winning configurations tend to have higher performances w.r.t. them. Finally, we analyzed how these (and other) indexes evolve in stochastic simulations in order to identify more general behaviors of the model and we tried to reason on the observed behaviors.
 	\newpage
 	\appendix
 	\section{Discarded choices}
-		We wanted to write this additional section mainly to better clarify the reasons behind our final design choices. Nonetheless, we would like to clarify that our design choices are what we believed to be more efficient and adequate for our interpretation of the game, so some of the discarded can possibly be the best ones in other contexts or with different requirements and also for this reason we wanted to state them in the report.
+		Even if our final design choices are what we believed to be more efficient and adequate for our interpretation of the game, some of the discarded ones may possibly be more adequate in other contexts or with different requirements so, we positively considered their mention in the report.
 		\subsection{MT template}
 			Originally, a template for MT was designed. It was, for its simplicity, the very first one to be designed (\texttt{decDamage} decreases MT's life by the value set in a global variable from the firing enemy):
 			
@@ -595,7 +595,7 @@ pdfcreator={pdflatex}]{hyperref}
 				\caption{Original MT's template}
 			\end{figure}
 		\subsection{Hard-coded enemies paths}
-			The very first enemy version used the concept of \texttt{next} but there was no idea on how to model the non-deterministic moves (unless using function \texttt{random}, which is not available in symbolic simulation). The only idea was to hard-code vectors of cells representing each straight red path on the map and enemies template would have chosen between them non-deterministically with transitions (once an enemy arrives in the last cell of a path, then it will start to follow non-deterministically one of the "next paths"):
+			The very first enemy version used the concept of \texttt{next} but there was no idea on how to model the non-deterministic moves (unless using the built-in function \texttt{random}, which is not available in symbolic simulation). The only idea we came up with was to hard-code vectors of cells representing each straight red path on the map and enemies template would have chosen between them non-deterministically with transitions (once an enemy arrives in the last cell of a path, then it will start to follow non-deterministically one of the "next paths"):
 			
 			\begin{figure}[h!]
 				\centering
@@ -603,7 +603,7 @@ pdfcreator={pdflatex}]{hyperref}
 				\caption{Original non-deterministic path choices example}
 			\end{figure}
 		\subsection{Quadratic enemies scanning strategy}
-			The very first turret version used to look for enemies to shoot in this way: for each $k$ from $1$ to the \texttt{range}, scan \texttt{SHOOT\_TABLE} to find all the available enemies at exactly $k$ cells of distance; then, choose the best iso-distant available enemy based on the requirements criteria. The worst-case asymptotic complexity of this procedure was $\Theta(k\times MAX\_ENEMIES)$ which was significantly worse than the one of the final version which is $\Theta(MAX\_ENEMIES)$ especially in the average case where there is no enemy inside the shooting range.
+			The very first turret version used to look for enemies to shoot in this way: for each $k$ from $1$ to \texttt{range}, scan \texttt{SHOOT\_TABLE} to find all the available enemies at exactly $k$ cells of distance; then, choose the best iso-distant available enemy based on the requirements criteria. The worst-case asymptotic complexity of this procedure was linear in $k\times MAX\_ENEMIES$ which provided significantly worse performances than our final implementation of the scan, which is linear in $MAX\_ENEMIES$.
 		\subsection{Locks}
 			At the beginning, the first way of synchronizing entities was thought in a classical lock-unlock manner:
 			\begin{figure}[h!]
@@ -619,30 +619,30 @@ pdfcreator={pdflatex}]{hyperref}
 					\caption{\texttt{STMTCONTROLLER} template}
 				\end{minipage}
 			\end{figure}
-			Once an enemy reaches the MT (for the MT template please see the proper section of the appendix):
+			Once an enemy had reached the MT (for the MT template please see the proper section of the appendix):
 			\begin{enumerate}
-				\item the enemy sends a message to \texttt{STMTCONTROLLER} and waits for its reply (more precisely, Uppaal chooses non-deterministically which one of the ready enemies can send the message to the controller);
-				\item once the controller replies the enemy places in the shared variable the damage for the MT;
-				\item the enemy shoots to the MT (i.e. sends a message over \texttt{STMT});
-				\item the enemy sends a message to \texttt{STMTCONTROLLER} to release the "lock".
+				\item the enemy would have sent a message to \texttt{STMTCONTROLLER} and have waited for its reply (more precisely, Uppaal chooses non-deterministically which one of the ready enemies can send the message to the controller);
+				\item once the controller had replied the enemy would have placed in the shared variable the damage for the MT;
+				\item the enemy would have shot to the MT (i.e. sending of a message over \texttt{STMT});
+				\item the enemy would have sent a message to \texttt{STMTCONTROLLER} to release the "lock".
 			\end{enumerate}
 			We understand that this solution is:
 			\begin{itemize}
 				\item deadlock-free: soon or later an acquired lock will be released and soon or later a lock request will be accepted;
 				\item not starvation-free: since it is not guaranteed that any enemy that requests a lock will eventually obtain it.
 			\end{itemize}
-			We removed this concept since we understood that a single transition that both changes the global variable and performs the shoot would have produced the same behavior, since, provided that this transition is not synchronized with other enemies, only one of them can perform it in a time instant, therefore there is no possibility that an enemy places the damage for the MT into the shared variable and before sending the shooting message another enemy changes the variable and (or not) shoots to the MT (which would clearly create an undesired behavior).
+			We removed this concept since we understood that a single transition that both changes the global variable and performs the shoot would have produced the same behavior, since, provided that this transition is not synchronized with other enemies, only one of them can perform it at a time (even in the same time unit, only one of them can be executed at a time), therefore there is no possibility that an enemy places the damage for the MT into the shared variable and before sending the shooting message another enemy changes the variable and (or not) shoots to the MT (which would clearly generate an undesired behavior).
 		\subsection{Lifetime counter}
-			As we have seen, turrets understand that an enemy is present on the map for a shorter amount of time by looking to its spawning. This idea lets enemies to not keep a counter updated to tell the turrets that they are present on the map for tot. time units. However, this idea is relatively new in the history of the model, since at the beginning, the lifetime of an enemy used to be update in each time unit by the enemy:
+			Turrets understand that an enemy is present on the map for a shorter amount of time by looking to its spawning time however, this idea is relatively new in the history of the model, since at the beginning, the lifetime of an enemy used to be an \texttt{int} variable (not a clock, since in symbolic simulation clocks be read, by turrets, as \texttt{double} values) updated in each time unit by the enemy:
 			
 			\begin{figure}[h!]
 				\centering
 				\includegraphics[width=0.5\textwidth]{lifetimeCounter.png}
 				\caption{Close-up of of the lifetime counter of an enemy}
 			\end{figure}
-			With clock \texttt{z} at each time unit the lifetime counter would have been updated.
+			With clock \texttt{z}, at each time unit the lifetime counter would have been updated.
 			
-			Note that this solution was also used to verify that enemies would have reached the MT spot in no more than $\texttt{MAX\_PATH\_LENGTH}\times speed$ time units.
-	\nocite{1,2,3,4,5,6,7}
+			Before introducing the \texttt{trip\_time} clock, this solution was also used to verify that enemies would have reached the MT spot in no more than $\texttt{MAX\_PATH\_LENGTH}\times speed$ time units.
+	\nocite{1,2,3,4,5,6,7,8}
 	\printbibliography
 \end{document}

@@ -47,6 +47,36 @@
       \verb https://webeep.polimi.it
       \endverb
     \endentry
+    \entry{8}{article}{}
+      \name{author}{1}{}{%
+        {{hash=5e535d12f917881a30f7299427558c89}{%
+           family={al.},
+           familyi={a\bibinitperiod},
+           given={A.\bibnamedelimi David},
+           giveni={A\bibinitperiod\bibinitdelim D\bibinitperiod},
+           prefix={et},
+           prefixi={e\bibinitperiod}}}%
+      }
+      \strng{namehash}{5e535d12f917881a30f7299427558c89}
+      \strng{fullhash}{5e535d12f917881a30f7299427558c89}
+      \strng{bibnamehash}{5e535d12f917881a30f7299427558c89}
+      \strng{authorbibnamehash}{5e535d12f917881a30f7299427558c89}
+      \strng{authornamehash}{5e535d12f917881a30f7299427558c89}
+      \strng{authorfullhash}{5e535d12f917881a30f7299427558c89}
+      \field{sortinit}{a}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Uppaal SMC Tutorial}
+      \field{year}{2018}
+      \true{nocite}
+      \verb{urlraw}
+      \verb https://uppaal.org/texts/uppaal-smc-tutorial.pdf
+      \endverb
+      \verb{url}
+      \verb https://uppaal.org/texts/uppaal-smc-tutorial.pdf
+      \endverb
+    \endentry
     \entry{3}{article}{}
       \name{author}{1}{}{%
         {{hash=bd5ec04fd827742680a4a34303776321}{%

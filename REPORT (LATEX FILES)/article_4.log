@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.9.9)  14 JUL 2025 10:36
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.9.9)  14 JUL 2025 18:08
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -189,6 +189,14 @@ Package: array 2022/09/04 v2.5g Tabular extension package (FMi)
 \TX@delta=\dimen148
 \TX@cols=\count196
 \TX@ftn=\toks20
+)
+(c:/texlive/2023/texmf-dist/tex/latex/base/inputenc.sty
+Package: inputenc 2021/02/14 v1.3d Input encoding file
+\inpenc@prehook=\toks21
+\inpenc@posthook=\toks22
+)
+(c:/texlive/2023/texmf-dist/tex/latex/base/fontenc.sty
+Package: fontenc 2021/04/29 v2.0v Standard LaTeX package
 )
 (c:/texlive/2023/texmf-dist/tex/latex/biblatex/biblatex.sty
 Package: biblatex 2023/03/05 v3.19 programmable bibliographies (PK/MW)
@@ -576,9 +584,9 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 (c:/texlive/2023/texmf-dist/tex/latex/float/float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \c@float@type=\count402
-\float@exts=\toks21
+\float@exts=\toks23
 \float@box=\box57
-\@float@everytoks=\toks22
+\@float@everytoks=\toks24
 \@floatcapt=\box58
 ) (./structure.tex
 (c:/texlive/2023/texmf-dist/tex/latex/classicthesis/classicthesis.sty
@@ -642,12 +650,12 @@ File: t1pplj.fd 2004/09/06 font definitions for T1/pplj.
 )
 (c:/texlive/2023/texmf-dist/tex/latex/microtype/microtype.sty
 Package: microtype 2023/03/13 v3.1a Micro-typographical refinements (RS)
-\MT@toks=\toks23
+\MT@toks=\toks25
 \MT@tempbox=\box59
 \MT@count=\count403
 LaTeX Info: Redefining \noprotrusionifhmode on input line 1059.
 LaTeX Info: Redefining \leftprotrusion on input line 1060.
-\MT@prot@toks=\toks24
+\MT@prot@toks=\toks26
 LaTeX Info: Redefining \rightprotrusion on input line 1078.
 LaTeX Info: Redefining \textls on input line 1368.
 \MT@outer@kern=\dimen153
@@ -749,7 +757,7 @@ Package: titlesec 2021/07/05 v2.14 Sectioning titles
 \aftertitleunit=\skip92
 \ttl@plus=\dimen167
 \ttl@minus=\dimen168
-\ttl@toksa=\toks25
+\ttl@toksa=\toks27
 \titlewidth=\dimen169
 \titlewidthlast=\dimen170
 \titlewidthfirst=\dimen171
@@ -925,11 +933,6 @@ Package hyperref Warning: Option `pdfpagelabels' has already been used,
 ) (c:/texlive/2023/texmf-dist/tex/latex/base/fontenc.sty
 Package: fontenc 2021/04/29 v2.0v Standard LaTeX package
 )
-(c:/texlive/2023/texmf-dist/tex/latex/base/inputenc.sty
-Package: inputenc 2021/02/14 v1.3d Input encoding file
-\inpenc@prehook=\toks26
-\inpenc@posthook=\toks27
-)
 (c:/texlive/2023/texmf-dist/tex/latex/graphics/graphicx.sty
 Package: graphicx 2021/09/16 v1.2d Enhanced LaTeX Graphics (DPC,SPQR)
 
@@ -1093,41 +1096,38 @@ Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
 \c@definition=\count437
 \c@theorem=\count438
 )
-
-Package biblatex Warning: Load 'inputenc' before biblatex.
-
 \@quotelevel=\count439
 \@quotereset=\count440
-(./article_4.aux)
+ (./article_4.aux)
 \openout1 = `article_4.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 63.
-LaTeX Font Info:    ... okay on input line 63.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 63.
-LaTeX Font Info:    ... okay on input line 63.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 63.
-LaTeX Font Info:    ... okay on input line 63.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 63.
-LaTeX Font Info:    ... okay on input line 63.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 63.
-LaTeX Font Info:    ... okay on input line 63.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 63.
-LaTeX Font Info:    ... okay on input line 63.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 63.
-LaTeX Font Info:    ... okay on input line 63.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 63.
-LaTeX Font Info:    ... okay on input line 63.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 63.
-LaTeX Font Info:    ... okay on input line 63.
-Package scrbase Info: activating english \abstractname on input line 63.
-Package scrbase Info: activating english \partname on input line 63.
-Package scrbase Info: activating english \figurename on input line 63.
-Package scrbase Info: activating english \tablename on input line 63.
-Package scrbase Info: activating english \contentsname on input line 63.
-Package scrbase Info: activating english \listfigurename on input line 63.
-Package scrbase Info: activating english \listtablename on input line 63.
-Package scrbase Info: activating english \refname on input line 63.
-Package scrbase Info: activating english \indexname on input line 63.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 65.
+LaTeX Font Info:    ... okay on input line 65.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 65.
+LaTeX Font Info:    ... okay on input line 65.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 65.
+LaTeX Font Info:    ... okay on input line 65.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 65.
+LaTeX Font Info:    ... okay on input line 65.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 65.
+LaTeX Font Info:    ... okay on input line 65.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 65.
+LaTeX Font Info:    ... okay on input line 65.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 65.
+LaTeX Font Info:    ... okay on input line 65.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 65.
+LaTeX Font Info:    ... okay on input line 65.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 65.
+LaTeX Font Info:    ... okay on input line 65.
+Package scrbase Info: activating english \abstractname on input line 65.
+Package scrbase Info: activating english \partname on input line 65.
+Package scrbase Info: activating english \figurename on input line 65.
+Package scrbase Info: activating english \tablename on input line 65.
+Package scrbase Info: activating english \contentsname on input line 65.
+Package scrbase Info: activating english \listfigurename on input line 65.
+Package scrbase Info: activating english \listtablename on input line 65.
+Package scrbase Info: activating english \refname on input line 65.
+Package scrbase Info: activating english \indexname on input line 65.
 Package biblatex Info: Trying to load language 'english'...
 Package biblatex Info: ... file 'english.lbx' found.
 
@@ -1143,9 +1143,9 @@ Package biblatex Info: Trying to load bibliographic data...
 Package biblatex Info: ... file 'article_4.bbl' found.
 
 (./article_4.bbl)
-Package biblatex Info: Reference section=0 on input line 63.
-Package biblatex Info: Reference segment=0 on input line 63.
-Package hyperref Info: Link coloring ON on input line 63.
+Package biblatex Info: Reference section=0 on input line 65.
+Package biblatex Info: Reference segment=0 on input line 65.
+Package hyperref Info: Link coloring ON on input line 65.
  (./article_4.out) (./article_4.out)
 \@outlinefile=\write4
 \openout4 = `article_4.out'.
@@ -1157,7 +1157,7 @@ Class scrartcl Info: loading recommended package `bookmark'.
 (scrartcl)           `bookmarkpackage=false' before \begin{document} and
 (scrartcl)           you can avoid this message adding:
 (scrartcl)             \usepackage{bookmark}
-(scrartcl)           before \begin{document} on input line 63.
+(scrartcl)           before \begin{document} on input line 65.
 
 (c:/texlive/2023/texmf-dist/tex/latex/bookmark/bookmark.sty
 Package: bookmark 2020-11-06 v1.29 PDF bookmarks (HO)
@@ -1188,12 +1188,12 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-LaTeX Info: Redefining \microtypecontext on input line 63.
-Package microtype Info: Applying patch `item' on input line 63.
-Package microtype Info: Applying patch `toc' on input line 63.
-Package microtype Info: Applying patch `eqnum' on input line 63.
-Package microtype Info: Applying patch `footnote' on input line 63.
-Package microtype Info: Applying patch `verbatim' on input line 63.
+LaTeX Info: Redefining \microtypecontext on input line 65.
+Package microtype Info: Applying patch `item' on input line 65.
+Package microtype Info: Applying patch `toc' on input line 65.
+Package microtype Info: Applying patch `eqnum' on input line 65.
+Package microtype Info: Applying patch `footnote' on input line 65.
+Package microtype Info: Applying patch `verbatim' on input line 65.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
@@ -1244,7 +1244,7 @@ Package caption Info: End \AtBeginDocument code.
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
 LaTeX Font Info:    Trying to load font information for T1+iwona on input line 
-71.
+72.
 (c:/texlive/2023/texmf-dist/tex/latex/iwona/t1iwona.fd
 File: t1iwona.fd 2008/07/22 v0.995 font definition file for T1/iwona (MW)
 )
@@ -1252,13 +1252,7 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `iwona' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
-LaTeX Font Info:    Trying to load font information for OT1+pplj on input line 
-71.
-
-(c:/texlive/2023/texmf-dist/tex/latex/psnfss/ot1pplj.fd
-File: ot1pplj.fd 2004/09/06 font definitions for OT1/pplj.
-)
-LaTeX Font Info:    Trying to load font information for U+zeur on input line 71
+LaTeX Font Info:    Trying to load font information for U+zeur on input line 72
 .
 
 (c:/texlive/2023/texmf-dist/tex/latex/eulervm/uzeur.fd
@@ -1267,7 +1261,7 @@ File: uzeur.fd 2005/01/11 v4.0 (WaS)
 (c:/texlive/2023/texmf-dist/tex/latex/microtype/mt-eur.cfg
 File: mt-eur.cfg 2006/07/31 v1.1 microtype config. file: AMS Euler Roman (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+zeus on input line 71
+LaTeX Font Info:    Trying to load font information for U+zeus on input line 72
 .
 
 (c:/texlive/2023/texmf-dist/tex/latex/eulervm/uzeus.fd
@@ -1277,13 +1271,13 @@ File: uzeus.fd 2005/01/11 v4.0 (WaS)
 File: mt-eus.cfg 2006/07/28 v1.2 microtype config. file: AMS Euler Script (RS)
 )
 LaTeX Font Info:    Trying to load font information for U+zeuex on input line 7
-1.
+2.
 
 (c:/texlive/2023/texmf-dist/tex/latex/eulervm/uzeuex.fd
 File: uzeuex.fd 2005/01/11 v4.0 (WaS)
 )
 LaTeX Font Info:    Trying to load font information for OT1+zplm on input line 
-71.
+72.
 
 (c:/texlive/2023/texmf-dist/tex/latex/psnfss/ot1zplm.fd
 File: ot1zplm.fd 2002/09/08 Fontinst v1.914 font definitions for OT1/zplm.
@@ -1299,19 +1293,19 @@ File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 (c:/texlive/2023/texmf-dist/tex/latex/microtype/mt-msb.cfg
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
-LaTeX Font Info:    Trying to load font information for T1+fvm on input line 71
+LaTeX Font Info:    Trying to load font information for T1+fvm on input line 72
 .
 
 (c:/texlive/2023/texmf-dist/tex/latex/bera/t1fvm.fd
 File: t1fvm.fd 2004/09/07 scalable font definitions for T1/fvm.
 )
 LaTeX Font Info:    Font shape `T1/fvm/m/n' will be
-(Font)              scaled to size 12.24008pt on input line 71.
+(Font)              scaled to size 12.24008pt on input line 72.
 Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `fvm' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
-Package tocbasic Info: character protrusion at toc deactivated on input line 77
+Package tocbasic Info: character protrusion at toc deactivated on input line 78
 .
  (./article_4.toc
 Package microtype Info: Character `029' is missing
@@ -1321,7 +1315,7 @@ Package microtype Info: Character `029' is missing
 \tf@toc=\write5
 \openout5 = `article_4.toc'.
 
-Package tocbasic Info: character protrusion at lof deactivated on input line 79
+Package tocbasic Info: character protrusion at lof deactivated on input line 80
 .
 
 (./article_4.lof [1
@@ -1337,7 +1331,7 @@ LaTeX Font Info:    Font shape `T1/fvm/m/n' will be
 \tf@lof=\write6
 \openout6 = `article_4.lof'.
 
-Package tocbasic Info: character protrusion at lot deactivated on input line 81
+Package tocbasic Info: character protrusion at lot deactivated on input line 82
 .
  (./article_4.lot)
 \tf@lot=\write7
@@ -1351,12 +1345,12 @@ Package microtype Info: Character `029' is missing
 (microtype)             in font `T1/iwona/b/sc/10'.
 (microtype)             Ignoring protrusion settings for this character.
  [3]
-Overfull \hbox (3.09444pt too wide) in alignment at lines 167--167
+Overfull \hbox (3.09444pt too wide) in alignment at lines 168--168
 [][][][][] 
  []
 
 
-Overfull \hbox (17.68437pt too wide) in paragraph at lines 171--172
+Overfull \hbox (17.68437pt too wide) in paragraph at lines 172--173
 []\T1/pplj/m/n/10 This doc-u-ment was writ-ten over the tem-plate Ar-sclas-sica
  Ar-ti-cle ([][]$\T1/fvm/m/n/10 https : / / www . latextemplates . com / templa
 te /
@@ -1364,12 +1358,12 @@ te /
 
 [4]
 LaTeX Font Info:    Font shape `T1/fvm/m/n' will be
-(Font)              scaled to size 7.65005pt on input line 200.
+(Font)              scaled to size 7.65005pt on input line 201.
  [5]
 <Figures/ndPathChoice.png, id=171, 427.5975pt x 251.94125pt>
 File: Figures/ndPathChoice.png Graphic file (type png)
 <use Figures/ndPathChoice.png>
-Package pdftex.def Info: Figures/ndPathChoice.png  used on input line 221.
+Package pdftex.def Info: Figures/ndPathChoice.png  used on input line 222.
 (pdftex.def)             Requested size: 266.03474pt x 156.74785pt.
  [6 <./Figures/ndPathChoice.png>] [7] [8] [9]
 <Figures/configs/vanilla/DownFromCannons.png, id=196, 557.08125pt x 304.13625pt
@@ -1377,29 +1371,29 @@ Package pdftex.def Info: Figures/ndPathChoice.png  used on input line 221.
 File: Figures/configs/vanilla/DownFromCannons.png Graphic file (type png)
 <use Figures/configs/vanilla/DownFromCannons.png>
 Package pdftex.def Info: Figures/configs/vanilla/DownFromCannons.png  used on i
-nput line 367.
+nput line 368.
 (pdftex.def)             Requested size: 193.47578pt x 105.62321pt.
 <Figures/configs/vanilla/DownFromSnipers.png, id=197, 578.66188pt x 335.75438pt
 >
 File: Figures/configs/vanilla/DownFromSnipers.png Graphic file (type png)
 <use Figures/configs/vanilla/DownFromSnipers.png>
 Package pdftex.def Info: Figures/configs/vanilla/DownFromSnipers.png  used on i
-nput line 372.
+nput line 373.
 (pdftex.def)             Requested size: 241.84843pt x 140.32423pt.
 <Figures/configs/vanilla/Cannonphobia.png, id=198, 551.56062pt x 295.60437pt>
 File: Figures/configs/vanilla/Cannonphobia.png Graphic file (type png)
 <use Figures/configs/vanilla/Cannonphobia.png>
 Package pdftex.def Info: Figures/configs/vanilla/Cannonphobia.png  used on inpu
-t line 380.
+t line 381.
 (pdftex.def)             Requested size: 193.47578pt x 103.69312pt.
 <Figures/configs/vanilla/Sniperphobia.png, id=199, 638.385pt x 396.48125pt>
 File: Figures/configs/vanilla/Sniperphobia.png Graphic file (type png)
 <use Figures/configs/vanilla/Sniperphobia.png>
 Package pdftex.def Info: Figures/configs/vanilla/Sniperphobia.png  used on inpu
-t line 385.
+t line 386.
 (pdftex.def)             Requested size: 241.84843pt x 150.20465pt.
 
-Overfull \hbox (6.7505pt too wide) in paragraph at lines 402--402
+Overfull \hbox (6.7505pt too wide) in paragraph at lines 403--403
 []|\T1/pplj/m/n/10 DownFromCannons| 
  []
 
@@ -1413,7 +1407,7 @@ e png)
 <use Figures/plots/SE/OVERVIEW WITH 10 RUNS/SNIPERPHOBIA.png>
 Package pdftex.def Info: Figures/plots/SE/OVERVIEW WITH 10 RUNS/SNIPERPHOBIA.pn
 g  used on input line 465.
-(pdftex.def)             Requested size: 193.47578pt x 120.26407pt.
+(pdftex.def)             Requested size: 217.66211pt x 135.30235pt.
 <Figures/plots/SE/OVERVIEW WITH 10 RUNS/DOWNFROMSNIPERS.png, id=212, 557.08125p
 t x 346.29375pt>
 File: Figures/plots/SE/OVERVIEW WITH 10 RUNS/DOWNFROMSNIPERS.png Graphic file (
@@ -1421,7 +1415,7 @@ type png)
 <use Figures/plots/SE/OVERVIEW WITH 10 RUNS/DOWNFROMSNIPERS.png>
 Package pdftex.def Info: Figures/plots/SE/OVERVIEW WITH 10 RUNS/DOWNFROMSNIPERS
 .png  used on input line 470.
-(pdftex.def)             Requested size: 193.47578pt x 120.26407pt.
+(pdftex.def)             Requested size: 217.66211pt x 135.30235pt.
 <Figures/plots/SE/OVERVIEW WITH 10 RUNS/CANNONPHOBIA.png, id=213, 557.08125pt x
  346.29375pt>
 File: Figures/plots/SE/OVERVIEW WITH 10 RUNS/CANNONPHOBIA.png Graphic file (typ
@@ -1429,7 +1423,7 @@ e png)
 <use Figures/plots/SE/OVERVIEW WITH 10 RUNS/CANNONPHOBIA.png>
 Package pdftex.def Info: Figures/plots/SE/OVERVIEW WITH 10 RUNS/CANNONPHOBIA.pn
 g  used on input line 478.
-(pdftex.def)             Requested size: 193.47578pt x 120.26407pt.
+(pdftex.def)             Requested size: 217.66211pt x 135.30235pt.
 <Figures/plots/SE/OVERVIEW WITH 10 RUNS/DEFAULT.png, id=214, 557.08125pt x 346.
 29375pt>
 File: Figures/plots/SE/OVERVIEW WITH 10 RUNS/DEFAULT.png Graphic file (type png
@@ -1437,58 +1431,53 @@ File: Figures/plots/SE/OVERVIEW WITH 10 RUNS/DEFAULT.png Graphic file (type png
 <use Figures/plots/SE/OVERVIEW WITH 10 RUNS/DEFAULT.png>
 Package pdftex.def Info: Figures/plots/SE/OVERVIEW WITH 10 RUNS/DEFAULT.png  us
 ed on input line 483.
-(pdftex.def)             Requested size: 193.47578pt x 120.26407pt.
-
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-<Figures/plots/SE/CLOSE-UP WITH TINY WINDOW/SNIPERPHOBIA.png, id=215, 557.08125
+(pdftex.def)             Requested size: 217.66211pt x 135.30235pt.
+ [11]
+<Figures/plots/SE/CLOSE-UP WITH TINY WINDOW/SNIPERPHOBIA.png, id=219, 557.08125
 pt x 346.29375pt>
 File: Figures/plots/SE/CLOSE-UP WITH TINY WINDOW/SNIPERPHOBIA.png Graphic file 
 (type png)
 <use Figures/plots/SE/CLOSE-UP WITH TINY WINDOW/SNIPERPHOBIA.png>
 Package pdftex.def Info: Figures/plots/SE/CLOSE-UP WITH TINY WINDOW/SNIPERPHOBI
 A.png  used on input line 494.
-(pdftex.def)             Requested size: 193.47578pt x 120.26407pt.
-<Figures/plots/SE/CLOSE-UP WITH TINY WINDOW/DOWNFROMSNIPERS.png, id=216, 557.08
+(pdftex.def)             Requested size: 169.29684pt x 105.23634pt.
+
+Underfull \hbox (badness 5260) in paragraph at lines 495--495
+[][]|\T1/pplj/m/n/9 Sniper-pho-bia SE prob-a-bil-ity
+ []
+
+<Figures/plots/SE/CLOSE-UP WITH TINY WINDOW/DOWNFROMSNIPERS.png, id=220, 557.08
 125pt x 346.29375pt>
 File: Figures/plots/SE/CLOSE-UP WITH TINY WINDOW/DOWNFROMSNIPERS.png Graphic fi
 le (type png)
 <use Figures/plots/SE/CLOSE-UP WITH TINY WINDOW/DOWNFROMSNIPERS.png>
 Package pdftex.def Info: Figures/plots/SE/CLOSE-UP WITH TINY WINDOW/DOWNFROMSNI
 PERS.png  used on input line 499.
-(pdftex.def)             Requested size: 193.47578pt x 120.26407pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 500--500
-[][]|\T1/pplj/m/n/9 Down-From-Snipers SE prob-a-bil-ity
- []
-
-<Figures/plots/SE/CLOSE-UP WITH TINY WINDOW/CANNONPHOBIA.png, id=217, 557.08125
+(pdftex.def)             Requested size: 169.29684pt x 105.23634pt.
+<Figures/plots/SE/CLOSE-UP WITH TINY WINDOW/CANNONPHOBIA.png, id=221, 557.08125
 pt x 346.29375pt>
 File: Figures/plots/SE/CLOSE-UP WITH TINY WINDOW/CANNONPHOBIA.png Graphic file 
 (type png)
 <use Figures/plots/SE/CLOSE-UP WITH TINY WINDOW/CANNONPHOBIA.png>
 Package pdftex.def Info: Figures/plots/SE/CLOSE-UP WITH TINY WINDOW/CANNONPHOBI
 A.png  used on input line 507.
-(pdftex.def)             Requested size: 193.47578pt x 120.26407pt.
-<Figures/plots/SE/CLOSE-UP WITH TINY WINDOW/DEFAULT.png, id=218, 557.08125pt x 
+(pdftex.def)             Requested size: 169.29684pt x 105.23634pt.
+<Figures/plots/SE/CLOSE-UP WITH TINY WINDOW/DEFAULT.png, id=222, 557.08125pt x 
 346.29375pt>
 File: Figures/plots/SE/CLOSE-UP WITH TINY WINDOW/DEFAULT.png Graphic file (type
  png)
 <use Figures/plots/SE/CLOSE-UP WITH TINY WINDOW/DEFAULT.png>
 Package pdftex.def Info: Figures/plots/SE/CLOSE-UP WITH TINY WINDOW/DEFAULT.png
   used on input line 512.
-(pdftex.def)             Requested size: 193.47578pt x 120.26407pt.
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-<Figures/plots/SE/OVERVIEW WITH DELAY 7 SNIPERS/SNIPERPHOBIA.png, id=219, 557.0
+(pdftex.def)             Requested size: 169.29684pt x 105.23634pt.
+[12 <./Figures/plots/SE/OVERVIEW WITH 10 RUNS/SNIPERPHOBIA.png> <./Figures/plot
+s/SE/OVERVIEW WITH 10 RUNS/DOWNFROMSNIPERS.png> <./Figures/plots/SE/OVERVIEW WI
+TH 10 RUNS/CANNONPHOBIA.png> <./Figures/plots/SE/OVERVIEW WITH 10 RUNS/DEFAULT.
+png> <./Figures/plots/SE/CLOSE-UP WITH TINY WINDOW/SNIPERPHOBIA.png> <./Figures
+/plots/SE/CLOSE-UP WITH TINY WINDOW/DOWNFROMSNIPERS.png> <./Figures/plots/SE/CL
+OSE-UP WITH TINY WINDOW/CANNONPHOBIA.png> <./Figures/plots/SE/CLOSE-UP WITH TIN
+Y WINDOW/DEFAULT.png>]
+<Figures/plots/SE/OVERVIEW WITH DELAY 7 SNIPERS/SNIPERPHOBIA.png, id=231, 557.0
 8125pt x 346.29375pt>
 File: Figures/plots/SE/OVERVIEW WITH DELAY 7 SNIPERS/SNIPERPHOBIA.png Graphic f
 ile (type png)
@@ -1496,86 +1485,80 @@ ile (type png)
 Package pdftex.def Info: Figures/plots/SE/OVERVIEW WITH DELAY 7 SNIPERS/SNIPERP
 HOBIA.png  used on input line 521.
 (pdftex.def)             Requested size: 241.84843pt x 150.33537pt.
-[11] [12 <./Figures/plots/SE/OVERVIEW WITH 10 RUNS/SNIPERPHOBIA.png> <./Figures
-/plots/SE/OVERVIEW WITH 10 RUNS/DOWNFROMSNIPERS.png> <./Figures/plots/SE/OVERVI
-EW WITH 10 RUNS/CANNONPHOBIA.png> <./Figures/plots/SE/OVERVIEW WITH 10 RUNS/DEF
-AULT.png> <./Figures/plots/SE/CLOSE-UP WITH TINY WINDOW/SNIPERPHOBIA.png> <./Fi
-gures/plots/SE/CLOSE-UP WITH TINY WINDOW/DOWNFROMSNIPERS.png> <./Figures/plots/
-SE/CLOSE-UP WITH TINY WINDOW/CANNONPHOBIA.png> <./Figures/plots/SE/CLOSE-UP WIT
-H TINY WINDOW/DEFAULT.png>]
 <Figures/plots/ADD/PD/SNIPERPHOBIA.png, id=232, 557.08125pt x 346.29375pt>
 File: Figures/plots/ADD/PD/SNIPERPHOBIA.png Graphic file (type png)
 <use Figures/plots/ADD/PD/SNIPERPHOBIA.png>
 Package pdftex.def Info: Figures/plots/ADD/PD/SNIPERPHOBIA.png  used on input l
-ine 533.
+ine 532.
 (pdftex.def)             Requested size: 193.47578pt x 120.26407pt.
 <Figures/plots/ADD/PD/DOWNFROMSNIPERS.png, id=233, 557.08125pt x 346.29375pt>
 File: Figures/plots/ADD/PD/DOWNFROMSNIPERS.png Graphic file (type png)
 <use Figures/plots/ADD/PD/DOWNFROMSNIPERS.png>
 Package pdftex.def Info: Figures/plots/ADD/PD/DOWNFROMSNIPERS.png  used on inpu
-t line 538.
+t line 537.
 (pdftex.def)             Requested size: 193.47578pt x 120.26407pt.
 <Figures/plots/ADD/PD/CANNONPHOBIA.png, id=234, 557.08125pt x 346.29375pt>
 File: Figures/plots/ADD/PD/CANNONPHOBIA.png Graphic file (type png)
 <use Figures/plots/ADD/PD/CANNONPHOBIA.png>
 Package pdftex.def Info: Figures/plots/ADD/PD/CANNONPHOBIA.png  used on input l
-ine 546.
+ine 545.
 (pdftex.def)             Requested size: 193.47578pt x 120.26407pt.
 <Figures/plots/ADD/PD/DEFAULT.png, id=235, 557.08125pt x 346.29375pt>
 File: Figures/plots/ADD/PD/DEFAULT.png Graphic file (type png)
 <use Figures/plots/ADD/PD/DEFAULT.png>
 Package pdftex.def Info: Figures/plots/ADD/PD/DEFAULT.png  used on input line 5
-51.
+50.
 (pdftex.def)             Requested size: 193.47578pt x 120.26407pt.
-<Figures/plots/ADD/OVERVIEW WITH 10 RUNS/CANNONPHOBIA.png, id=236, 557.08125pt 
+ [13 <./Figures/plots/SE/OVERVIEW WITH DELAY 7 SNIPERS/SNIPERPHOBIA.png> <./Fig
+ures/plots/ADD/PD/SNIPERPHOBIA.png> <./Figures/plots/ADD/PD/DOWNFROMSNIPERS.png
+> <./Figures/plots/ADD/PD/CANNONPHOBIA.png> <./Figures/plots/ADD/PD/DEFAULT.png
+>]
+<Figures/plots/ADD/OVERVIEW WITH 10 RUNS/CANNONPHOBIA.png, id=245, 557.08125pt 
 x 346.29375pt>
 File: Figures/plots/ADD/OVERVIEW WITH 10 RUNS/CANNONPHOBIA.png Graphic file (ty
 pe png)
 <use Figures/plots/ADD/OVERVIEW WITH 10 RUNS/CANNONPHOBIA.png>
 Package pdftex.def Info: Figures/plots/ADD/OVERVIEW WITH 10 RUNS/CANNONPHOBIA.p
-ng  used on input line 560.
+ng  used on input line 561.
 (pdftex.def)             Requested size: 193.47578pt x 120.26407pt.
-<Figures/plots/ADD/OVERVIEW WITH OVER RANGE/CANNONPHOBIA.png, id=237, 557.08125
+<Figures/plots/ADD/OVERVIEW WITH OVER RANGE/CANNONPHOBIA.png, id=246, 557.08125
 pt x 346.29375pt>
 File: Figures/plots/ADD/OVERVIEW WITH OVER RANGE/CANNONPHOBIA.png Graphic file 
 (type png)
 <use Figures/plots/ADD/OVERVIEW WITH OVER RANGE/CANNONPHOBIA.png>
 Package pdftex.def Info: Figures/plots/ADD/OVERVIEW WITH OVER RANGE/CANNONPHOBI
-A.png  used on input line 565.
+A.png  used on input line 566.
 (pdftex.def)             Requested size: 193.47578pt x 120.26407pt.
-<Figures/plots/ADD/OVERVIEW WITH 10 RUNS/DEFAULT.png, id=238, 557.08125pt x 346
+<Figures/plots/ADD/OVERVIEW WITH 10 RUNS/DEFAULT.png, id=247, 557.08125pt x 346
 .29375pt>
 File: Figures/plots/ADD/OVERVIEW WITH 10 RUNS/DEFAULT.png Graphic file (type pn
 g)
 <use Figures/plots/ADD/OVERVIEW WITH 10 RUNS/DEFAULT.png>
 Package pdftex.def Info: Figures/plots/ADD/OVERVIEW WITH 10 RUNS/DEFAULT.png  u
-sed on input line 573.
+sed on input line 574.
 (pdftex.def)             Requested size: 193.47578pt x 120.26407pt.
-<Figures/plots/ADD/OVERVIEW WITH OVER RANGE/DEFAULT.png, id=239, 557.08125pt x 
+<Figures/plots/ADD/OVERVIEW WITH OVER RANGE/DEFAULT.png, id=248, 557.08125pt x 
 346.29375pt>
 File: Figures/plots/ADD/OVERVIEW WITH OVER RANGE/DEFAULT.png Graphic file (type
  png)
 <use Figures/plots/ADD/OVERVIEW WITH OVER RANGE/DEFAULT.png>
 Package pdftex.def Info: Figures/plots/ADD/OVERVIEW WITH OVER RANGE/DEFAULT.png
-  used on input line 578.
+  used on input line 579.
 (pdftex.def)             Requested size: 193.47578pt x 120.26407pt.
- [13 <./Figures/plots/SE/OVERVIEW WITH DELAY 7 SNIPERS/SNIPERPHOBIA.png> <./Fig
-ures/plots/ADD/PD/SNIPERPHOBIA.png> <./Figures/plots/ADD/PD/DOWNFROMSNIPERS.png
-> <./Figures/plots/ADD/PD/CANNONPHOBIA.png> <./Figures/plots/ADD/PD/DEFAULT.png
->] [14 <./Figures/plots/ADD/OVERVIEW WITH 10 RUNS/CANNONPHOBIA.png> <./Figures/
-plots/ADD/OVERVIEW WITH OVER RANGE/CANNONPHOBIA.png> <./Figures/plots/ADD/OVERV
-IEW WITH 10 RUNS/DEFAULT.png> <./Figures/plots/ADD/OVERVIEW WITH OVER RANGE/DEF
-AULT.png>]
+ [14 <./Figures/plots/ADD/OVERVIEW WITH 10 RUNS/CANNONPHOBIA.png> <./Figures/pl
+ots/ADD/OVERVIEW WITH OVER RANGE/CANNONPHOBIA.png> <./Figures/plots/ADD/OVERVIE
+W WITH 10 RUNS/DEFAULT.png> <./Figures/plots/ADD/OVERVIEW WITH OVER RANGE/DEFAU
+LT.png>]
 <Figures/MT_Template.png, id=253, 431.11063pt x 138.5175pt>
 File: Figures/MT_Template.png Graphic file (type png)
 <use Figures/MT_Template.png>
 Package pdftex.def Info: Figures/MT_Template.png  used on input line 594.
 (pdftex.def)             Requested size: 241.84843pt x 77.70665pt.
-<Figures/ENEMIES_PATHS.png, id=254, 564.60938pt x 268.00125pt>
+<Figures/ENEMIES_PATHS.png, id=254, 668.4975pt x 352.81813pt>
 File: Figures/ENEMIES_PATHS.png Graphic file (type png)
 <use Figures/ENEMIES_PATHS.png>
 Package pdftex.def Info: Figures/ENEMIES_PATHS.png  used on input line 602.
-(pdftex.def)             Requested size: 314.40001pt x 149.23726pt.
+(pdftex.def)             Requested size: 314.40001pt x 165.93759pt.
 <Figures/enemyLock.png, id=255, 371.88937pt x 137.51375pt>
 File: Figures/enemyLock.png Graphic file (type png)
 <use Figures/enemyLock.png>
@@ -1610,11 +1593,11 @@ Package logreq Info: Writing requests to 'article_4.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 29160 strings out of 474934
- 557320 string characters out of 5763815
- 1945801 words of memory out of 5000000
- 50176 multiletter control sequences out of 15000+600000
- 674254 words of font info for 168 fonts, out of 8000000 for 9000
+ 29133 strings out of 474934
+ 556966 string characters out of 5763815
+ 1946801 words of memory out of 5000000
+ 50149 multiletter control sequences out of 15000+600000
+ 674616 words of font info for 164 fonts, out of 8000000 for 9000
  1143 hyphenation exceptions out of 8191
  108i,23n,112p,10955b,1560s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/texl
@@ -1634,10 +1617,10 @@ sam10.pfb><c:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/symbols/msam7
 .pfb><c:/texlive/2023/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb><c:/texliv
 e/2023/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb><c:/texlive/2023/texmf-di
 st/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on article_4.pdf (17 pages, 1710329 bytes).
+Output written on article_4.pdf (17 pages, 1718156 bytes).
 PDF statistics:
- 499 PDF objects out of 1000 (max. 8388607)
- 390 compressed objects within 4 object streams
- 91 named destinations out of 1000 (max. 500000)
- 24952 words of extra memory for PDF output out of 29859 (max. 10000000)
+ 502 PDF objects out of 1000 (max. 8388607)
+ 393 compressed objects within 4 object streams
+ 92 named destinations out of 1000 (max. 500000)
+ 22392 words of extra memory for PDF output out of 24883 (max. 10000000)
 
