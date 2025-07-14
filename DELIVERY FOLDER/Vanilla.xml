@@ -438,9 +438,9 @@ It is only a well-state where the enemy arrives when it "leaves the map". The se
 	<template>
 		<name>turret</name>
 		<parameter>const int id, const TurretConfiguration config</parameter>
-		<declaration>int range = config.range;
-int speed = config.speed;
-int damage = config.damage;
+		<declaration>const int range = config.range;
+const int speed = config.speed;
+const int damage = config.damage;
 clock y;
 
 void shoot (const EnemyID_t targetId)

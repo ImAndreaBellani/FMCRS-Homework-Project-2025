@@ -117,7 +117,7 @@ pdfcreator={pdflatex}]{hyperref}
 					\ytl{june 15th}{First stochastic version}
 					\ytl{june 24th}{Started delivery procedures}
 					\ytl{june 26th}{Started report writing}
-					\ytl{july 14th}{Finished report writing}
+					\ytl{july 15th}{Finished report writing}
 					\bigskip
 					\rule{\linewidth}{1pt}%
 				\end{minipage}
@@ -357,7 +357,24 @@ pdfcreator={pdflatex}]{hyperref}
 				
 				Note that in the configurations section we also analyzed the other kinds of "winning" for the chosen configurations. For brevity, we do not report these queries but they are really similar to Q5 (e.g. to verify the weakly-winning property: $E\square(mt\_life>0)$).
 		\subsection{Stochastic model verification}
-		\newpage
+			We verified the property I with two different approaches. The first one is a classical simulation over 100 runs of the property \texttt{mt\_life==MT.health} in 200 time units, while the second one is the analysis of the cumulative probability distribution that MT is eventually damaged in the first 200 time units:
+			\begin{figure}[H]
+				\centering
+				\begin{minipage}{.45\textwidth}
+					\centering
+					\includegraphics[width=\linewidth]{plots/SIM.png}
+					\caption{Simulation of \texttt{mt\_life==MT.health} in the first 200 time units (over 100 runs)}
+				\end{minipage}
+				\begin{minipage}{.45\textwidth}
+					\centering
+					\includegraphics[width=\linewidth]{plots/CPD.png}
+					\caption{Cumulative probability distribution that MT is eventually damage in the first 200 time units (with 1000 runs)}
+				\end{minipage}
+			\end{figure}
+			By simulating the system, we see that in the majority of the runs the MT starts to be damaged around 90 time units and the cumulative probability distribution identifies a mean of $\approx88$ time units.
+			
+			Also for the property II we wanted to verify it with two complementary approaches. The first one is a classical measurement of the probability that MT's life remains $>0$ in the first 200 time units, while the second one is the calculus of the cumulative probability distribution that MT life is eventually $\leq0$ until the wave has ended. The probability that MT survives in the first 200 time units is $0.633605\pm 0.0303201$ while the cumulative probability distribution that MT is defeated in the first 200 time units is $\approx 0.392$, which is coherent since it is the calculus of the complementary probability that the MT survives in the first 200 time units.
+			
 	\section{Analysis of selected configurations}
 		\subsection{Vanilla version}
 			We further analyzed the default configuration with turrets and four more configurations:

@@ -1,29 +1,31 @@
 \deactivateaddvspace 
 \contentsline {figure}{\numberline {1}{\ignorespaces Close-up of how "a priori" non-deterministic path choice is implemented in the enemy template}}{6}{figure.caption.5}%
-\contentsline {figure}{\numberline {2}{\ignorespaces \emph {DownFromCannons} configuration}}{10}{figure.caption.8}%
-\contentsline {figure}{\numberline {3}{\ignorespaces \emph {DownFromSnipers} configuration}}{10}{figure.caption.8}%
-\contentsline {figure}{\numberline {4}{\ignorespaces \emph {Cannonphobia} configuration}}{10}{figure.caption.9}%
-\contentsline {figure}{\numberline {5}{\ignorespaces \emph {Sniperphobia} configuration}}{10}{figure.caption.9}%
-\contentsline {figure}{\numberline {6}{\ignorespaces Sniperphobia SE simulation with 10 runs}}{12}{figure.caption.12}%
-\contentsline {figure}{\numberline {7}{\ignorespaces DownFromSnipers SE simulation with 10 runs}}{12}{figure.caption.12}%
-\contentsline {figure}{\numberline {8}{\ignorespaces Cannonphobia SE simulation with 10 runs}}{12}{figure.caption.13}%
-\contentsline {figure}{\numberline {9}{\ignorespaces Default SE simulation with 10 runs}}{12}{figure.caption.13}%
-\contentsline {figure}{\numberline {10}{\ignorespaces Sniperphobia SE probability distribution in the first 100 time units with 1000 runs}}{12}{figure.caption.14}%
-\contentsline {figure}{\numberline {11}{\ignorespaces DownFromSnipers SE probability distribution in the first 100 time units with 1000 runs}}{12}{figure.caption.14}%
-\contentsline {figure}{\numberline {12}{\ignorespaces Cannonphobia SE probability distribution in the first 100 time units with 1000 runs}}{12}{figure.caption.15}%
-\contentsline {figure}{\numberline {13}{\ignorespaces Default SE probability distribution in the first 100 time units with 1000 runs}}{12}{figure.caption.15}%
-\contentsline {figure}{\numberline {14}{\ignorespaces Sniperphobia SE simulation with 10 runs (snipers delay set to 7)}}{13}{figure.caption.16}%
-\contentsline {figure}{\numberline {15}{\ignorespaces Sniperphobia ADD probability distribution in the first 100 time units with 500 runs}}{13}{figure.caption.17}%
-\contentsline {figure}{\numberline {16}{\ignorespaces DownFromSnipers ADD probability distribution in the first 100 time units with 500 runs}}{13}{figure.caption.17}%
-\contentsline {figure}{\numberline {17}{\ignorespaces Cannonphobia ADD probability distribution in the first 100 time units with 500 runs}}{13}{figure.caption.18}%
-\contentsline {figure}{\numberline {18}{\ignorespaces Default ADD probability distribution in the first 100 time units with 500 runs}}{13}{figure.caption.18}%
-\contentsline {figure}{\numberline {19}{\ignorespaces Cannonphobia ADD simulation with 10 runs}}{14}{figure.caption.19}%
-\contentsline {figure}{\numberline {20}{\ignorespaces Cannonphobia ADD simulation with 10 runs (in over range mode)}}{14}{figure.caption.19}%
-\contentsline {figure}{\numberline {21}{\ignorespaces Default ADD simulation with 10 runs}}{14}{figure.caption.20}%
-\contentsline {figure}{\numberline {22}{\ignorespaces Default ADD simulation with 10 runs (in over range mode)}}{14}{figure.caption.20}%
-\contentsline {figure}{\numberline {23}{\ignorespaces Original MT's template}}{15}{figure.caption.21}%
-\contentsline {figure}{\numberline {24}{\ignorespaces Original non-deterministic path choices example}}{15}{figure.caption.22}%
-\contentsline {figure}{\numberline {25}{\ignorespaces Close-up of the enemy locking \texttt {STMT} channel}}{16}{figure.caption.23}%
-\contentsline {figure}{\numberline {26}{\ignorespaces \texttt {STMTCONTROLLER} template}}{16}{figure.caption.23}%
-\contentsline {figure}{\numberline {27}{\ignorespaces Close-up of of the lifetime counter of an enemy}}{16}{figure.caption.24}%
+\contentsline {figure}{\numberline {2}{\ignorespaces Simulation of \texttt {mt\_life==MT.health} in the first 200 time units (over 100 runs)}}{10}{figure.caption.8}%
+\contentsline {figure}{\numberline {3}{\ignorespaces Cumulative probability distribution that MT is eventually damage in the first 200 time units (with 1000 runs)}}{10}{figure.caption.8}%
+\contentsline {figure}{\numberline {4}{\ignorespaces \emph {DownFromCannons} configuration}}{10}{figure.caption.9}%
+\contentsline {figure}{\numberline {5}{\ignorespaces \emph {DownFromSnipers} configuration}}{10}{figure.caption.9}%
+\contentsline {figure}{\numberline {6}{\ignorespaces \emph {Cannonphobia} configuration}}{11}{figure.caption.10}%
+\contentsline {figure}{\numberline {7}{\ignorespaces \emph {Sniperphobia} configuration}}{11}{figure.caption.10}%
+\contentsline {figure}{\numberline {8}{\ignorespaces Sniperphobia SE simulation with 10 runs}}{12}{figure.caption.13}%
+\contentsline {figure}{\numberline {9}{\ignorespaces DownFromSnipers SE simulation with 10 runs}}{12}{figure.caption.13}%
+\contentsline {figure}{\numberline {10}{\ignorespaces Cannonphobia SE simulation with 10 runs}}{12}{figure.caption.14}%
+\contentsline {figure}{\numberline {11}{\ignorespaces Default SE simulation with 10 runs}}{12}{figure.caption.14}%
+\contentsline {figure}{\numberline {12}{\ignorespaces Sniperphobia SE probability distribution in the first 100 time units with 1000 runs}}{13}{figure.caption.15}%
+\contentsline {figure}{\numberline {13}{\ignorespaces DownFromSnipers SE probability distribution in the first 100 time units with 1000 runs}}{13}{figure.caption.15}%
+\contentsline {figure}{\numberline {14}{\ignorespaces Cannonphobia SE probability distribution in the first 100 time units with 1000 runs}}{13}{figure.caption.16}%
+\contentsline {figure}{\numberline {15}{\ignorespaces Default SE probability distribution in the first 100 time units with 1000 runs}}{13}{figure.caption.16}%
+\contentsline {figure}{\numberline {16}{\ignorespaces Sniperphobia SE simulation with 10 runs (snipers delay set to 7)}}{13}{figure.caption.17}%
+\contentsline {figure}{\numberline {17}{\ignorespaces Sniperphobia ADD probability distribution in the first 100 time units with 500 runs}}{14}{figure.caption.18}%
+\contentsline {figure}{\numberline {18}{\ignorespaces DownFromSnipers ADD probability distribution in the first 100 time units with 500 runs}}{14}{figure.caption.18}%
+\contentsline {figure}{\numberline {19}{\ignorespaces Cannonphobia ADD probability distribution in the first 100 time units with 500 runs}}{14}{figure.caption.19}%
+\contentsline {figure}{\numberline {20}{\ignorespaces Default ADD probability distribution in the first 100 time units with 500 runs}}{14}{figure.caption.19}%
+\contentsline {figure}{\numberline {21}{\ignorespaces Cannonphobia ADD simulation with 10 runs}}{14}{figure.caption.20}%
+\contentsline {figure}{\numberline {22}{\ignorespaces Cannonphobia ADD simulation with 10 runs (in over range mode)}}{14}{figure.caption.20}%
+\contentsline {figure}{\numberline {23}{\ignorespaces Default ADD simulation with 10 runs}}{15}{figure.caption.21}%
+\contentsline {figure}{\numberline {24}{\ignorespaces Default ADD simulation with 10 runs (in over range mode)}}{15}{figure.caption.21}%
+\contentsline {figure}{\numberline {25}{\ignorespaces Original MT's template}}{16}{figure.caption.22}%
+\contentsline {figure}{\numberline {26}{\ignorespaces Original non-deterministic path choices example}}{16}{figure.caption.23}%
+\contentsline {figure}{\numberline {27}{\ignorespaces Close-up of the enemy locking \texttt {STMT} channel}}{17}{figure.caption.24}%
+\contentsline {figure}{\numberline {28}{\ignorespaces \texttt {STMTCONTROLLER} template}}{17}{figure.caption.24}%
+\contentsline {figure}{\numberline {29}{\ignorespaces Close-up of of the lifetime counter of an enemy}}{17}{figure.caption.25}%
 \providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 
