@@ -613,11 +613,11 @@ cannon(const int id) = turret(id, CANNON);
 sniper(const int id) = turret(id, SNIPER);
 
 //NO TURRETS CONFIG
-    /*
-        system circle,square;
-    */
-//WITH TURRETS "Default" CONFIG
     
+        system circle,square;
+    
+//WITH TURRETS "Default" CONFIG
+    /*
         t0 = cannon(0);
         t1 = cannon(1);
         t2 = basic(2);
@@ -627,7 +627,7 @@ sniper(const int id) = turret(id, SNIPER);
         t6 = cannon(6);
 
         system circle,square,t0,t1,t2,t3,t4,t5,t6;
-    
+    */
 //WITH TURRETS "DownFromCannons" CONFIG
     /*
         t0 = cannon(0);
@@ -708,7 +708,7 @@ This query MAY NOT work with turrets since some enemies may be killed before rea
 
 In any state of any path, if any enemy reaches the MT, its trip time must be less or equal than the product between the maximum path length and its speed.
 This query will still work with turrets (turrets do not change the time limit to reach the MT).</comment>
-			<result outcome="success" type="quality" timestamp="2025-07-14 07:44:37 +0200">
+			<result outcome="success" type="quality" timestamp="2025-07-14 10:23:19 +0200">
 			</result>
 		</query>
 		<query>
@@ -800,6 +800,13 @@ since it raised an error in Uppaal 5.0.0).</comment>
 			<comment>THIS QUERY WAS ONLY WRITTEN FOR DEBUGGING PURPOSES (USED TO TEST IF LEFT_ENEMIES HAS ALWAYS A VALID VALUE)</comment>
 			<result outcome="success" type="quality" timestamp="2025-07-10 11:30:45 +0200">
 			</result>
+		</query>
+		<query>
+			<formula>A&lt;&gt;(
+	(forall(i:int[0,N_CIRCLES-1])          (circle(i).Dismissed)) &amp;&amp;
+	(forall(i:int[N_CIRCLES,MAX_ENEMIES-1])(square(i).Dismissed))
+)</formula>
+			<comment>THIS QUERY WAS ONLY WRITTEN FOR DEBUGGING PURPOSES (USED TO TEST THAT WITHOUT TURRETS, ALL ENEMIES EVENTUALLY BECOME DISMISSED ALL TOGETHER)</comment>
 		</query>
 	</queries>
 </nta>
