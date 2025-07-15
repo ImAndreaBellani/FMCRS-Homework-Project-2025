@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.9.9)  14 JUL 2025 23:35
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.9.9)  16 JUL 2025 00:07
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1364,59 +1364,54 @@ LaTeX Font Info:    Font shape `T1/fvm/m/n' will be
 File: Figures/ndPathChoice.png Graphic file (type png)
 <use Figures/ndPathChoice.png>
 Package pdftex.def Info: Figures/ndPathChoice.png  used on input line 222.
-(pdftex.def)             Requested size: 266.03474pt x 156.74785pt.
+(pdftex.def)             Requested size: 241.84843pt x 142.497pt.
  [6 <./Figures/ndPathChoice.png>] [7] [8]
-<Figures/plots/SIM.png, id=194, 557.08125pt x 346.29375pt>
+<Figures/plots/SIM.png, id=195, 557.08125pt x 346.29375pt>
 File: Figures/plots/SIM.png Graphic file (type png)
 <use Figures/plots/SIM.png>
 Package pdftex.def Info: Figures/plots/SIM.png  used on input line 365.
 (pdftex.def)             Requested size: 217.66211pt x 135.30235pt.
-<Figures/plots/CPD.png, id=195, 557.08125pt x 346.29375pt>
+<Figures/plots/CPD.png, id=196, 557.08125pt x 346.29375pt>
 File: Figures/plots/CPD.png Graphic file (type png)
 <use Figures/plots/CPD.png>
 Package pdftex.def Info: Figures/plots/CPD.png  used on input line 370.
 (pdftex.def)             Requested size: 217.66211pt x 135.30235pt.
- [9]
-<Figures/configs/vanilla/DownFromCannons.png, id=201, 557.08125pt x 304.13625pt
+ [9 <./Figures/plots/SIM.png> <./Figures/plots/CPD.png>]
+<Figures/configs/vanilla/DownFromCannons.png, id=203, 557.08125pt x 304.13625pt
 >
 File: Figures/configs/vanilla/DownFromCannons.png Graphic file (type png)
 <use Figures/configs/vanilla/DownFromCannons.png>
 Package pdftex.def Info: Figures/configs/vanilla/DownFromCannons.png  used on i
 nput line 385.
 (pdftex.def)             Requested size: 193.47578pt x 105.62321pt.
-<Figures/configs/vanilla/DownFromSnipers.png, id=202, 578.66188pt x 335.75438pt
+<Figures/configs/vanilla/DownFromSnipers.png, id=204, 578.66188pt x 335.75438pt
 >
 File: Figures/configs/vanilla/DownFromSnipers.png Graphic file (type png)
 <use Figures/configs/vanilla/DownFromSnipers.png>
 Package pdftex.def Info: Figures/configs/vanilla/DownFromSnipers.png  used on i
 nput line 390.
 (pdftex.def)             Requested size: 241.84843pt x 140.32423pt.
-<Figures/configs/vanilla/Cannonphobia.png, id=203, 551.56062pt x 295.60437pt>
+<Figures/configs/vanilla/Cannonphobia.png, id=205, 551.56062pt x 295.60437pt>
 File: Figures/configs/vanilla/Cannonphobia.png Graphic file (type png)
 <use Figures/configs/vanilla/Cannonphobia.png>
 Package pdftex.def Info: Figures/configs/vanilla/Cannonphobia.png  used on inpu
 t line 398.
 (pdftex.def)             Requested size: 193.47578pt x 103.69312pt.
-<Figures/configs/vanilla/Sniperphobia.png, id=204, 638.385pt x 396.48125pt>
+<Figures/configs/vanilla/Sniperphobia.png, id=206, 638.385pt x 396.48125pt>
 File: Figures/configs/vanilla/Sniperphobia.png Graphic file (type png)
 <use Figures/configs/vanilla/Sniperphobia.png>
 Package pdftex.def Info: Figures/configs/vanilla/Sniperphobia.png  used on inpu
 t line 403.
 (pdftex.def)             Requested size: 241.84843pt x 150.20465pt.
 
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-
 Overfull \hbox (6.7505pt too wide) in paragraph at lines 420--420
 []|\T1/pplj/m/n/10 DownFromCannons| 
  []
 
-[10 <./Figures/plots/SIM.png> <./Figures/plots/CPD.png> <./Figures/configs/vani
-lla/DownFromCannons.png> <./Figures/configs/vanilla/DownFromSnipers.png>]
-[11 <./Figures/configs/vanilla/Cannonphobia.png> <./Figures/configs/vanilla/Sni
-perphobia.png>]
-<Figures/plots/SE/OVERVIEW WITH 10 RUNS/SNIPERPHOBIA.png, id=222, 557.08125pt x
+[10 <./Figures/configs/vanilla/DownFromCannons.png> <./Figures/configs/vanilla/
+DownFromSnipers.png> <./Figures/configs/vanilla/Cannonphobia.png> <./Figures/co
+nfigs/vanilla/Sniperphobia.png>]
+<Figures/plots/SE/OVERVIEW WITH 10 RUNS/SNIPERPHOBIA.png, id=216, 557.08125pt x
  346.29375pt>
 File: Figures/plots/SE/OVERVIEW WITH 10 RUNS/SNIPERPHOBIA.png Graphic file (typ
 e png)
@@ -1424,7 +1419,7 @@ e png)
 Package pdftex.def Info: Figures/plots/SE/OVERVIEW WITH 10 RUNS/SNIPERPHOBIA.pn
 g  used on input line 482.
 (pdftex.def)             Requested size: 217.66211pt x 135.30235pt.
-<Figures/plots/SE/OVERVIEW WITH 10 RUNS/DOWNFROMSNIPERS.png, id=223, 557.08125p
+<Figures/plots/SE/OVERVIEW WITH 10 RUNS/DOWNFROMSNIPERS.png, id=217, 557.08125p
 t x 346.29375pt>
 File: Figures/plots/SE/OVERVIEW WITH 10 RUNS/DOWNFROMSNIPERS.png Graphic file (
 type png)
@@ -1432,6 +1427,7 @@ type png)
 Package pdftex.def Info: Figures/plots/SE/OVERVIEW WITH 10 RUNS/DOWNFROMSNIPERS
 .png  used on input line 487.
 (pdftex.def)             Requested size: 217.66211pt x 135.30235pt.
+ [11]
 <Figures/plots/SE/OVERVIEW WITH 10 RUNS/CANNONPHOBIA.png, id=224, 557.08125pt x
  346.29375pt>
 File: Figures/plots/SE/OVERVIEW WITH 10 RUNS/CANNONPHOBIA.png Graphic file (typ
@@ -1488,8 +1484,9 @@ Package pdftex.def Info: Figures/plots/SE/CLOSE-UP WITH TINY WINDOW/DEFAULT.png
 [12 <./Figures/plots/SE/OVERVIEW WITH 10 RUNS/SNIPERPHOBIA.png> <./Figures/plot
 s/SE/OVERVIEW WITH 10 RUNS/DOWNFROMSNIPERS.png> <./Figures/plots/SE/OVERVIEW WI
 TH 10 RUNS/CANNONPHOBIA.png> <./Figures/plots/SE/OVERVIEW WITH 10 RUNS/DEFAULT.
-png>]
-<Figures/plots/SE/OVERVIEW WITH DELAY 7 SNIPERS/SNIPERPHOBIA.png, id=234, 557.0
+png> <./Figures/plots/SE/CLOSE-UP WITH TINY WINDOW/SNIPERPHOBIA.png> <./Figures
+/plots/SE/CLOSE-UP WITH TINY WINDOW/DOWNFROMSNIPERS.png>]
+<Figures/plots/SE/OVERVIEW WITH DELAY 7 SNIPERS/SNIPERPHOBIA.png, id=236, 557.0
 8125pt x 346.29375pt>
 File: Figures/plots/SE/OVERVIEW WITH DELAY 7 SNIPERS/SNIPERPHOBIA.png Graphic f
 ile (type png)
@@ -1497,36 +1494,35 @@ ile (type png)
 Package pdftex.def Info: Figures/plots/SE/OVERVIEW WITH DELAY 7 SNIPERS/SNIPERP
 HOBIA.png  used on input line 538.
 (pdftex.def)             Requested size: 241.84843pt x 150.33537pt.
-<Figures/plots/ADD/PD/SNIPERPHOBIA.png, id=235, 557.08125pt x 346.29375pt>
+<Figures/plots/ADD/PD/SNIPERPHOBIA.png, id=237, 557.08125pt x 346.29375pt>
 File: Figures/plots/ADD/PD/SNIPERPHOBIA.png Graphic file (type png)
 <use Figures/plots/ADD/PD/SNIPERPHOBIA.png>
 Package pdftex.def Info: Figures/plots/ADD/PD/SNIPERPHOBIA.png  used on input l
 ine 549.
 (pdftex.def)             Requested size: 193.47578pt x 120.26407pt.
-<Figures/plots/ADD/PD/DOWNFROMSNIPERS.png, id=236, 557.08125pt x 346.29375pt>
+<Figures/plots/ADD/PD/DOWNFROMSNIPERS.png, id=238, 557.08125pt x 346.29375pt>
 File: Figures/plots/ADD/PD/DOWNFROMSNIPERS.png Graphic file (type png)
 <use Figures/plots/ADD/PD/DOWNFROMSNIPERS.png>
 Package pdftex.def Info: Figures/plots/ADD/PD/DOWNFROMSNIPERS.png  used on inpu
 t line 554.
 (pdftex.def)             Requested size: 193.47578pt x 120.26407pt.
-<Figures/plots/ADD/PD/CANNONPHOBIA.png, id=237, 557.08125pt x 346.29375pt>
+<Figures/plots/ADD/PD/CANNONPHOBIA.png, id=239, 557.08125pt x 346.29375pt>
 File: Figures/plots/ADD/PD/CANNONPHOBIA.png Graphic file (type png)
 <use Figures/plots/ADD/PD/CANNONPHOBIA.png>
 Package pdftex.def Info: Figures/plots/ADD/PD/CANNONPHOBIA.png  used on input l
 ine 562.
 (pdftex.def)             Requested size: 193.47578pt x 120.26407pt.
-<Figures/plots/ADD/PD/DEFAULT.png, id=238, 557.08125pt x 346.29375pt>
+<Figures/plots/ADD/PD/DEFAULT.png, id=240, 557.08125pt x 346.29375pt>
 File: Figures/plots/ADD/PD/DEFAULT.png Graphic file (type png)
 <use Figures/plots/ADD/PD/DEFAULT.png>
 Package pdftex.def Info: Figures/plots/ADD/PD/DEFAULT.png  used on input line 5
 67.
 (pdftex.def)             Requested size: 193.47578pt x 120.26407pt.
- [13 <./Figures/plots/SE/CLOSE-UP WITH TINY WINDOW/SNIPERPHOBIA.png> <./Figures
-/plots/SE/CLOSE-UP WITH TINY WINDOW/DOWNFROMSNIPERS.png> <./Figures/plots/SE/CL
-OSE-UP WITH TINY WINDOW/CANNONPHOBIA.png> <./Figures/plots/SE/CLOSE-UP WITH TIN
-Y WINDOW/DEFAULT.png> <./Figures/plots/SE/OVERVIEW WITH DELAY 7 SNIPERS/SNIPERP
-HOBIA.png>]
-<Figures/plots/ADD/OVERVIEW WITH 10 RUNS/CANNONPHOBIA.png, id=248, 557.08125pt 
+ [13 <./Figures/plots/SE/CLOSE-UP WITH TINY WINDOW/CANNONPHOBIA.png> <./Figures
+/plots/SE/CLOSE-UP WITH TINY WINDOW/DEFAULT.png> <./Figures/plots/SE/OVERVIEW W
+ITH DELAY 7 SNIPERS/SNIPERPHOBIA.png> <./Figures/plots/ADD/PD/SNIPERPHOBIA.png>
+ <./Figures/plots/ADD/PD/DOWNFROMSNIPERS.png>]
+<Figures/plots/ADD/OVERVIEW WITH 10 RUNS/CANNONPHOBIA.png, id=250, 557.08125pt 
 x 346.29375pt>
 File: Figures/plots/ADD/OVERVIEW WITH 10 RUNS/CANNONPHOBIA.png Graphic file (ty
 pe png)
@@ -1534,7 +1530,7 @@ pe png)
 Package pdftex.def Info: Figures/plots/ADD/OVERVIEW WITH 10 RUNS/CANNONPHOBIA.p
 ng  used on input line 578.
 (pdftex.def)             Requested size: 193.47578pt x 120.26407pt.
-<Figures/plots/ADD/OVERVIEW WITH OVER RANGE/CANNONPHOBIA.png, id=249, 557.08125
+<Figures/plots/ADD/OVERVIEW WITH OVER RANGE/CANNONPHOBIA.png, id=251, 557.08125
 pt x 346.29375pt>
 File: Figures/plots/ADD/OVERVIEW WITH OVER RANGE/CANNONPHOBIA.png Graphic file 
 (type png)
@@ -1542,7 +1538,7 @@ File: Figures/plots/ADD/OVERVIEW WITH OVER RANGE/CANNONPHOBIA.png Graphic file
 Package pdftex.def Info: Figures/plots/ADD/OVERVIEW WITH OVER RANGE/CANNONPHOBI
 A.png  used on input line 583.
 (pdftex.def)             Requested size: 193.47578pt x 120.26407pt.
-<Figures/plots/ADD/OVERVIEW WITH 10 RUNS/DEFAULT.png, id=250, 557.08125pt x 346
+<Figures/plots/ADD/OVERVIEW WITH 10 RUNS/DEFAULT.png, id=252, 557.08125pt x 346
 .29375pt>
 File: Figures/plots/ADD/OVERVIEW WITH 10 RUNS/DEFAULT.png Graphic file (type pn
 g)
@@ -1550,7 +1546,7 @@ g)
 Package pdftex.def Info: Figures/plots/ADD/OVERVIEW WITH 10 RUNS/DEFAULT.png  u
 sed on input line 591.
 (pdftex.def)             Requested size: 193.47578pt x 120.26407pt.
-<Figures/plots/ADD/OVERVIEW WITH OVER RANGE/DEFAULT.png, id=251, 557.08125pt x 
+<Figures/plots/ADD/OVERVIEW WITH OVER RANGE/DEFAULT.png, id=253, 557.08125pt x 
 346.29375pt>
 File: Figures/plots/ADD/OVERVIEW WITH OVER RANGE/DEFAULT.png Graphic file (type
  png)
@@ -1558,28 +1554,27 @@ File: Figures/plots/ADD/OVERVIEW WITH OVER RANGE/DEFAULT.png Graphic file (type
 Package pdftex.def Info: Figures/plots/ADD/OVERVIEW WITH OVER RANGE/DEFAULT.png
   used on input line 596.
 (pdftex.def)             Requested size: 193.47578pt x 120.26407pt.
- [14 <./Figures/plots/ADD/PD/SNIPERPHOBIA.png> <./Figures/plots/ADD/PD/DOWNFROM
-SNIPERS.png> <./Figures/plots/ADD/PD/CANNONPHOBIA.png> <./Figures/plots/ADD/PD/
-DEFAULT.png> <./Figures/plots/ADD/OVERVIEW WITH 10 RUNS/CANNONPHOBIA.png> <./Fi
-gures/plots/ADD/OVERVIEW WITH OVER RANGE/CANNONPHOBIA.png>]
-[15 <./Figures/plots/ADD/OVERVIEW WITH 10 RUNS/DEFAULT.png> <./Figures/plots/AD
-D/OVERVIEW WITH OVER RANGE/DEFAULT.png>]
-<Figures/MT_Template.png, id=264, 431.11063pt x 138.5175pt>
+ [14 <./Figures/plots/ADD/PD/CANNONPHOBIA.png> <./Figures/plots/ADD/PD/DEFAULT.
+png> <./Figures/plots/ADD/OVERVIEW WITH 10 RUNS/CANNONPHOBIA.png> <./Figures/pl
+ots/ADD/OVERVIEW WITH OVER RANGE/CANNONPHOBIA.png> <./Figures/plots/ADD/OVERVIE
+W WITH 10 RUNS/DEFAULT.png> <./Figures/plots/ADD/OVERVIEW WITH OVER RANGE/DEFAU
+LT.png>]
+<Figures/MT_Template.png, id=260, 431.11063pt x 138.5175pt>
 File: Figures/MT_Template.png Graphic file (type png)
 <use Figures/MT_Template.png>
 Package pdftex.def Info: Figures/MT_Template.png  used on input line 611.
 (pdftex.def)             Requested size: 241.84843pt x 77.70665pt.
-<Figures/ENEMIES_PATHS.png, id=265, 668.4975pt x 352.81813pt>
+<Figures/ENEMIES_PATHS.png, id=261, 668.4975pt x 352.81813pt>
 File: Figures/ENEMIES_PATHS.png Graphic file (type png)
 <use Figures/ENEMIES_PATHS.png>
 Package pdftex.def Info: Figures/ENEMIES_PATHS.png  used on input line 619.
 (pdftex.def)             Requested size: 314.40001pt x 165.93759pt.
-<Figures/enemyLock.png, id=266, 371.88937pt x 137.51375pt>
+<Figures/enemyLock.png, id=262, 371.88937pt x 137.51375pt>
 File: Figures/enemyLock.png Graphic file (type png)
 <use Figures/enemyLock.png>
 Package pdftex.def Info: Figures/enemyLock.png  used on input line 630.
 (pdftex.def)             Requested size: 217.66211pt x 80.48613pt.
-<Figures/controller.png, id=267, 250.43562pt x 101.37875pt>
+<Figures/controller.png, id=263, 250.43562pt x 101.37875pt>
 File: Figures/controller.png Graphic file (type png)
 <use Figures/controller.png>
 Package pdftex.def Info: Figures/controller.png  used on input line 635.
@@ -1588,15 +1583,15 @@ Package pdftex.def Info: Figures/controller.png  used on input line 635.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[16 <./Figures/MT_Template.png> <./Figures/ENEMIES_PATHS.png>]
-<Figures/lifetimeCounter.png, id=274, 382.42876pt x 241.40187pt>
+[15 <./Figures/MT_Template.png> <./Figures/ENEMIES_PATHS.png>]
+<Figures/lifetimeCounter.png, id=270, 382.42876pt x 241.40187pt>
 File: Figures/lifetimeCounter.png Graphic file (type png)
 <use Figures/lifetimeCounter.png>
 Package pdftex.def Info: Figures/lifetimeCounter.png  used on input line 657.
 (pdftex.def)             Requested size: 241.84843pt x 152.66228pt.
- [17 <./Figures/enemyLock.png> <./Figures/controller.png> <./Figures/lifetimeCo
+ [16 <./Figures/enemyLock.png> <./Figures/controller.png> <./Figures/lifetimeCo
 unter.png>]
-[18] (./article_4.aux)
+[17] (./article_4.aux)
  ***********
 LaTeX2e <2023-06-01> patch level 1
 L3 programming layer <2020/03/25>
@@ -1609,9 +1604,9 @@ Package logreq Info: Writing requests to 'article_4.run.xml'.
  ) 
 Here is how much of TeX's memory you used:
  29153 strings out of 474934
- 557454 string characters out of 5763815
- 1946801 words of memory out of 5000000
- 50167 multiletter control sequences out of 15000+600000
+ 557463 string characters out of 5763815
+ 1945801 words of memory out of 5000000
+ 50168 multiletter control sequences out of 15000+600000
  674616 words of font info for 164 fonts, out of 8000000 for 9000
  1143 hyphenation exceptions out of 8191
  108i,23n,112p,10955b,1560s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -1632,10 +1627,10 @@ sam10.pfb><c:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/symbols/msam7
 .pfb><c:/texlive/2023/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb><c:/texliv
 e/2023/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb><c:/texlive/2023/texmf-di
 st/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on article_4.pdf (18 pages, 1772445 bytes).
+Output written on article_4.pdf (17 pages, 1771340 bytes).
 PDF statistics:
- 513 PDF objects out of 1000 (max. 8388607)
- 399 compressed objects within 4 object streams
- 94 named destinations out of 1000 (max. 500000)
+ 509 PDF objects out of 1000 (max. 8388607)
+ 396 compressed objects within 4 object streams
+ 93 named destinations out of 1000 (max. 500000)
  22402 words of extra memory for PDF output out of 24883 (max. 10000000)
 

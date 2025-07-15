@@ -172,7 +172,7 @@ pdfcreator={pdflatex}]{hyperref}
 			This document was written over the template Arsclassica Article (\url{https://www.latextemplates.com/template/arsclassica-article}) with few adjustments by us.
 	\newpage
 	\section{Model description}
-		We modeled both the Vanilla and the Stochastic version of the game. In particular, we firstly modeled the Vanilla version and then proceeded to modify it to model the stochastic requirements. In this section we provide a detailed explanation of both versions and how the Stochastic one was obtained from the Vanilla one..
+		We modeled both the Vanilla and the Stochastic version of the game. In particular, we firstly modeled the Vanilla version and then proceeded to modify it to model the stochastic requirements. In this section we provide a detailed explanation of both versions and how the Stochastic version was obtained from the Vanilla one.
 		\subsection{Entities modeling (for Vanilla version)}
 			\subsubsection{Map}
 				There is no template that models the Map. Each enemy and each turret has a \texttt{Cell} variable that represents its actual position on the map (\texttt{Cell} is simply a \texttt{struct} with two bounded integers):
@@ -219,7 +219,7 @@ pdfcreator={pdflatex}]{hyperref}
 					The very interesting design choice behind the move of an enemy is how a (deterministic, since Uppaal \texttt{random} is not available in symbolic simulation) function like \texttt{next} can model the non-deterministic next cell choice an enemy has to take in a red paths junction. Simply, the choices an enemy will take in junctions are non-deterministically determined "a priori" when an enemy spawns, by calling \texttt{initialize} with different parameters:
 					\begin{figure}[h!]
 						\centering
-						\includegraphics[width=0.55\textwidth]{ndPathChoice.png}
+						\includegraphics[width=0.5\textwidth]{ndPathChoice.png}
 						\caption{Close-up of how "a priori" non-deterministic path choice is implemented in the enemy template}
 					\end{figure}
 					
@@ -263,33 +263,33 @@ pdfcreator={pdflatex}]{hyperref}
 				Note that the complexity of both \texttt{canShoot} and \texttt{target} is linear in the \texttt{shoot\_table} length but it is totally independent of the size of the shooting range.
 				
 				Another improvement that could be argued is to let \texttt{canShoot} pass the first enemy in the shooting range found to \texttt{target}, in this way the latter has already a candidate enemy. However, since \texttt{canShoot} is inside a guard, it must be side-effects free, therefore it can't change a value outside of its scope.
-		\subsection{Communication modeling description (for Vanilla version)}
+		\subsection{Communication modeling description}
 			\subsubsection{How turrets shoot to enemies}
-				Each enemy has a record in the \texttt{shoot\_table} structure that keeps updated. This record contains all the information turrets need to identify which enemy shoot (position, time in which the enemy spawned and enemy's kind) and a flag to know if that enemy is present on the map.
+				Each enemy has a record in the \texttt{shoot\_table} structure to keep updated. This record contains all the information turrets need to identify the enemy to shoot (i.e. position, time in which the enemy spawned and enemy's kind) and a flag to know if that enemy is present on the map.
 				
-				Once an enemy is targeted, the turret places on the global variable \texttt{target\_record} the id of the target and the related damage. In the meantime a message to all (targetable) enemies is sent over the broadcast channel \texttt{SHOOT\_TO\_ENEMY}, then each one checks if their id corresponds to the one of the target and if it is, they decrement their life accordingly to the damage and in case their health is now zero or below they leave the map.
+				Once an enemy is targeted, the turret places on the global variable \texttt{target\_record} the id of the target and the related damage. In the meantime a message to all (targetable) enemies is sent over the broadcast channel \texttt{SHOOT\_TO\_ENEMY}, then each enemy checks if its id corresponds to the one of the target; if it is, it decrements its life accordingly to the damage and in case its health is now at zero or below it leaves the map.
 				
-				An important design choice is that \texttt{SHOOT\_TO\_ENEMY} is an urgent channel. In our vision of the game, when a turret can shoot, time can't elapse. This does not avoid situations where the delay of an enemy is fully elapsed and the move is performed while the "urgent" transition is enabled by a turret (because in this case the delay has already fully elapsed, so this update does not concern time) but avoids situations where a turret is ready to shoot and it is completely ignored by the progress of time. In other words, a shot to an enemy must be performed in the same time unit where it is "calculated", any other action that "would make the time progress" is "postponed" as long as the turret can fire. It is a simple rule to extremely reduce the space of possible executions (since transitions related to a shot can never "interleave" the passage of time) and ensure a more predictable and reasonable behavior of the model. We can rephrase this choice by considering time as a resource that enemies need to move and turrets need to shoot. Once a turret is able to shoot, it is not fair (for our interpretation of the game) that time is "gained" by enemies which delay has not fully elapsed yet. Note that this choice can be also interpreted as the opponent case where a turret needs to wait and an enemy can move. In this situation, time can never pass since it is "blocked" by the combination of invariant and guard in the enemy template. Therefore, it would not be fair for turrets if a turret is ready to shoot but enemies (with a delay that still has to elapse) can "ignore" this situation. Note that (this is a more technical explanation) this "fairness" needs \texttt{SHOOT\_TO\_ENEMY} to be urgent since the transition fired once the turret delay has expired is not the one that performs the shoot (since \texttt{canMove} may not be true by the time the delay expires, this design choice may cause deadlocks), in that case we obtained the same effect with an urgent channel.
+				Note that \texttt{SHOOT\_TO\_ENEMY} is an urgent channel. In other words, a shot to an enemy must be performed in the same time unit where it is "calculated", any other action that "would make the time progress" is "postponed" as long as the turret can fire. We can rephrase this choice by considering time as a resource that enemies need to move and turrets need to shoot. Once a turret is able to shoot, it is not fair (for our interpretation of the game) that time is "gained" by enemies which delay has not fully elapsed yet. This choice can be also interpreted as the opponent case where a turret needs to wait and an enemy can move. In this situation, time can never pass since it is "blocked" by the combination of invariant and guard in the enemy template, therefore it would not be fair for turrets if a turret is ready to shoot but enemies (with a delay that still has to elapse) can "ignore" this situation. Moreover, this "fairness" needs \texttt{SHOOT\_TO\_ENEMY} to be urgent since the transition fired once the turret delay has expired (i.e. the one with the guard \texttt{x$\geq$speed}) is not the one that performs the shoot (since \texttt{canMove} may not be true by the time the delay expires, this design choice may cause deadlocks), in that case we would obtain the same effect with an urgent channel.
 			\subsubsection{How enemies shoot to the MT}
-				Since there is no template for the MT, there is apparently no need to use define a channel to "synchronize" the shot since it is nothing more than a decrement of a global variable. However, we still designed an urgent broadcast channel to guarantee that once an enemy can shoot to the MT, time can't elapse (for the same reason why \texttt{SHOOT\_TO\_ENEMY} is urgent). Note that it is necessary to define the channel as broadcast otherwise, since there is no entity that "receives" the message sent over it, a deadlock would happen if an enemy wants to send a message over a non-broadcast channel where no entity is listening on and the time is blocked since the channel is urgent.
+				Since there is no template for the MT, there is apparently no need to define a channel to "synchronize" the shot since it is nothing more than a decrement of a global variable. However, we still designed an urgent broadcast channel to guarantee that once an enemy can shoot to the MT, time can't elapse (for the same reason why \texttt{SHOOT\_TO\_ENEMY} is urgent). Note that it is necessary to define the channel as broadcast otherwise, since there is no entity that "receives" the message sent over it, a deadlock would happen if an enemy wants to send a message over a non-broadcast channel where no entity is listening on and the time is blocked since the channel is urgent.
 		\subsection{Enrichment of Vanilla model with stochastic features}
 			To model the stochastic features, there are no big changes from the Vanilla model but they are crucial:
 			\begin{itemize}
 				\item enemies and turrets "speeds" delays : it is no more modeled with a clock but with a simple self-transition (which guard of course does not involve clocks) and a \texttt{rate of exponential} properly set to in the location. In this way, the probability of leaving from the state with the self-transition determines the delay before an enemy's move or a turret can shoot again;
-				\item self-loop in \texttt{Dismissed} : [SPIEGARE COME MAI DAVVERO E' STATO RIMOSSO, DATO CHE NON CREDO NON SIA CONCESSO AVERE NESSUNO STATO SENZA INVARIANTI E SENZA RATE OF EXPONENTIAL].
+				\item self-loop in \texttt{Dismissed} : it is removed since Uppaal (if we keep \texttt{Dismissed} without time invariants and rate of exponential) can't determine which transition to choose when that self-loop is enabled. We are not interested in deadlocks for the stochastic version, so we can safely remove it.
 			\end{itemize}
 			The only delay that is still implemented as a "non-probabilistic" delay is the one related to the spawning time.
 			
-			Note that there was no change in communication channels since all of them were broadcast also in the Vanilla version (stochastic models can only use broadcast channels) and the motivations behind making them \texttt{urgent} are independent of the stochastic nature of the model.
+			Note that there was no change in communication channels since they are already broadcast (stochastic models can only use broadcast channels) and the motivations behind making them \texttt{urgent} are independent of the stochastic nature of the model.
 	\section{Verification results}
 		\subsection{Vanilla model verification}
 			\subsubsection{Verification without turrets}
-				To verify the requested query we wrote the following Uppaal queries:
+				To verify the requested properties we wrote the following queries in Uppaal:
 				\begin{table}[H]
 					\centering
 					\begin{tabularx}{\textwidth}{||c|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X||}
 						\hline
-						 & Verified properties & Result [T/F] & Verification time on Machine 1 [s] & Verification time on Machine 2 [s] & Average maximum past-waiting list load \\
+						 & Verified properties & Result [T/F] & Verification time on Machine 1 [s] & Verification time on Machine 2 [s] & Max. past-waiting list load \\
 						\hline
 						Q1 & I & T& $\approx$ 9.7 & $\approx$ 5.6& $\approx$ 13100\\ \hline
 						Q2 & II & T&  $\approx$ 10.5 & $\approx$ 6.9 & $\approx$ 220\\ \hline
@@ -338,7 +338,7 @@ pdfcreator={pdflatex}]{hyperref}
 					\centering
 					\begin{tabularx}{\textwidth}{||c|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X||}
 						\hline
-						& Verified properties & Result [T/F] & Verification time on Machine 1 [s] & Verification time on Machine 2 [s] & Average maximum past-waiting list load \\
+						& Verified properties & Result [T/F] & Verification time on Machine 1 [s] & Verification time on Machine 2 [s] & Max. past-waiting list load \\
 						\hline
 						Q1 & VII & T & $\approx$ 284.3 & $\approx$ 78 & $\approx$ 50000\\ \hline
 						Q5 & VI & T &  $\approx$ 100.4 & $\approx$ 46.5 & $\approx$ 49000  \\
@@ -570,7 +570,7 @@ pdfcreator={pdflatex}]{hyperref}
 			\end{figure}
 			Sniperphobia tends to kill enemies in a slightly greater distance from the MT spot and with more "uniform" probability distribution.
 			
-			Finally, we simulated the system in what we called the \emph{Over Range mode}: any turret has a range of 15 (i.e. any turret may fire enemies in any point of the map). We may think that this parameter choice tends to uniform the performances between configurations or tends to let snipers outclass cannons and basics however, no index changed significantly its trend also in comparison to the ones of other configurations. The only notable change we found is that the hyperbolic trend of ADD tends to have an higher product rather than just an higher asymptotic value:
+			Finally, we simulated the system in what we called the \emph{Over Range mode}: any turret has a range of 15 (i.e. any turret may fire enemies in any point of the map). We may think that this parameter choice tends to uniform the performances between configurations or tends to let snipers outclass cannons and basics however, no index changed significantly its trend. The only notable change we found is that the hyperbolic trend of ADD tends to have an higher product rather than just an higher asymptotic value:
 			\begin{figure}[H]
 				\centering
 				\begin{minipage}{.4\textwidth}
