@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.9.9)  16 JUL 2025 00:07
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.9.9)  17 JUL 2025 22:25
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1366,12 +1366,12 @@ File: Figures/ndPathChoice.png Graphic file (type png)
 Package pdftex.def Info: Figures/ndPathChoice.png  used on input line 222.
 (pdftex.def)             Requested size: 241.84843pt x 142.497pt.
  [6 <./Figures/ndPathChoice.png>] [7] [8]
-<Figures/plots/SIM.png, id=195, 557.08125pt x 346.29375pt>
+<Figures/plots/SIM.png, id=194, 557.08125pt x 346.29375pt>
 File: Figures/plots/SIM.png Graphic file (type png)
 <use Figures/plots/SIM.png>
 Package pdftex.def Info: Figures/plots/SIM.png  used on input line 365.
 (pdftex.def)             Requested size: 217.66211pt x 135.30235pt.
-<Figures/plots/CPD.png, id=196, 557.08125pt x 346.29375pt>
+<Figures/plots/CPD.png, id=195, 557.08125pt x 346.29375pt>
 File: Figures/plots/CPD.png Graphic file (type png)
 <use Figures/plots/CPD.png>
 Package pdftex.def Info: Figures/plots/CPD.png  used on input line 370.
@@ -1410,8 +1410,8 @@ Overfull \hbox (6.7505pt too wide) in paragraph at lines 420--420
 
 [10 <./Figures/configs/vanilla/DownFromCannons.png> <./Figures/configs/vanilla/
 DownFromSnipers.png> <./Figures/configs/vanilla/Cannonphobia.png> <./Figures/co
-nfigs/vanilla/Sniperphobia.png>]
-<Figures/plots/SE/OVERVIEW WITH 10 RUNS/SNIPERPHOBIA.png, id=216, 557.08125pt x
+nfigs/vanilla/Sniperphobia.png>] [11]
+<Figures/plots/SE/OVERVIEW WITH 10 RUNS/SNIPERPHOBIA.png, id=222, 557.08125pt x
  346.29375pt>
 File: Figures/plots/SE/OVERVIEW WITH 10 RUNS/SNIPERPHOBIA.png Graphic file (typ
 e png)
@@ -1419,7 +1419,7 @@ e png)
 Package pdftex.def Info: Figures/plots/SE/OVERVIEW WITH 10 RUNS/SNIPERPHOBIA.pn
 g  used on input line 482.
 (pdftex.def)             Requested size: 217.66211pt x 135.30235pt.
-<Figures/plots/SE/OVERVIEW WITH 10 RUNS/DOWNFROMSNIPERS.png, id=217, 557.08125p
+<Figures/plots/SE/OVERVIEW WITH 10 RUNS/DOWNFROMSNIPERS.png, id=223, 557.08125p
 t x 346.29375pt>
 File: Figures/plots/SE/OVERVIEW WITH 10 RUNS/DOWNFROMSNIPERS.png Graphic file (
 type png)
@@ -1427,7 +1427,6 @@ type png)
 Package pdftex.def Info: Figures/plots/SE/OVERVIEW WITH 10 RUNS/DOWNFROMSNIPERS
 .png  used on input line 487.
 (pdftex.def)             Requested size: 217.66211pt x 135.30235pt.
- [11]
 <Figures/plots/SE/OVERVIEW WITH 10 RUNS/CANNONPHOBIA.png, id=224, 557.08125pt x
  346.29375pt>
 File: Figures/plots/SE/OVERVIEW WITH 10 RUNS/CANNONPHOBIA.png Graphic file (typ
@@ -1603,10 +1602,10 @@ Package logreq Info: Writing requests to 'article_4.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 29153 strings out of 474934
- 557463 string characters out of 5763815
+ 29152 strings out of 474934
+ 557449 string characters out of 5763815
  1945801 words of memory out of 5000000
- 50168 multiletter control sequences out of 15000+600000
+ 50167 multiletter control sequences out of 15000+600000
  674616 words of font info for 164 fonts, out of 8000000 for 9000
  1143 hyphenation exceptions out of 8191
  108i,23n,112p,10955b,1560s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -1627,7 +1626,7 @@ sam10.pfb><c:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/symbols/msam7
 .pfb><c:/texlive/2023/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb><c:/texliv
 e/2023/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb><c:/texlive/2023/texmf-di
 st/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on article_4.pdf (17 pages, 1771340 bytes).
+Output written on article_4.pdf (17 pages, 1771367 bytes).
 PDF statistics:
  509 PDF objects out of 1000 (max. 8388607)
  396 compressed objects within 4 object streams

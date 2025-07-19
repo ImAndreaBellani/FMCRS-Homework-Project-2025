@@ -269,14 +269,14 @@ pdfcreator={pdflatex}]{hyperref}
 				
 				Once an enemy is targeted, the turret places on the global variable \texttt{target\_record} the id of the target and the related damage. In the meantime a message to all (targetable) enemies is sent over the broadcast channel \texttt{SHOOT\_TO\_ENEMY}, then each enemy checks if its id corresponds to the one of the target; if it is, it decrements its life accordingly to the damage and in case its health is now at zero or below it leaves the map.
 				
-				Note that \texttt{SHOOT\_TO\_ENEMY} is an urgent channel. In other words, a shot to an enemy must be performed in the same time unit where it is "calculated", any other action that "would make the time progress" is "postponed" as long as the turret can fire. We can rephrase this choice by considering time as a resource that enemies need to move and turrets need to shoot. Once a turret is able to shoot, it is not fair (for our interpretation of the game) that time is "gained" by enemies which delay has not fully elapsed yet. This choice can be also interpreted as the opponent case where a turret needs to wait and an enemy can move. In this situation, time can never pass since it is "blocked" by the combination of invariant and guard in the enemy template, therefore it would not be fair for turrets if a turret is ready to shoot but enemies (with a delay that still has to elapse) can "ignore" this situation. Moreover, this "fairness" needs \texttt{SHOOT\_TO\_ENEMY} to be urgent since the transition fired once the turret delay has expired (i.e. the one with the guard \texttt{x$\geq$speed}) is not the one that performs the shoot (since \texttt{canMove} may not be true by the time the delay expires, this design choice may cause deadlocks), in that case we would obtain the same effect with an urgent channel.
+				Note that \texttt{SHOOT\_TO\_ENEMY} is an urgent channel. In other words, a shot to an enemy must be performed in the same time unit where it is "calculated", any other action that "would make the time progress" is "postponed" as long as the turret can fire. We can rephrase this choice by considering time as a resource that enemies need to move and turrets need to shoot. Once a turret is able to shoot, it is not equitable (for our interpretation of the game) that time is "gained" by enemies which delay has not fully elapsed yet. This choice can be also interpreted as the opponent case where a turret needs to wait and an enemy can move. In this situation, time can never pass since it is "blocked" by the combination of invariant and guard in the enemy template, therefore it would not be equitable for turrets if a turret is ready to shoot but enemies (with a delay that still has to elapse) can "ignore" this situation. To implement this concept of "impartiality" we need \texttt{SHOOT\_TO\_ENEMY} to be urgent since the transition fired once the turret delay has expired (i.e. the one with the clock-guard) is not the one that performs the shot (since \texttt{canMove} may not be true by the time the delay expires, this design choice may cause deadlocks), in that case we would have obtained the same effect of an urgent transition.
 			\subsubsection{How enemies shoot to the MT}
 				Since there is no template for the MT, there is apparently no need to define a channel to "synchronize" the shot since it is nothing more than a decrement of a global variable. However, we still designed an urgent broadcast channel to guarantee that once an enemy can shoot to the MT, time can't elapse (for the same reason why \texttt{SHOOT\_TO\_ENEMY} is urgent). Note that it is necessary to define the channel as broadcast otherwise, since there is no entity that "receives" the message sent over it, a deadlock would happen if an enemy wants to send a message over a non-broadcast channel where no entity is listening on and the time is blocked since the channel is urgent.
 		\subsection{Enrichment of Vanilla model with stochastic features}
 			To model the stochastic features, there are no big changes from the Vanilla model but they are crucial:
 			\begin{itemize}
 				\item enemies and turrets "speeds" delays : it is no more modeled with a clock but with a simple self-transition (which guard of course does not involve clocks) and a \texttt{rate of exponential} properly set to in the location. In this way, the probability of leaving from the state with the self-transition determines the delay before an enemy's move or a turret can shoot again;
-				\item self-loop in \texttt{Dismissed} : it is removed since Uppaal (if we keep \texttt{Dismissed} without time invariants and rate of exponential) can't determine which transition to choose when that self-loop is enabled. We are not interested in deadlocks for the stochastic version, so we can safely remove it.
+				\item self-loop in \texttt{Dismissed} : it is removed since Uppaal can't determine which transition to choose when that self-loop is enabled (if we keep \texttt{Dismissed} without time invariants or rate of exponential, there is no probability that can be used to determine the following state). We are not interested in deadlocks for the stochastic version, so we can safely remove it.
 			\end{itemize}
 			The only delay that is still implemented as a "non-probabilistic" delay is the one related to the spawning time.
 			
@@ -322,15 +322,15 @@ pdfcreator={pdflatex}]{hyperref}
 				\end{center}
 				Simply, once an enemy is \texttt{OnTrip} and reaches the MT spot, it must have satisfied the time constraint for its kind (\texttt{trip\_time} is a classic clock that counts the time units passed from the spawn).
 				
-				Note that this query would not be satisfied in this form if \texttt{SHOOT\_TO\_MT} was not \texttt{urgent}, since this imposes that time (and so also \texttt{trip\_time}) can't progress as long as the MT spot in reached in \texttt{OnTrip}.
+				Note that this query would not be satisfied in this form if \texttt{SHOOT\_TO\_MT} was not \texttt{urgent}, since this imposes that time (and so also \texttt{trip\_time}) can't progress as long as the enemy is at the the MT spot in \texttt{OnTrip}.
 				
-				Q4 is probably the most intuitive query:
+				Q4 is probably the most intuitive query ($shoot\_table[e]$ identifies the record related to the enemy $e$ in the $shoot\_table$):
 				\begin{center}
 					$A\square(\forall e \in Enemy\ (shoot\_table[e].targetable \implies isRed(e.pos)))$
 				\end{center}
 				In any state of any possible path, if an enemy is targetable it must be on a red spot.
 				
-				Note that since \texttt{pos} is by default \texttt{\{0,0\}} before spawning and it is kept to the MT spot once it is reached, even if an enemy is not targetable anymore it will be anyway on a red spot. We put this restriction to the "query scope" because there is no need to check \texttt{pos} if an enemy is not present on the map. 
+				Note that since \texttt{pos} is by default \texttt{\{0,0\}} before spawning and it is kept at the MT spot once it is reached, even if an enemy is not targetable it will be anyway on a red spot. We put this restriction to the "query scope" because there is no need to check \texttt{pos} if an enemy is not present on the map. 
 			\subsubsection{Verification with turrets}
 				To verify the requested queries we wrote the following queries in Uppaal:
 				
@@ -340,7 +340,7 @@ pdfcreator={pdflatex}]{hyperref}
 						\hline
 						& Verified properties & Result [T/F] & Verification time on Machine 1 [s] & Verification time on Machine 2 [s] & Max. past-waiting list load \\
 						\hline
-						Q1 & VII & T & $\approx$ 284.3 & $\approx$ 78 & $\approx$ 50000\\ \hline
+						Q1 & VII & T & $\approx$ 167 & $\approx$ 78 & $\approx$ 50000\\ \hline
 						Q5 & VI & T &  $\approx$ 100.4 & $\approx$ 46.5 & $\approx$ 49000  \\
 						\hline
 					\end{tabularx}
@@ -368,12 +368,12 @@ pdfcreator={pdflatex}]{hyperref}
 				\begin{minipage}{.45\textwidth}
 					\centering
 					\includegraphics[width=\linewidth]{plots/CPD.png}
-					\caption{Cumulative probability distribution that MT is eventually damage in the first 200 time units (with 1000 runs)}
+					\caption{Cumulative probability distribution that MT is eventually damaged in the first 200 time units (with 1000 runs)}
 				\end{minipage}
 			\end{figure}
 			By simulating the system, we see that in the majority of the runs the MT starts to be damaged around 90 time units and the cumulative probability distribution identifies a mean of $\approx88$ time units.
 			
-			Also for the property II we wanted to verify it with two complementary approaches. The first one is a classical measurement of the probability that MT's life remains $>0$ in the first 200 time units, while the second one is the calculus of the cumulative probability distribution that MT life is eventually $\leq0$ until the wave has ended. The probability that MT survives in the first 200 time units is $0.633605\pm 0.0303201$ while the cumulative probability distribution that MT is defeated in the first 200 time units is $\approx 0.392$, which is coherent since it is the calculus of the complementary probability that the MT survives in the first 200 time units.
+			Also for the property II we wanted to verify it with two complementary approaches. The first one is a classical measurement of the probability that MT's life remains $>0$ in the first 200 time units, while the second one is the calculus of the cumulative probability distribution that MT life is eventually $\leq0$ until the wave has ended. The probability that MT survives in the first 200 time units is $0.633605\pm 0.0303201$ while the cumulative probability distribution that MT is defeated in the first 200 time units is $\approx 0.392$, which is coherent since it is the calculus of the complementary probability that the MT always survives in the first 200 time units.
 			
 	\section{Analysis of selected configurations}
 		\subsection{Vanilla version}
@@ -458,7 +458,7 @@ pdfcreator={pdflatex}]{hyperref}
 			Note that:
 			\begin{itemize}
 				\item strongly-winning configurations have a SE of 0 (if an enemy has survived it means that it shot the MT, and so the configuration can't be strongly-winning);
-				\item weakly-winning configurations likely a have lower ADMT since at least for the execution where the MT is defeated, an amount of enemies arrived at the MT spot and for the same reason, they are likely to have higher SE;
+				\item weakly-winning configurations are likely to have a lower ADMT since at least for the execution where the MT is defeated, an amount of enemies arrived at the MT spot and for the same reason, they are likely to have higher SE;
 				\item it is quite unlikely to have a configuration where $CUPE>SE$ or $CLPE>SE$, because enemies that reached the MT are really likely to survive (and they will survive of course in configurations like Cannonphobia where the MT spot is outside of any shooting range).
 			\end{itemize}
 			At the end, to judge a configuration we may look for the one with an higher ADMT and a lower SE. CUPE and CLPE and are not better than SE to compare configurations, we defined them to demonstrate that configurations that do not cover parts of the map are more like to see (from the MT spot point of view) enemies coming from those parts. Indeed, DownFromCannons and DownFromSnipers have $CUPE\leq CLPE$ since they cover more the higher paths of the map, while more "uniform" configurations tend to have $CUPE=CLPE=SE$ (that holds also from a probabilistic point of view; see the section dedicated to the spawn strategy).
@@ -598,7 +598,7 @@ pdfcreator={pdflatex}]{hyperref}
 				\end{minipage}
 			\end{figure}
 	\section{Conclusions}
-		We modeled UppaalTD in both Vanilla and Stochastic version and verified relevant properties on it. Moreover, we defined metrics to evaluate and compare different configurations in Vanilla version and demonstrated with a small amount of selected configurations that winning and strongly-winning configurations tend to have higher performances w.r.t. them. Finally, we analyzed how these (and other) indexes evolve in stochastic simulations in order to identify more general behaviors of the model and we tried to reason on the observed behaviors.
+		We modeled UppaalTD in both Vanilla and Stochastic version and verified relevant properties on it. Moreover, we defined metrics to evaluate and compare different configurations in Vanilla version and demonstrated with a small amount of selected configurations that winning and strongly-winning configurations tend to have higher performances w.r.t. them. Finally, we analyzed how these (and other) indexes evolve in stochastic simulations in order to identify more general behaviors of the model and we tried to reason on the behaviors we observed.
 	\newpage
 	\appendix
 	\section{Discarded choices}

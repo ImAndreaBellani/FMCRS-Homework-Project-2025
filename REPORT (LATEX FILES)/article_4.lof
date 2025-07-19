@@ -1,7 +1,7 @@
 \deactivateaddvspace 
 \contentsline {figure}{\numberline {1}{\ignorespaces Close-up of how "a priori" non-deterministic path choice is implemented in the enemy template}}{6}{figure.caption.5}%
 \contentsline {figure}{\numberline {2}{\ignorespaces Simulation of \texttt {mt\_life==MT.health} in the first 200 time units (over 100 runs)}}{9}{figure.caption.8}%
-\contentsline {figure}{\numberline {3}{\ignorespaces Cumulative probability distribution that MT is eventually damage in the first 200 time units (with 1000 runs)}}{9}{figure.caption.8}%
+\contentsline {figure}{\numberline {3}{\ignorespaces Cumulative probability distribution that MT is eventually damaged in the first 200 time units (with 1000 runs)}}{9}{figure.caption.8}%
 \contentsline {figure}{\numberline {4}{\ignorespaces \emph {DownFromCannons} configuration}}{10}{figure.caption.9}%
 \contentsline {figure}{\numberline {5}{\ignorespaces \emph {DownFromSnipers} configuration}}{10}{figure.caption.9}%
 \contentsline {figure}{\numberline {6}{\ignorespaces \emph {Cannonphobia} configuration}}{10}{figure.caption.10}%
