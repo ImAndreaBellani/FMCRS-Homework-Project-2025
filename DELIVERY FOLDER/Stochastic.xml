@@ -326,7 +326,7 @@ An enemy stays in this state (in the sense that only takes self-transitions) as 
 
 An enemy starts its execution from this state, where it stays for an amount of time exactly equal to "spawningTime" before leaving.
 
-Since in this state the "shoot_table[id].targettable" is set to false, it can't be targetted by turrets.
+Since in this state the "shoot_table[id].targetable" is set to false, it can't be targetted by turrets.
 
 Once the spawningTime has expired, there are three possible transition through "OnTrip" and what changes between them is simply
 the value assigned to the variable "chosenPath":
@@ -708,12 +708,12 @@ const int TINY_WINDOW := 100; //to analyze behaviors at the beginning of a wave
     -&gt; set MAX_ENEMIES (in "Declarations") to the number of enemies of the wave;
     -&gt; set N_CIRCLES to the number of circles of the wave.
     
-    To change a configuration:
+    To define a configuration:
     -&gt; instantiate a turret (of the type you want) and pass the index value that corresponds to the position you want for that
        turret in "turrets_board" (e.g. to place a "sniper" in position "{8,2}", use "turret(5,SNIPER)", since "turrets_board[5]={8,2}").
 
     To switch between configurations:
-    -&gt; use comments below to comment/de-comment "system" and "ti" instructions.    
+    -&gt; use comments below to comment/de-comment "system" and "ti" assignments.    
 */
 
 circle(const int[0,N_CIRCLES-1] id) = compactEnemy(id, CIRCLE.speed, CIRCLE.health, CIRCLE.damage, id*CIRCLE.spawningTime, CIRCLE.kind);
@@ -66905,7 +66905,7 @@ Mean estimate of displayed sample: 87.764 ± 0.71922 (95% CI)</comment>
 			<formula>E[&lt;=TINY_WINDOW;1000](max: survived_enemies())
 
 </formula>
-			<comment>This query estimates the probability distribution of the maximum value of the SE with a close-up of the TINY_WINDOW</comment>
+			<comment>This query estimates the probability distribution of the SE with a close-up of the TINY_WINDOW</comment>
 			<result outcome="success" type="quantity" value="1.658 ± 0.0857376 (95% CI)" timestamp="2025-07-12 15:51:54 +0200">
 				<details>1.658 ± 0.0857376 (95% CI)</details>
 				<plot title="Probability Density Distribution" xaxis="max: survived_enemies()" yaxis="probability density">

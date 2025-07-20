@@ -71,7 +71,7 @@ pdfcreator={pdflatex}]{hyperref}
 	\maketitle % Print the title/author/date block
 	
 	\paragraph*{Abstract}
-		Uppaal is a tool for modeling, simulating and verifying real-time system as networks of timed automatons. In this report, we present our modeling and verification of the game UppaalTD (both vanilla and stochastic versions) in Uppaal. In Addition, we also analyze the model behavior with selected configurations and define metrics to compare them.
+		Uppaal is a tool for modeling, simulating and verifying real-time system as networks of timed automatons. In this report, we present our modeling and verification of the game UppaalTD (both vanilla and stochastic versions) in Uppaal. In Addition, we analyze the model behavior with selected configurations and define metrics to compare them.
 		
 	\setcounter{tocdepth}{3} % Set the depth of the table of contents to show sections and subsections only
 	
@@ -129,7 +129,7 @@ pdfcreator={pdflatex}]{hyperref}
 				\item \textbf{Introduction} : sum up of our definitions for the terminologies used in the document and project development timeline;
 				\item \textbf{Model description} : description of the models with focus on the most critical modeling choices;
 				\item \textbf{Verification results} : detailed analysis of the queries verified;
-				\item \textbf{Analysis of selected configurations} : presentation and deeper analysis of the models behaviors for some interesting configurations;
+				\item \textbf{Analysis of selected configurations} : presentation and deeper analysis of models behaviors with interesting configurations;
 				\item \textbf{Conclusions} : resume of the results obtained.
 			\end{enumerate}
 			Appendixes:
@@ -275,8 +275,8 @@ pdfcreator={pdflatex}]{hyperref}
 		\subsection{Enrichment of Vanilla model with stochastic features}
 			To model the stochastic features, there are no big changes from the Vanilla model but they are crucial:
 			\begin{itemize}
-				\item enemies and turrets "speeds" delays : it is no more modeled with a clock but with a simple self-transition (which guard of course does not involve clocks) and a \texttt{rate of exponential} properly set to in the location. In this way, the probability of leaving from the state with the self-transition determines the delay before an enemy's move or a turret can shoot again;
-				\item self-loop in \texttt{Dismissed} : it is removed since Uppaal can't determine which transition to choose when that self-loop is enabled (if we keep \texttt{Dismissed} without time invariants or rate of exponential, there is no probability that can be used to determine the following state). We are not interested in deadlocks for the stochastic version, so we can safely remove it.
+				\item enemy and turret "speeds" delays : they are no more modeled with a clock but with simple transitions (which guards of course do not involve clocks) and \texttt{rate of exponential} properly set in the locations. For any of these transitions, no other transition can be enabled at the same time in its location, therefore the probability of leaving the location is equal to the probability of taking the transition;
+				\item self-loop in \texttt{Dismissed} : it is removed since Uppaal can't determine which transition choose when that self-loop is enabled (if we keep \texttt{Dismissed} without time invariants or rate of exponential, there is no probability that can be used to determine the following state, neither uniform nor exponential). We are not interested in deadlocks for the stochastic version, so we can safely remove it.
 			\end{itemize}
 			The only delay that is still implemented as a "non-probabilistic" delay is the one related to the spawning time.
 			
@@ -314,11 +314,11 @@ pdfcreator={pdflatex}]{hyperref}
 				\end{center}
 				We interpreted "can reach" as if in any possible path all enemies will eventually reach the MT, this is the reason way this query is not stated with $E\lozenge$.
 				
-				Another important observation on this formulation is that this query in reality verifies that exists state in any possible path where all enemies have their position in the MT spot all together. This condition is easy to guarantee in our model since the dismissal of an enemy keeps \texttt{pos} in the last value it had right before the dismissal. It is like we are "freezing" in the \texttt{pos} variable the fact that the enemy reached the MT spot and so by looking at it "eventually" in any path we are sure that all enemies had reached the MT spot.
+				Another important observation on this formulation is that this query in reality verifies that exists a state in any possible path where all enemies have their position in the MT spot all together. This condition is easy to guarantee in our model since the dismissal of an enemy keeps \texttt{pos} in the last value it had right before the dismissal. It is like we are "freezing" in the \texttt{pos} variable the fact that the enemy reached the MT spot and so by looking at it "eventually" in any path we are sure that all enemies had reached the MT spot.
 				
 				Q3 verifies both that each circle and each square satisfy the time constraint:
 				\begin{center}
-					$A\square(\forall e \in Enemy\ ((e.OnTrip \wedge e.pos==MAIN\_POS) \implies (e.trip\_time\leq(MAX\_PATH\_LENGTH*e.speed)))$
+					$A\square(\forall e \in Enemy\ ((e.OnTrip \wedge e.pos==MAIN\_POS) \implies (e.trip\_time\leq(MAX\_PATH\_LENGTH*e.speed))))$
 				\end{center}
 				Simply, once an enemy is \texttt{OnTrip} and reaches the MT spot, it must have satisfied the time constraint for its kind (\texttt{trip\_time} is a classic clock that counts the time units passed from the spawn).
 				
@@ -330,7 +330,7 @@ pdfcreator={pdflatex}]{hyperref}
 				\end{center}
 				In any state of any possible path, if an enemy is targetable it must be on a red spot.
 				
-				Note that since \texttt{pos} is by default \texttt{\{0,0\}} before spawning and it is kept at the MT spot once it is reached, even if an enemy is not targetable it will be anyway on a red spot. We put this restriction to the "query scope" because there is no need to check \texttt{pos} if an enemy is not present on the map. 
+				Note that since \texttt{pos} is by default \texttt{\{0,0\}} before spawning and it is kept at the MT spot once it is reached, even if an enemy is not targetable it will be anyway on a red spot. We put this restriction to the "query scope" anyways because there is no need to check \texttt{pos} if an enemy is not present on the map. 
 			\subsubsection{Verification with turrets}
 				To verify the requested queries we wrote the following queries in Uppaal:
 				
@@ -341,7 +341,7 @@ pdfcreator={pdflatex}]{hyperref}
 						& Verified properties & Result [T/F] & Verification time on Machine 1 [s] & Verification time on Machine 2 [s] & Max. past-waiting list load \\
 						\hline
 						Q1 & VII & T & $\approx$ 167 & $\approx$ 78 & $\approx$ 50000\\ \hline
-						Q5 & VI & T &  $\approx$ 100.4 & $\approx$ 46.5 & $\approx$ 49000  \\
+						Q5 & VI & T &  $\approx$ 96.8 & $\approx$ 46.5 & $\approx$ 49000  \\
 						\hline
 					\end{tabularx}
 					\caption{Queries with turrets overview}
@@ -373,7 +373,7 @@ pdfcreator={pdflatex}]{hyperref}
 			\end{figure}
 			By simulating the system, we see that in the majority of the runs the MT starts to be damaged around 90 time units and the cumulative probability distribution identifies a mean of $\approx88$ time units.
 			
-			Also for the property II we wanted to verify it with two complementary approaches. The first one is a classical measurement of the probability that MT's life remains $>0$ in the first 200 time units, while the second one is the calculus of the cumulative probability distribution that MT life is eventually $\leq0$ until the wave has ended. The probability that MT survives in the first 200 time units is $0.633605\pm 0.0303201$ while the cumulative probability distribution that MT is defeated in the first 200 time units is $\approx 0.392$, which is coherent since it is the calculus of the complementary probability that the MT always survives in the first 200 time units.
+			Also for the property II we wanted to verify it with two complementary approaches. The first one is a classical measurement of the probability that MT's life remains $>0$ in the first 200 time units, while the second one is the calculus of the cumulative probability distribution that MT life is eventually $\leq0$ until the wave has ended (both calculated over 1000 runs). The probability that MT survives in the first 200 time units is $0.633605\pm 0.0303201$ while the cumulative probability distribution that MT is defeated in the first 200 time units is $\approx 0.392$, which is coherent since it is the calculus of the complementary probability that the MT always survives in the first 200 time units.
 			
 	\section{Analysis of selected configurations}
 		\subsection{Vanilla version}
@@ -463,9 +463,9 @@ pdfcreator={pdflatex}]{hyperref}
 			\end{itemize}
 			At the end, to judge a configuration we may look for the one with an higher ADMT and a lower SE. CUPE and CLPE and are not better than SE to compare configurations, we defined them to demonstrate that configurations that do not cover parts of the map are more like to see (from the MT spot point of view) enemies coming from those parts. Indeed, DownFromCannons and DownFromSnipers have $CUPE\leq CLPE$ since they cover more the higher paths of the map, while more "uniform" configurations tend to have $CUPE=CLPE=SE$ (that holds also from a probabilistic point of view; see the section dedicated to the spawn strategy).
 		\subsection{Stochastic version}
-			In this section, we present the most interesting results we obtained by analyzing the following parameters in the stochastic version of the game:
+			In this section, we present the most interesting results we obtained by analyzing the following indexes in the stochastic version of the game:
 			\begin{itemize}
-				\item the number of enemies survived;
+				\item SE (Survived Enemies);
 				\item \emph{ADT} (Average Death Time) : the average time unit in which killed enemies were killed;
 				\item \emph{ADD} (Average Death Distance) : the average distance from MT that killed enemies had when they were killed;
 				\item the MT life;

@@ -312,7 +312,7 @@ An enemy stays in this state (in the sense that only takes self-transitions) as 
 
 An enemy starts its execution from this state, where it stays for an amount of time exactly equal to "spawningTime" before leaving.
 
-Since in this state the "shoot_table[id].targettable" is set to false, it can't be targetted by turrets.
+Since in this state the "shoot_table[id].targetable" is set to false, it can't be targetted by turrets.
 
 Once the spawningTime has expired, there are three possible transition through "OnTrip" and what changes between them is simply
 the value assigned to the variable "chosenPath":
@@ -597,12 +597,12 @@ looks for enemies to shoot.</label>
     -&gt; set MAX_ENEMIES (in "Declarations") to the number of enemies of the wave;
     -&gt; set N_CIRCLES to the number of circles of the wave.
     
-    To change a configuration:
+    To define a configuration:
     -&gt; instantiate a turret (of the type you want) and pass the index value that corresponds to the position you want for that
        turret in "turrets_board" (e.g. to place a "sniper" in position "{8,2}", use "turret(5,SNIPER)", since "turrets_board[5]={8,2}").
 
     To switch between configurations:
-    -&gt; use comments below to comment/de-comment "system" and "ti" instructions.    
+    -&gt; use comments below to comment/de-comment "system" and "ti" assignments.    
 */
 
 circle(const int[0,N_CIRCLES-1] id) = compactEnemy(id, CIRCLE.speed, CIRCLE.health, CIRCLE.damage, id*CIRCLE.spawningTime, CIRCLE.kind);
@@ -679,7 +679,7 @@ sniper(const int id) = turret(id, SNIPER);
 
 In any state, the model must not be in deadlock.
 This query will still work with turrets.</comment>
-			<result outcome="success" type="quality" timestamp="2025-07-17 20:40:57 +0200">
+			<result outcome="success" type="quality" timestamp="2025-07-19 13:07:14 +0200">
 			</result>
 		</query>
 		<query>
@@ -696,7 +696,7 @@ To be more precise, the query verifies that for any path there exists a state wh
 its "pos" (for example, to "{-1,-1}") once it leaves the map (this is also the reason why we did not state this query with "OnTrip &amp;&amp; pos==MAIN_POS", since it is not true, neither with "E&lt;&gt;", that
 exists a state in which all enemies arrive at MAIN_POS simultaneously).
 This query MAY NOT work with turrets since some enemies may be killed before reaching the MT spot.</comment>
-			<result outcome="success" type="quality" timestamp="2025-07-17 20:36:51 +0200">
+			<result outcome="success" type="quality" timestamp="2025-07-19 11:31:35 +0200">
 			</result>
 		</query>
 		<query>
@@ -708,7 +708,7 @@ This query MAY NOT work with turrets since some enemies may be killed before rea
 
 In any state of any path, if any enemy reaches the MT, its trip time must be less or equal than the product between the maximum path length and its speed.
 This query will still work with turrets (turrets do not change the time limit to reach the MT).</comment>
-			<result outcome="success" type="quality" timestamp="2025-07-17 20:37:04 +0200">
+			<result outcome="success" type="quality" timestamp="2025-07-19 11:38:10 +0200">
 			</result>
 		</query>
 		<query>
@@ -737,7 +737,7 @@ anymore).</comment>
 
 This query is satisfied if and only if the MT is alive in any state of any possible path, therefore it is satisfied if and only if the configuration is "winning"
 (a configuration is "winning" there is no possibility that the MT is defeated).</comment>
-			<result outcome="success" type="quality" timestamp="2025-07-17 20:34:56 +0200">
+			<result outcome="success" type="quality" timestamp="2025-07-19 13:04:15 +0200">
 			</result>
 		</query>
 		<query>
