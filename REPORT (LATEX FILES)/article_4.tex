@@ -30,7 +30,7 @@ BCOR5mm, % Binding correction
 \usepackage{enumitem}% http://ctan.org/pkg/enumitem
 
 \newcommand\ytl[2]{
-	\parbox[b]{8em}{\hfill{\color{cyan}\bfseries\sffamily #1}~$\cdots\cdots$~}\makebox[0pt][c]{$\bullet$}\vrule\quad \parbox[c]{10cm}{\vspace{5pt}\color{red!40!black!80}\raggedright\sffamily #2.\\[5pt]}\\[-3pt]}
+	\parbox[b]{8em}{\hfill{\color{cyan}\bfseries\sffamily #1}~$\cdots\cdots$~}\makebox[0pt][c]{$\bullet$}\vrule\quad \parbox[c]{10cm}{\vspace{7pt}\color{red!40!black!80}\raggedright\sffamily #2.\\[7pt]}\\[-3pt]}
 \usepackage{tabularx}
 
 \usepackage[utf8]{inputenc}
@@ -71,7 +71,7 @@ pdfcreator={pdflatex}]{hyperref}
 	\maketitle % Print the title/author/date block
 	
 	\paragraph*{Abstract}
-		Uppaal is a tool for modeling, simulating and verifying real-time system as networks of timed automatons. In this report, we present our modeling and verification of the game UppaalTD (both vanilla and stochastic versions) in Uppaal. In Addition, we analyze the model behavior with selected configurations and define metrics to compare them.
+		Uppaal is a tool for modeling, simulating and verifying real-time systems as networks of timed automatons. In this report, we present our modeling and verification of the game UppaalTD (both vanilla and stochastic versions) in Uppaal. In Addition, we analyze the model behavior with selected configurations and define metrics to compare configurations.
 		
 	\setcounter{tocdepth}{3} % Set the depth of the table of contents to show sections and subsections only
 	
@@ -86,7 +86,7 @@ pdfcreator={pdflatex}]{hyperref}
 	\section{Introduction}
 		\subsection{Definitions}
 			\begin{itemize}
-				\item \textbf{requirements} : the official specifications of UppaalTD's parameters and rules;
+				\item \textbf{requirements} : the official specification of UppaalTD's parameters and rules;
 				\item \textbf{alive} or \textbf{targetable} enemy : the enemy has an health strictly greater than zero and is present on the map;
 				\item \textbf{dismissed} enemy : the enemy is dead or it shot the MT and the following delay has expired;
 				\item \textbf{ending} of a wave : a wave is considered \emph{ended} when each enemy is dismissed (i.e. it can't move or shoot anymore because it has already shoot or it was killed by turrets);
@@ -96,8 +96,6 @@ pdfcreator={pdflatex}]{hyperref}
 						\item \textbf{strongly-winning} configuration : a configuration that does not let the MT to be damaged in any game execution;
 						\item \textbf{weakly-strongly-winning} configuration : a configuration that does not let the MT to be damaged in at least one game execution;
 					\end{itemize}
-				\item \textbf{location} : a location of an Uppaal template;
-				\item \textbf{state} : the entire game's state in a certain time instant (i.e. each automaton's position and each variable's or clock's value);
 				\item \emph{Chebyshev distance} : given two generic $n$-dimensional points $x=(x_1 \dots x_n)$ and $y=(y_1 \dots y_n)$, their Chebyshev distance can be computed as $\max\limits_{1\leq i\leq n}\{|x_i - y_i|\}$.
 			\end{itemize}					
 		\subsection{Project development timeline}
@@ -118,7 +116,8 @@ pdfcreator={pdflatex}]{hyperref}
 					\ytl{june 24th}{Started delivery procedures}
 					\ytl{june 26th}{Started report writing}
 					\ytl{july 15th}{Finished report writing}
-					\ytl{july 21st}{Finished report revision}
+					\ytl{july 20th}{Finished report revision}
+					\ytl{july 21st}{Project delivery}
 					\bigskip
 					\rule{\linewidth}{1pt}%
 				\end{minipage}
@@ -468,7 +467,7 @@ pdfcreator={pdflatex}]{hyperref}
 			\begin{itemize}
 				\item SE (Survived Enemies);
 				\item \emph{ADT} (Average Death Time) : the average time unit in which killed enemies were killed;
-				\item \emph{ADD} (Average Death Distance) : the average distance from MT that killed enemies had when they were killed;
+				\item \emph{ADD} (Average Death Distance) : the average distance from MT that killed enemies had when they were killed (i.e. the ADMT restricted to killed enemies);
 				\item the MT life;
 			\end{itemize}
 			in four different configurations (Default, DownFromSnipers, Cannonphobia and Sniperphobia). We also analyzed how these parameters change (if they change significantly) when turrets and enemies parameters are changed.
@@ -571,7 +570,7 @@ pdfcreator={pdflatex}]{hyperref}
 			\end{figure}
 			Sniperphobia tends to kill enemies in a slightly greater distance from the MT spot and with more "uniform" probability distribution.
 			
-			Finally, we simulated the system in what we called the \emph{Over Range mode}: any turret has a range of 15 (i.e. any turret may fire enemies in any point of the map). We may think that this parameter choice tends to uniform the performances between configurations or tends to let snipers outclass cannons and basics however, no index changed significantly its trend. The only notable change we found is that the hyperbolic trend of ADD tends to have an higher product rather than just an higher asymptotic value:
+			Finally, we simulated the system in what we called the \emph{Over Range mode}: any turret has a range of 15 (i.e. any turret may fire enemies in any point of the map). We may think that this parameters choice tends to uniform the performances between configurations or tends to let snipers outclass cannons and basics however, no index changed significantly its trend. The only notable change we found is that the hyperbolic trend of ADD tends to have an higher product rather than just an higher asymptotic value:
 			\begin{figure}[H]
 				\centering
 				\begin{minipage}{.4\textwidth}
